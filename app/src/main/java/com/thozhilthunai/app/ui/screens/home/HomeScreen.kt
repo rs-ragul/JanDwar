@@ -20,6 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.thozhilthunai.app.R
 import com.thozhilthunai.app.ui.AppViewModel
 import com.thozhilthunai.app.ui.components.ThozhilCard
 import com.thozhilthunai.app.ui.components.brandGradient
@@ -49,27 +52,39 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
                     .background(brush = brandGradient)
-                    .padding(start = 24.dp, end = 8.dp, top = 48.dp, bottom = 24.dp)
+                    .padding(start = 20.dp, end = 8.dp, top = 44.dp, bottom = 20.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column {
-                        Text(
-                            text = appViewModel.str("name"),
-                            style = MaterialTheme.typography.headlineMedium.copy(
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.logo_premium),
+                            contentDescription = "ThozhilThunai Logo",
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(RoundedCornerShape(12.dp))
                         )
-                        Text(
-                            text = appViewModel.str("tagline"),
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = Color.White.copy(alpha = 0.8f)
+                        Column {
+                            Text(
+                                text = appViewModel.str("name"),
+                                style = MaterialTheme.typography.headlineMedium.copy(
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
                             )
-                        )
+                            Text(
+                                text = appViewModel.str("tagline"),
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = Color.White.copy(alpha = 0.8f)
+                                )
+                            )
+                        }
                     }
                     IconButton(onClick = onSettings) {
                         Icon(Icons.Filled.Settings, contentDescription = "Settings", tint = Color.White)

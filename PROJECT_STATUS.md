@@ -118,7 +118,8 @@ g:\Project\Hackathons\ThozhilThunai\
   - `MatcherUseCaseTest`: 6 cases verifying NSQF education level gating, interest affinity boosting, and tie-breaking.
 - **Fixed Issues**:
   - `MatcherUseCaseTest` mock resolution: `whenever(dataRepository.getJobRoleSnapshot()).thenReturn(sampleRoles)` updated to match `MatcherUseCase` snapshot API call.
-- **Lint & Warnings**: Kapt language compatibility warning handles fallback gracefully; deprecation warning for `menuAnchor` identified in `IntakeScreen.kt`.
+  - **Gradle Kapt Configuration Cache Error**: Resolved `DefaultMapProperty` serialization error on `:app:kaptDebugKotlin` under JDK 21+ by configuring `org.gradle.configuration-cache=false` and worker API settings in `gradle.properties`.
+  - **Brand Logo & App Launcher Icon Alignment**: Configured `@drawable/logo_premium` in `AndroidManifest.xml` (`android:icon` & `android:roundIcon`) and adaptive icon vectors (`ic_launcher.xml` & `ic_launcher_round.xml`), plus integrated the logo image cleanly into the `HomeScreen` header row.
 
 ---
 
