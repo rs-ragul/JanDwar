@@ -105,7 +105,7 @@ class IntakeViewModel @Inject constructor(
     }
 
     fun getDistricts(): List<String> =
-        (dataRepository.districts as kotlinx.coroutines.flow.StateFlow).value.map { it.name }.sorted()
+        dataRepository.getDistrictSnapshot().map { it.name }.sorted()
 
     override fun onCleared() {
         super.onCleared()

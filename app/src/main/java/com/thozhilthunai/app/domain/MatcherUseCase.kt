@@ -30,12 +30,6 @@ class MatcherUseCase @Inject constructor(
         "media" to emptySet<String>()
     )
 
-    // NSQF level ordering for entry qualification
-    private val nsqfLevelOrder = mapOf(
-        "1" to 0, "2" to 1, "3" to 2, "4" to 3,
-        "5" to 4, "6" to 5, "7" to 6, "8" to 7
-    )
-
     // Education → max NSQF level accessible
     private val eduToMaxNsqf = mapOf(
         EducationLevel.BELOW_8 to 2,
@@ -47,34 +41,28 @@ class MatcherUseCase @Inject constructor(
     )
 
     fun match(fields: IntakeFields): List<MatchedRole> {
-        val roles = repository.jobRoles.let {
-            // Use synchronous snapshot from StateFlow
-            (it as kotlinx.coroutines.flow.StateFlow).value
-        }
-
+        val roles = repository.getJobRoleSnapshot()
         val maxNsqf = eduToMaxNsqf[fields.education] ?: 4
 
-        return roles
-            .map { role ->
-                val levelNum = nsqfLevelOrder[role.nsqfLevel] ?: -1
-                val levelInferred = role.nsqfLevel.contains("inferred", ignoreCase = true)
+        return roles.mapNotNull { role ->
+            val rawLevel = role.nsqfLevel.replace("(inferred)", "").trim()
+            val levelNum = rawLevel.toIntOrNull() ?: -1
+            val levelInferred = role.nsqfLevel.contains("inferred", ignoreCase = true)
 
-                // Education gate: only include roles within user's level
-                if (levelNum > maxNsqf) return@map null
+            // Education gate: only include roles within user's level
+            if (levelNum > maxNsqf) return@mapNotNull null
 
-                // Score: interest matching
-                val roleInterests = sectorToInterests[role.sector] ?: emptySet()
-                val interestScore = if (fields.interests.isEmpty()) 1
-                else (roleInterests intersect fields.interests).size
+            // Score: interest matching
+            val roleInterests = sectorToInterests[role.sector] ?: emptySet()
+            val interestScore = if (fields.interests.isEmpty()) 1
+            else (roleInterests intersect fields.interests).size
 
-                // Tie-break: prefer lower NSQF for lower-literacy
-                val levelScore = maxNsqf - levelNum
+            // Tie-break: prefer lower NSQF for lower-literacy
+            val levelScore = maxNsqf - levelNum
 
-                val score = (interestScore * 10) + levelScore
+            val score = (interestScore * 10) + levelScore
 
-                MatchedRole(role = role, score = score, levelInferred = levelInferred)
-            }
-            .filterNotNull()
-            .sortedByDescending { it.score }
+            MatchedRole(role = role, score = score, levelInferred = levelInferred)
+        }.sortedByDescending { it.score }
     }
 }

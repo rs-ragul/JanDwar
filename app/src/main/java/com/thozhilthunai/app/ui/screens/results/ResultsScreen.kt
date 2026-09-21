@@ -14,19 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.thozhilthunai.app.data.model.JobRole
 import com.thozhilthunai.app.data.model.MatchedRole
 import com.thozhilthunai.app.data.repository.DataRepository
-import com.thozhilthunai.app.domain.MatcherUseCase
 import com.thozhilthunai.app.ui.AppViewModel
 import com.thozhilthunai.app.ui.components.NsqfBadge
 import com.thozhilthunai.app.ui.components.ThozhilCard
 import com.thozhilthunai.app.ui.theme.BrandIndigo
 import com.thozhilthunai.app.ui.theme.BrandTeal
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +36,7 @@ class ResultsViewModel @Inject constructor(
 
     fun loadFromCodes(codes: List<String>) {
         _qpCodes = codes
-        val allRoles = (dataRepository.jobRoles as StateFlow).value
+        val allRoles = dataRepository.getJobRoleSnapshot()
         _roles = codes.mapIndexed { idx, code ->
             val role = allRoles.find { it.qpCode == code }
             role?.let { MatchedRole(it, score = codes.size - idx, levelInferred = it.nsqfLevel.contains("inferred")) }

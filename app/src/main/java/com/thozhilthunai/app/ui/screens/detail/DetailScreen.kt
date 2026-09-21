@@ -45,7 +45,7 @@ class DetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun getRole(qpCode: String): JobRole? =
-        (dataRepository.jobRoles as StateFlow).value.find { it.qpCode == qpCode }
+        dataRepository.getJobRoleSnapshot().find { it.qpCode == qpCode }
 
     fun getCentresForDistrict(district: String): List<Centre> =
         dataRepository.getCentresForDistrict(district)

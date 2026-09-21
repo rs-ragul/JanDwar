@@ -56,6 +56,6 @@ class AppViewModel @Inject constructor(
 
     fun getAllInterestKeys(): List<String> = dataRepository.getAllInterestKeys()
 
-    fun totalRoles(): Int = (dataRepository.jobRoles as kotlinx.coroutines.flow.StateFlow).value.size
-    fun totalCentres(): Int = (dataRepository.centres as kotlinx.coroutines.flow.StateFlow).value.size
+    fun totalRoles(): Int = dataRepository.getJobRoleSnapshot().size
+    fun totalCentres(): Int = dataRepository.getCentreSnapshot().size
 }

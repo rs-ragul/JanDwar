@@ -37,6 +37,10 @@ class DataRepository @Inject constructor(
         loaded = true
     }
 
+    fun getJobRoleSnapshot(): List<JobRole> = _jobRoles.value
+    fun getCentreSnapshot(): List<Centre> = _centres.value
+    fun getDistrictSnapshot(): List<District> = _districts.value
+
     fun getCentresForDistrict(district: String): List<Centre> =
         _centres.value.filter { it.district.equals(district, ignoreCase = true) }
 
