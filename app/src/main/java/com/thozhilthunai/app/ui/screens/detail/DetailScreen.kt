@@ -56,6 +56,7 @@ class DetailViewModel @Inject constructor(
     }
 }
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     appViewModel: AppViewModel,

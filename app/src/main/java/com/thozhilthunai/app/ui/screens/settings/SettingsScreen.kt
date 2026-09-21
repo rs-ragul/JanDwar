@@ -17,6 +17,7 @@ import com.thozhilthunai.app.ui.theme.BrandIndigo
 import com.thozhilthunai.app.ui.theme.BrandSaffron
 import com.thozhilthunai.app.ui.theme.BrandTeal
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     appViewModel: AppViewModel,

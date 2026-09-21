@@ -1,10 +1,10 @@
 package com.thozhilthunai.app.ui
 
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.thozhilthunai.app.data.repository.UserPreferencesRepository
@@ -18,29 +18,43 @@ import com.thozhilthunai.app.ui.screens.settings.SettingsScreen
 import com.thozhilthunai.app.ui.screens.splash.SplashScreen
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
 
 // Route keys
-object Routes {
-    const val SPLASH = "splash"
-    const val LANGUAGE = "language"
-    const val ONBOARDING = "onboarding"
-    const val HOME = "home"
-    const val INTAKE = "intake"
-    const val RESULTS = "results"
-    const val SETTINGS = "settings"
-    fun detail(qpCode: String) = "detail/$qpCode"
-}
+@Serializable
+data object Splash : NavKey
+
+@Serializable
+data object Language : NavKey
+
+@Serializable
+data object Onboarding : NavKey
+
+@Serializable
+data object Home : NavKey
+
+@Serializable
+data object Intake : NavKey
+
+@Serializable
+data class Results(val qpCodes: String) : NavKey
+
+@Serializable
+data class Detail(val qpCode: String) : NavKey
+
+@Serializable
+data object Settings : NavKey
 
 @Composable
 fun AppNavigation(
     appViewModel: AppViewModel,
     prefsRepository: UserPreferencesRepository
 ) {
-    val backStack = rememberNavBackStack(Routes.SPLASH)
+    val backStack = rememberNavBackStack(Splash)
 
     NavDisplay(backStack = backStack) { key ->
-        when {
-            key == Routes.SPLASH -> NavEntry(key) {
+        when (key) {
+            is Splash -> NavEntry(key) {
                 SplashScreen(
                     onDone = {
                         // Decide next screen based on persisted state
@@ -48,72 +62,71 @@ fun AppNavigation(
                         val onboardingDone = runBlocking { prefsRepository.onboardingDone.first() }
                         backStack.clear()
                         if (lang == null) {
-                            backStack.add(Routes.LANGUAGE)
+                            backStack.add(Language)
                         } else if (!onboardingDone) {
-                            backStack.add(Routes.ONBOARDING)
+                            backStack.add(Onboarding)
                         } else {
-                            backStack.add(Routes.HOME)
+                            backStack.add(Home)
                         }
                     }
                 )
             }
-            key == Routes.LANGUAGE -> NavEntry(key) {
+            is Language -> NavEntry(key) {
                 LanguageScreen(
                     appViewModel = appViewModel,
                     onLanguageSelected = {
                         // After language picked, check if onboarding needed
                         val onboardingDone = runBlocking { prefsRepository.onboardingDone.first() }
-                        if (onboardingDone) backStack.add(Routes.HOME)
-                        else backStack.add(Routes.ONBOARDING)
+                        if (onboardingDone) backStack.add(Home)
+                        else backStack.add(Onboarding)
                     }
                 )
             }
-            key == Routes.ONBOARDING -> NavEntry(key) {
+            is Onboarding -> NavEntry(key) {
                 OnboardingScreen(
                     appViewModel = appViewModel,
                     onDone = {
                         runBlocking { prefsRepository.markOnboardingDone() }
                         backStack.clear()
-                        backStack.add(Routes.HOME)
+                        backStack.add(Home)
                     }
                 )
             }
-            key == Routes.HOME -> NavEntry(key) {
+            is Home -> NavEntry(key) {
                 HomeScreen(
                     appViewModel = appViewModel,
-                    onFindCourse = { backStack.add(Routes.INTAKE) },
-                    onSettings = { backStack.add(Routes.SETTINGS) }
+                    onFindCourse = { backStack.add(Intake) },
+                    onSettings = { backStack.add(Settings) }
                 )
             }
-            key == Routes.INTAKE -> NavEntry(key) {
+            is Intake -> NavEntry(key) {
                 IntakeScreen(
                     appViewModel = appViewModel,
-                    onResults = { qpCodes -> backStack.add("${Routes.RESULTS}/$qpCodes") },
+                    onResults = { qpCodes -> backStack.add(Results(qpCodes)) },
                     onBack = { backStack.removeLastOrNull() }
                 )
             }
-            key.toString().startsWith(Routes.RESULTS) -> NavEntry(key) {
+            is Results -> NavEntry(key) {
                 ResultsScreen(
                     appViewModel = appViewModel,
-                    onRoleClick = { qpCode -> backStack.add(Routes.detail(qpCode)) },
+                    onRoleClick = { qpCode -> backStack.add(Detail(qpCode)) },
                     onBack = { backStack.removeLastOrNull() }
                 )
             }
-            key.toString().startsWith("detail/") -> NavEntry(key) {
-                val qpCode = key.toString().removePrefix("detail/")
+            is Detail -> NavEntry(key) {
                 DetailScreen(
                     appViewModel = appViewModel,
-                    qpCode = qpCode,
+                    qpCode = key.qpCode,
                     onBack = { backStack.removeLastOrNull() }
                 )
             }
-            key == Routes.SETTINGS -> NavEntry(key) {
+            is Settings -> NavEntry(key) {
                 SettingsScreen(
                     appViewModel = appViewModel,
                     onBack = { backStack.removeLastOrNull() },
                     onChangeLanguage = {
                         backStack.clear()
-                        backStack.add(Routes.LANGUAGE)
+                        backStack.add(Language)
                     }
                 )
             }
@@ -122,6 +135,6 @@ fun AppNavigation(
     }
 }
 
-private fun NavBackStack.clear() {
+private fun <T : NavKey> NavBackStack<T>.clear() {
     while (size > 0) removeLastOrNull()
 }

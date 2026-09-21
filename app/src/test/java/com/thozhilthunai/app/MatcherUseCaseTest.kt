@@ -27,6 +27,7 @@ class MatcherUseCaseTest {
     fun setUp() {
         val stateFlow = MutableStateFlow(sampleRoles)
         whenever(dataRepository.jobRoles).thenReturn(stateFlow)
+        whenever(dataRepository.getJobRoleSnapshot()).thenReturn(sampleRoles)
         matcher = MatcherUseCase(dataRepository)
     }
 

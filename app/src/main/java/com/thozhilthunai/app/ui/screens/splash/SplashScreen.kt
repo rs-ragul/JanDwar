@@ -21,6 +21,7 @@ import com.thozhilthunai.app.R
 import com.thozhilthunai.app.ui.components.brandGradient
 import com.thozhilthunai.app.ui.theme.ThozhilThunaiTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(onDone: () -> Unit) {
