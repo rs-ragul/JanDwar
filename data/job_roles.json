@@ -1,0 +1,4130 @@
+[
+ {
+  "qp_code": "FIC/Q5005",
+  "job_role": "Assistant Baking Technician",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q5006",
+  "job_role": "Industrial baker",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q5002",
+  "job_role": "Craft Baker",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7102",
+  "job_role": "Sugar Processing Operator",
+  "nsqf_level": "4",
+  "notional_hours": "990",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q2001",
+  "job_role": "Dairy Products Processor",
+  "nsqf_level": "4",
+  "notional_hours": "900",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q4001",
+  "job_role": "Fish and Sea Food Jr. Processor",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q4003",
+  "job_role": "Seafood Processor",
+  "nsqf_level": "1",
+  "notional_hours": "330",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q1003",
+  "job_role": "Grain Miller Elective 1 - Rice, Elective 2 - Pulses",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q1010",
+  "job_role": "Fortified Rice Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q1011",
+  "job_role": "Millet Products Processor",
+  "nsqf_level": "3",
+  "notional_hours": "360",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q1012",
+  "job_role": "Food Fortification Associate",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q1013",
+  "job_role": "Oil Extraction and Refining Technician",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q0203",
+  "job_role": "Assistant Pickle band Paste Making Technician (Fruits & Vegetables)",
+  "nsqf_level": "3",
+  "notional_hours": "360",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q0111",
+  "job_role": "Preservation Technician-Fruits and Vegetables",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q0108",
+  "job_role": "Assistant Sorter and Grader - Fruits and Vegetables",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q0106",
+  "job_role": "Fruit Pulp Jr. Processor",
+  "nsqf_level": "3",
+  "notional_hours": "450",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q0206",
+  "job_role": "Jr. Coconut Processing Operator",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q0207",
+  "job_role": "Assistant Dehydration Technician (Fruits and Vegetables)",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7004",
+  "job_role": "Assistant Technician – Cold Storage",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7603",
+  "job_role": "Microbiologist (Food)",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9002",
+  "job_role": "Regulatory Affairs Manager (Food)",
+  "nsqf_level": "6",
+  "notional_hours": "630",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9701",
+  "job_role": "Assistant Food Sales Promoter",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7606",
+  "job_role": "Assistant Sanitation Supervisor (Processed Food Industry)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9007",
+  "job_role": "Multi Skill Technician (Food Processing)",
+  "nsqf_level": "4",
+  "notional_hours": "870",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7002",
+  "job_role": "Packing Machine Operator-Food Industry",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9001",
+  "job_role": "Processed Food Entrepreneur",
+  "nsqf_level": "4",
+  "notional_hours": "480",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9003",
+  "job_role": "Production Manager (Processed Food Industry)",
+  "nsqf_level": "6",
+  "notional_hours": "600",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7005",
+  "job_role": "Purchase Assistant - Food and Agricultural Commodities",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7602",
+  "job_role": "Quality Assurance Manager (Processed Food Industry)",
+  "nsqf_level": "6",
+  "notional_hours": "600",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q0205",
+  "job_role": "Multiskill Technician - Fruits and Vegetables",
+  "nsqf_level": "3",
+  "notional_hours": "600",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9012",
+  "job_role": "Food Handler",
+  "nsqf_level": "2",
+  "notional_hours": "210",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q7601",
+  "job_role": "Assistant Lab Technician - Food and Agricultural Commodities",
+  "nsqf_level": "3",
+  "notional_hours": "330",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9703",
+  "job_role": "Food Handling and Service Assistant",
+  "nsqf_level": "1",
+  "notional_hours": "240",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9704",
+  "job_role": "Sales Associate-Food Industry",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q8502",
+  "job_role": "Spice Processor",
+  "nsqf_level": "3",
+  "notional_hours": "360",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q8504",
+  "job_role": "Traditional sweet and savoury product maker",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "FIC/Q9011",
+  "job_role": "Honey Processor",
+  "nsqf_level": "2",
+  "notional_hours": "240",
+  "ssc": "FICSI",
+  "sector": "food_processing"
+ },
+ {
+  "qp_code": "CON/Q0101",
+  "job_role": "English Hindi",
+  "nsqf_level": "1",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0102",
+  "job_role": "Assistant Mason",
+  "nsqf_level": "2",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0113",
+  "job_role": "English Hindi",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0104",
+  "job_role": "English Hindi",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0105",
+  "job_role": "Mason Concrete",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0115",
+  "job_role": "English Hindi",
+  "nsqf_level": "6",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0107",
+  "job_role": "Mason – Special Finishing",
+  "nsqf_level": "7",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0108",
+  "job_role": "Mason Form Finished & Special Concrete",
+  "nsqf_level": "8",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0109",
+  "job_role": "Foreman Wet Finishing and Flooring",
+  "nsqf_level": "9",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0110",
+  "job_role": "Foreman – Concrete",
+  "nsqf_level": "10",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0111",
+  "job_role": "Supervisor Structure (Technical)",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0112",
+  "job_role": "Supervisor Finishes",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0201",
+  "job_role": "Helper Bar Bender and Steel Fixer",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0202",
+  "job_role": "Assistant Bar Bender and Steel Fixer",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0203",
+  "job_role": "Bar Bender and Steel Fixer",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0204",
+  "job_role": "Reinforcement Fitter",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0205",
+  "job_role": "Foreman Reinforcement",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0301",
+  "job_role": "Helper Shuttering Carpenter",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0302",
+  "job_role": "Assistant Shuttering Carpenter",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q3001",
+  "job_role": "Shuttering Carpenter",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q3002",
+  "job_role": "Chargehand- Shuttering Carpenter",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0308",
+  "job_role": "Foreman Formwork",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0314",
+  "job_role": "Assistant Scaffolder-System",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0313",
+  "job_role": "Assistant Scaffolder-conventional",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0312",
+  "job_role": "Scaffolder-Conventional",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0305",
+  "job_role": "Scaffolder-System",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0307",
+  "job_role": "Chargehand Scaffolding-System",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0309",
+  "job_role": "Foreman-Scaffolding",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0601",
+  "job_role": "Helper Electrician",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0602",
+  "job_role": "Assistant Electrician",
+  "nsqf_level": "",
+  "notional_hours": "30",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0603",
+  "job_role": "Construction Electrician-LV",
+  "nsqf_level": "",
+  "notional_hours": "31",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0604",
+  "job_role": "Foreman-Electrician works(Construction)",
+  "nsqf_level": "",
+  "notional_hours": "32",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0605",
+  "job_role": "Supervisor-Electrical Works",
+  "nsqf_level": "",
+  "notional_hours": "33",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0501",
+  "job_role": "Helper Construction Painter",
+  "nsqf_level": "",
+  "notional_hours": "34",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0502",
+  "job_role": "Assistant Construction Painter & Decorator",
+  "nsqf_level": "",
+  "notional_hours": "35",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0503",
+  "job_role": "Construction Painter & Decorator",
+  "nsqf_level": "",
+  "notional_hours": "36",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0504",
+  "job_role": "Chargehand-Painting & Decorating",
+  "nsqf_level": "",
+  "notional_hours": "37",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0505",
+  "job_role": "Foreman – Painting & Decorating",
+  "nsqf_level": "",
+  "notional_hours": "38",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0401",
+  "job_role": "Helper – Construction Laboratory and Field Technician",
+  "nsqf_level": "",
+  "notional_hours": "39",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0402",
+  "job_role": "Construction Laboratory & Field Technician",
+  "nsqf_level": "",
+  "notional_hours": "40",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0403",
+  "job_role": "Quality Technician",
+  "nsqf_level": "",
+  "notional_hours": "41",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q3503",
+  "job_role": "English Hindi",
+  "nsqf_level": "",
+  "notional_hours": "42",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0407",
+  "job_role": "Assistant Paint Inspector",
+  "nsqf_level": "",
+  "notional_hours": "43",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0701",
+  "job_role": "Khalasi (Assistant Rigger)",
+  "nsqf_level": "",
+  "notional_hours": "44",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0702",
+  "job_role": "Rigger – Structural Erection",
+  "nsqf_level": "",
+  "notional_hours": "45",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0703",
+  "job_role": "Rigger – Precast Erection",
+  "nsqf_level": "",
+  "notional_hours": "46",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0704",
+  "job_role": "Rigger – Piling",
+  "nsqf_level": "",
+  "notional_hours": "47",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0705",
+  "job_role": "Chargehand – Structural Erection",
+  "nsqf_level": "",
+  "notional_hours": "48",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0706",
+  "job_role": "Chargehand – Precast Erection",
+  "nsqf_level": "",
+  "notional_hours": "49",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0707",
+  "job_role": "Chargehand – Piling",
+  "nsqf_level": "",
+  "notional_hours": "50",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0708",
+  "job_role": "Foreman – Erection",
+  "nsqf_level": "",
+  "notional_hours": "51",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0709",
+  "job_role": "Supervisor – Erection",
+  "nsqf_level": "",
+  "notional_hours": "52",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0710",
+  "job_role": "Supervisor – Piling",
+  "nsqf_level": "",
+  "notional_hours": "53",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1201",
+  "job_role": "Helper Fabrication",
+  "nsqf_level": "",
+  "notional_hours": "54",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1202",
+  "job_role": "Assistant construction Fitter",
+  "nsqf_level": "",
+  "notional_hours": "55",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1203",
+  "job_role": "Grinder- Construction",
+  "nsqf_level": "",
+  "notional_hours": "56",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1204",
+  "job_role": "Gas Cutter- Construction",
+  "nsqf_level": "",
+  "notional_hours": "57",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1205",
+  "job_role": "Construction Fitter",
+  "nsqf_level": "",
+  "notional_hours": "58",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1251",
+  "job_role": "Tack Welder",
+  "nsqf_level": "",
+  "notional_hours": "59",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1252",
+  "job_role": "Construction Welder MIG/TIG/SMAW",
+  "nsqf_level": "",
+  "notional_hours": "60",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1207",
+  "job_role": "Plasma Cutter",
+  "nsqf_level": "",
+  "notional_hours": "63",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1206",
+  "job_role": "English Hindi",
+  "nsqf_level": "",
+  "notional_hours": "64",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1208",
+  "job_role": "Foreman Fabrication",
+  "nsqf_level": "",
+  "notional_hours": "65",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1253",
+  "job_role": "Senior Construction Welder MIG/TIG/SMAW",
+  "nsqf_level": "",
+  "notional_hours": "66",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1209",
+  "job_role": "Supervisor Fabrication",
+  "nsqf_level": "",
+  "notional_hours": "69",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1210",
+  "job_role": "Multi Skill Technician – Fabrication",
+  "nsqf_level": "",
+  "notional_hours": "70",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0801",
+  "job_role": "Assistant Technician-Prestress",
+  "nsqf_level": "",
+  "notional_hours": "71",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0802",
+  "job_role": "Technician-Prestress",
+  "nsqf_level": "",
+  "notional_hours": "72",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0803",
+  "job_role": "Senior Technician-Prestress",
+  "nsqf_level": "",
+  "notional_hours": "73",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0901",
+  "job_role": "Assistant Surveyor",
+  "nsqf_level": "",
+  "notional_hours": "74",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q0902",
+  "job_role": "English Hindi",
+  "nsqf_level": "",
+  "notional_hours": "75",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1001",
+  "job_role": "Pavement Layer(Helper)",
+  "nsqf_level": "",
+  "notional_hours": "76",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1002",
+  "job_role": "Pavement Layer",
+  "nsqf_level": "",
+  "notional_hours": "77",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1003",
+  "job_role": "Foreman – Roads & Runways",
+  "nsqf_level": "",
+  "notional_hours": "78",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1004",
+  "job_role": "Supervisor – Roads & Runways",
+  "nsqf_level": "",
+  "notional_hours": "79",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1101",
+  "job_role": "Helper Interior Finishes",
+  "nsqf_level": "",
+  "notional_hours": "80",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1102",
+  "job_role": "Helper Façade Installer",
+  "nsqf_level": "",
+  "notional_hours": "81",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1103",
+  "job_role": "Assistant False Ceiling and Drywall Installer",
+  "nsqf_level": "",
+  "notional_hours": "82",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1104",
+  "job_role": "Assistant Façade Installer",
+  "nsqf_level": "",
+  "notional_hours": "83",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1105",
+  "job_role": "Doors & Windows Fixer",
+  "nsqf_level": "",
+  "notional_hours": "84",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1106",
+  "job_role": "Façade Installer",
+  "nsqf_level": "",
+  "notional_hours": "85",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1107",
+  "job_role": "False Ceiling & Dry Wall Installer",
+  "nsqf_level": "",
+  "notional_hours": "86",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1108",
+  "job_role": "Chargehand – Façade Installer",
+  "nsqf_level": "",
+  "notional_hours": "87",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1109",
+  "job_role": "Chargehand – False Ceiling & Drywall Installer",
+  "nsqf_level": "",
+  "notional_hours": "88",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1110",
+  "job_role": "Foreman – Facade Installation",
+  "nsqf_level": "",
+  "notional_hours": "89",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1111",
+  "job_role": "Foreman – False Ceiling and Dry wall Installer",
+  "nsqf_level": "",
+  "notional_hours": "90",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1301",
+  "job_role": "Draughtsperson Civil Works",
+  "nsqf_level": "",
+  "notional_hours": "91",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1401",
+  "job_role": "English Hindi",
+  "nsqf_level": "",
+  "notional_hours": "92",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1402",
+  "job_role": "Supervisor – Site EHS",
+  "nsqf_level": "",
+  "notional_hours": "93",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1501",
+  "job_role": "Store Assistant -Construction",
+  "nsqf_level": "",
+  "notional_hours": "94",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1502",
+  "job_role": "Junior Store Keeper -Construction",
+  "nsqf_level": "",
+  "notional_hours": "95",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q1503",
+  "job_role": "Store Keeper -Construction",
+  "nsqf_level": "",
+  "notional_hours": "96",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q3603",
+  "job_role": "English Hindi",
+  "nsqf_level": "",
+  "notional_hours": "97",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q03605",
+  "job_role": "Assistant Rural Mason",
+  "nsqf_level": "",
+  "notional_hours": "98",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q3604",
+  "job_role": "Helper Rural Mason",
+  "nsqf_level": "",
+  "notional_hours": "99",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q5101",
+  "job_role": "Mason Heritage Works (Electives: Lime/Stone)",
+  "nsqf_level": "",
+  "notional_hours": "100",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2101",
+  "job_role": "BIM Designer-Interior Design and VR Integration",
+  "nsqf_level": "1",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2102",
+  "job_role": "4D BIM Planner-Planning and Monitoring",
+  "nsqf_level": "2",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2103",
+  "job_role": "BIM Coordinator -Design",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2104",
+  "job_role": "7D BIM Creator-BIM & IoT Integration",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2105",
+  "job_role": "6D BIM Creator – Sustainability",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2106",
+  "job_role": "Project Soft-Landing Executive",
+  "nsqf_level": "6",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2107",
+  "job_role": "5D BIM Planner-Cost Planning and Monitoring",
+  "nsqf_level": "7",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2108",
+  "job_role": "BIM Manager-Construction",
+  "nsqf_level": "8",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2109",
+  "job_role": "BIM Technician – Object Creation",
+  "nsqf_level": "9",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "CON/Q2110",
+  "job_role": "BIM Modeler",
+  "nsqf_level": "10",
+  "notional_hours": "",
+  "ssc": "CSDCI",
+  "sector": "construction"
+ },
+ {
+  "qp_code": "MES/Q0511",
+  "job_role": "3D Printing Operator",
+  "nsqf_level": "4",
+  "notional_hours": "570",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0207",
+  "job_role": "Account Director",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0208",
+  "job_role": "Account Executive",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0105",
+  "job_role": "2022/ME/MESC/05451",
+  "nsqf_level": "4",
+  "notional_hours": "480",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0206",
+  "job_role": "Advertising Operations Coordinator",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1908",
+  "job_role": "2022/ME/MESC/05688",
+  "nsqf_level": "6",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1302",
+  "job_role": "Animation Director",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0701",
+  "job_role": "Animator",
+  "nsqf_level": "4",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2509",
+  "job_role": "AR VR Producer",
+  "nsqf_level": "7",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0509",
+  "job_role": "2021/ME/MESC/04873",
+  "nsqf_level": "6",
+  "notional_hours": "1230",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0501",
+  "job_role": "Art Director (Animation & Gaming)",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3102",
+  "job_role": "Art Director (Set Designing)",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0903",
+  "job_role": "Assistant Cameraman",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0508",
+  "job_role": "Assistant Costume Designer",
+  "nsqf_level": "3",
+  "notional_hours": "600",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2809",
+  "job_role": "Broadcasting Operation Manager",
+  "nsqf_level": "5",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0902",
+  "job_role": "Camera Operator",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0211",
+  "job_role": "Celebrity PR Manager",
+  "nsqf_level": "5",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0502",
+  "job_role": "Character designer",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2811",
+  "job_role": "Cinematic Tourism Manager",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0905",
+  "job_role": "Cinematographer/Videographer",
+  "nsqf_level": "5",
+  "notional_hours": "600",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0506",
+  "job_role": "Clean-up Artist",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1904",
+  "job_role": "Community Journalist",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3505",
+  "job_role": "Compositor",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2506",
+  "job_role": "Content Strategist",
+  "nsqf_level": "5",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1906",
+  "job_role": "Correspondent",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0106",
+  "job_role": "Costume Designer",
+  "nsqf_level": "4",
+  "notional_hours": "630",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1505",
+  "job_role": "Dance Teacher",
+  "nsqf_level": "6",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1201",
+  "job_role": "2022/ME/MESC/05450",
+  "nsqf_level": "3",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1909",
+  "job_role": "Desk Editor",
+  "nsqf_level": "5",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0706",
+  "job_role": "Digital Marketing Manager",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0901",
+  "job_role": "Director of Photography",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0515",
+  "job_role": "Drawing and Painting Artist",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1401",
+  "job_role": "2022/ME/MESC/05202",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1911",
+  "job_role": "Editor- in-chief (Print Media)",
+  "nsqf_level": "6",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0209",
+  "job_role": "Event Planner/Event Manager",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2801",
+  "job_role": "Executive Producer",
+  "nsqf_level": "7",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0513",
+  "job_role": "Fine-Arts Teacher",
+  "nsqf_level": "6",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0906",
+  "job_role": "Gaffer Man",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0510",
+  "job_role": "Game Artist",
+  "nsqf_level": "5",
+  "notional_hours": "1050",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0601",
+  "job_role": "Graphic Designer",
+  "nsqf_level": "4",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1802",
+  "job_role": "Hairdresser",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2807",
+  "job_role": "Jr. Digital Film Restoration Artist",
+  "nsqf_level": "3",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0503",
+  "job_role": "Layout designer",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0504",
+  "job_role": "Lighting artist",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2802",
+  "job_role": "Line Producer",
+  "nsqf_level": "6",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1301",
+  "job_role": "Live Action Director",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0514",
+  "job_role": "Live Performer - Folk Art (Dancer / Singer)",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2804",
+  "job_role": "Location Manager",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1801",
+  "job_role": "Make-up Artist",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2507",
+  "job_role": "Media IP Merchandising Director",
+  "nsqf_level": "6",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2501",
+  "job_role": "Modeller",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2808",
+  "job_role": "Multiplex Operation Manager",
+  "nsqf_level": "5",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1501",
+  "job_role": "Music Composer",
+  "nsqf_level": "7",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1502",
+  "job_role": "Music Producer",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1503",
+  "job_role": "Music Programmer",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1506",
+  "job_role": "Music Teacher",
+  "nsqf_level": "6",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1504",
+  "job_role": "Music Therapist",
+  "nsqf_level": "5",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2504",
+  "job_role": "Offset Print Operator",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2805",
+  "job_role": "PRODUCTION ASSISTANT",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0707",
+  "job_role": "Project Manager (OOH) Media",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3108",
+  "job_role": "Props Master",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1803",
+  "job_role": "Prosthetic Artist",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2806",
+  "job_role": "Radio Broadcast Technician",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1910",
+  "job_role": "Radio Jockey",
+  "nsqf_level": "5",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3503",
+  "job_role": "Rendering Artist",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2502",
+  "job_role": "Rigging Artist",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3504",
+  "job_role": "Roto Artist",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0201",
+  "job_role": "Sales Director",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0203",
+  "job_role": "Sales Executive",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0202",
+  "job_role": "Sales Manager",
+  "nsqf_level": "5",
+  "notional_hours": "810",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3001",
+  "job_role": "Script Editor",
+  "nsqf_level": "6",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3003",
+  "job_role": "Script Researcher",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3002",
+  "job_role": "SCRIPT WRITER",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0512",
+  "job_role": "Sculpt Artist",
+  "nsqf_level": "3",
+  "notional_hours": "420",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0705",
+  "job_role": "Search Engine Marketing Executive",
+  "nsqf_level": "4",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0704",
+  "job_role": "Search Engine Optimization Executive",
+  "nsqf_level": "4",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3103",
+  "job_role": "Set Carpenter",
+  "nsqf_level": "3",
+  "notional_hours": "330",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3109",
+  "job_role": "Set Decorator",
+  "nsqf_level": "4",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3104",
+  "job_role": "Set Painter",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3106",
+  "job_role": "Set Plasterer",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0702",
+  "job_role": "Social Media Executive",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0708",
+  "job_role": "Social Media Influencer",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0703",
+  "job_role": "Social Media Manager",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3403",
+  "job_role": "Sound Assistant",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3401",
+  "job_role": "Sound Designer",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3404",
+  "job_role": "Sound Editor",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3402",
+  "job_role": "Sound Engineer",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2810",
+  "job_role": "Spot Boy",
+  "nsqf_level": "3",
+  "notional_hours": "360",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1907",
+  "job_role": "Sr. Correspondent",
+  "nsqf_level": "5",
+  "notional_hours": "840",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0904",
+  "job_role": "Still Photographer",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0507",
+  "job_role": "Storyboard Artist",
+  "nsqf_level": "3",
+  "notional_hours": "330",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2812",
+  "job_role": "Studio Manager",
+  "nsqf_level": "5",
+  "notional_hours": "900",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1905",
+  "job_role": "Stuntman",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2505",
+  "job_role": "Technical Artist – AR/VR",
+  "nsqf_level": "5",
+  "notional_hours": "1140",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2503",
+  "job_role": "Texturing Artist",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0205",
+  "job_role": "TRAFFIC COORDINATOR (Media Organisations)",
+  "nsqf_level": "4",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2803",
+  "job_role": "Unit Production Manager",
+  "nsqf_level": "5",
+  "notional_hours": "540",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3501",
+  "job_role": "VFX Editor",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2508",
+  "job_role": "Video Blogger",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0101",
+  "job_role": "Voice-over Artist",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q3502",
+  "job_role": "COLOURIST",
+  "nsqf_level": "4",
+  "notional_hours": "280",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0204",
+  "job_role": "SALES COORDINATOR (MEDIA ORGANIZATION)",
+  "nsqf_level": "4",
+  "notional_hours": "40",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1101",
+  "job_role": "COSTUME DESIGNER",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1102",
+  "job_role": "ASSISTANT COSTUME DESIGNER",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0107",
+  "job_role": "SPOT BOY (PRODUCTION)",
+  "nsqf_level": "2",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1901",
+  "job_role": "EDITOR IN CHIEF",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1902",
+  "job_role": "DESK EDITOR",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1903",
+  "job_role": "CORRESPONDENT",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2001",
+  "job_role": "LIGHTING DIRECTOR",
+  "nsqf_level": "9",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2003",
+  "job_role": "LIGHTING TECHNICIAN",
+  "nsqf_level": "10",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q2002",
+  "job_role": "GAFFER",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0402",
+  "job_role": "MANAGER MAINTENANCE",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q0401",
+  "job_role": "PROJECT MANAGER DIGITAL",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1103",
+  "job_role": "PROJECT MANAGER OOH",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1001",
+  "job_role": "AR DEVELOPER",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "MES/Q1002",
+  "job_role": "VR DEVELOPER",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "MESC",
+  "sector": "media_entertainment"
+ },
+ {
+  "qp_code": "IAS/Q5002",
+  "job_role": "Testing and Calibration- Electro Technical",
+  "nsqf_level": "4",
+  "notional_hours": "304",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q5003",
+  "job_role": "Testing and callibration – Mechanical Dimension",
+  "nsqf_level": "4",
+  "notional_hours": "280",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q5604",
+  "job_role": "PLC Programmer and Troubleshooter",
+  "nsqf_level": "4",
+  "notional_hours": "384",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q5602",
+  "job_role": "Installer and Operator-Additive Manufacturing (3D Printing)",
+  "nsqf_level": "4",
+  "notional_hours": "256",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IASC/Q0204",
+  "job_role": "Installation and Commissioning technician",
+  "nsqf_level": "4",
+  "notional_hours": "280",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q5606",
+  "job_role": "HMI SCADA Programmer and Trouble Shooter",
+  "nsqf_level": "4",
+  "notional_hours": "232",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "ELE/Q8106",
+  "job_role": "Digital Cable Technician – Access",
+  "nsqf_level": "4",
+  "notional_hours": "200",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q5605",
+  "job_role": "DCS Programmer and trouble Shooter",
+  "nsqf_level": "4",
+  "notional_hours": "248",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IASC/Q5603",
+  "job_role": "Cabling Technician – Multi Skill",
+  "nsqf_level": "4",
+  "notional_hours": "252",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q3102",
+  "job_role": "Instrumentation Technician",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q0203",
+  "job_role": "Installation and Commissioning Technician – Head End",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q5601",
+  "job_role": "Industrial Automation Technician",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "CSC/Q0801",
+  "job_role": "Calibration Technician",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "ELE/Q4605",
+  "job_role": "CCTV Installation technician",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "ELE/Q8102",
+  "job_role": "DAS Set-top Box Installer and Service Technician",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q3003",
+  "job_role": "Junior Instrumentation Technician (Process Control)",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q3001",
+  "job_role": "Instrumentation Technician (Control Valve)",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q5001",
+  "job_role": "Calibration Technician (Thermal)",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q3006",
+  "job_role": "Building Automation Specialist",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "IAS/Q8005",
+  "job_role": "Industrial Automation Specialist",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "IASC",
+  "sector": "electronics_automation"
+ },
+ {
+  "qp_code": "AGR/Q0104",
+  "job_role": "Pulses Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0202",
+  "job_role": "Cotton Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0201",
+  "job_role": "Oilseed Crop Grower (Elective: Soybean, Groundnut, Mustard)",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0203",
+  "job_role": "Sugarcane Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0204",
+  "job_role": "Jute & Mesta Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1201",
+  "job_role": "Organic Grower",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0105",
+  "job_role": "",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0101",
+  "job_role": "Paddy Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1210",
+  "job_role": "Organic Farm and Business Promoter",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1211",
+  "job_role": "Integrated Farming Practitioner",
+  "nsqf_level": "4",
+  "notional_hours": "300",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1202",
+  "job_role": "Pesticide & Fertilizer Applicator",
+  "nsqf_level": "4",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7804",
+  "job_role": "Agri Service Input Dealer",
+  "nsqf_level": "5",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7802",
+  "job_role": "Community Service Provider",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7803",
+  "job_role": "Mushroom Grower",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1203",
+  "job_role": "Vermicompost Producer",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7806",
+  "job_role": "Group Farming Practitioner",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7805",
+  "job_role": "Institution Development Manager",
+  "nsqf_level": "2",
+  "notional_hours": "570",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7601",
+  "job_role": "Agriculture Extension Service provider (Option: Formation of SHGs, FIGs & PGs)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7701",
+  "job_role": "Agriculture Field Officer",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7603",
+  "job_role": "Krishi Sahayak",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1010",
+  "job_role": "Digital Agriculture Extension Promoter (Elective: Farm Production, Agri Supply Chain)",
+  "nsqf_level": "1",
+  "notional_hours": "570",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0801",
+  "job_role": "Master Gardener",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0807",
+  "job_role": "Plant Nursery Associate",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0808",
+  "job_role": "Hydroponics Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0804",
+  "job_role": "Assistant Gardener",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0809",
+  "job_role": "Gardener cum Nursery Raiser",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0815",
+  "job_role": "Professional Gardening and Nursery Management",
+  "nsqf_level": "1",
+  "notional_hours": "1200",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0816",
+  "job_role": "Hydroponics Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0806",
+  "job_role": "Interior Landscaper",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4803",
+  "job_role": "Artificial Insemination Technician (Option: Program implementation and livestock marketing)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4804",
+  "job_role": "Livestock Service Provider (Options: Program implementation and livestock marketing, Small farm animal breeding)",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4501",
+  "job_role": "Goat and Sheep Farmer",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4805",
+  "job_role": "Livestock Green Management Promoter",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4502",
+  "job_role": "Piggery Farmer",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4607",
+  "job_role": "Zoo Animal Keeper- Small Captive animals",
+  "nsqf_level": "4",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4602",
+  "job_role": "Canine Trainer and Handler",
+  "nsqf_level": "5",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4604",
+  "job_role": "Zoo Animal Keeper",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4605",
+  "job_role": "Stray Animal Catcher",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4606",
+  "job_role": "Laboratory Animal Attendant",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7902",
+  "job_role": "Agri Commodity Quality Assayer",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7904",
+  "job_role": "Agri Commodity Procurement Manager",
+  "nsqf_level": "2",
+  "notional_hours": "600",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7908",
+  "job_role": "Agri Commodity Fumigation Operator",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7906",
+  "job_role": "Commodity Account Manager",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4101",
+  "job_role": "Dairy Farmer-Entrepreneur",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4202",
+  "job_role": "Milk Collection Center Incharge",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4204",
+  "job_role": "Bulk Milk Cooler (BMC) Operator",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4205",
+  "job_role": "Chilling Plant Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4103",
+  "job_role": "Dairy Farm Supervisor",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4102",
+  "job_role": "Dairy Worker",
+  "nsqf_level": "4",
+  "notional_hours": "240",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4201",
+  "job_role": "Milk Procurement & Input Supervisor",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4701",
+  "job_role": "Stud Farm Worker",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1007",
+  "job_role": "Precision Farming Technician",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1002",
+  "job_role": "Micro-Irrigation Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6701",
+  "job_role": "Solar Pump Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1003",
+  "job_role": "Greenhouse Operator (Option: Small Enterprise)",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1104",
+  "job_role": "Irrigation Pump Technician (Small Capacity)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1101",
+  "job_role": "Tractor operator",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1006",
+  "job_role": "Kisan Drone Operator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1112",
+  "job_role": "Custom Hiring Centre In-charge (Agri machinery)",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1107",
+  "job_role": "Agriculture Machinery Demonstrator",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1111",
+  "job_role": "Repair and Maintenance Supervisor (Farm Machinery)",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1102",
+  "job_role": "Combine Harvester Machine Operator",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1105",
+  "job_role": "Harvesting Machinery Operator (Option: Post-harvest machineries operation)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1108",
+  "job_role": "Tractor Service Mechanic (Option: Repair and maintenance of farm implements)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1106",
+  "job_role": "Repair and Maintenance Technician (Farm Machinery)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1103",
+  "job_role": "Power Tiller Operator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4904",
+  "job_role": "Aquaculture Worker",
+  "nsqf_level": "4",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5107",
+  "job_role": "Fisheries Extension Associate",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5003",
+  "job_role": "Inland Capture Fisherman cum Primary Processor",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4908",
+  "job_role": "Fish Seed Grower",
+  "nsqf_level": "4",
+  "notional_hours": "450",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5108",
+  "job_role": "Aquarium Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4905",
+  "job_role": "Freshwater Aquaculture Farmer",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5001",
+  "job_role": "Marine Capture Fisherman cum Primary Processor",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5002",
+  "job_role": "Fishing Boat Driver (Small Mechanized vessel)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4902",
+  "job_role": "Shrimp Farmer",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5004",
+  "job_role": "Deep Sea Fisher",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4903",
+  "job_role": "Aquaculture Technical Supervisor (Option: Biofloc Technology, RAS Technology)",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4906",
+  "job_role": "Brackishwater Aquaculture Farmer (Option: Crab, Finfish)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4901",
+  "job_role": "Fishery Hatchery Production Worker",
+  "nsqf_level": "4",
+  "notional_hours": "240",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4909",
+  "job_role": "Mariculture Farmer (Option: Pearl Culture)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4910",
+  "job_role": "Ornamental Fish Farmer (Option: Aquarium)",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6107",
+  "job_role": "Vriksh Sanrakshak",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6103",
+  "job_role": "Forest Nursery Raiser",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6101",
+  "job_role": "Bamboo Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6106",
+  "job_role": "Urban Forest Developer",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6105",
+  "job_role": "Lac Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6112",
+  "job_role": "Carbon Farming Practitioner",
+  "nsqf_level": "1",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6102",
+  "job_role": "Non-timber forest poduce harvester",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5301",
+  "job_role": "",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q5201",
+  "job_role": "Sericulturist",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7801",
+  "job_role": "Barefoot Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q8101",
+  "job_role": "Plant Tissue Culture Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7502",
+  "job_role": "Agriculture Warehouse Worker",
+  "nsqf_level": "4",
+  "notional_hours": "240",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7503",
+  "job_role": "Packhouse Worker",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7501",
+  "job_role": "Supply Chain Field Executive",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7510",
+  "job_role": "Agri Warehouse Supervisor",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7508",
+  "job_role": "Controlled Atmosphere Store Technician",
+  "nsqf_level": "5",
+  "notional_hours": "510",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7504",
+  "job_role": "Ripening chamber operator",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4306",
+  "job_role": "Small Poultry Farmer",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4402",
+  "job_role": "Poultry Hatchery Operator",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4401",
+  "job_role": "Poultry Hatchery Supervisor",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4309",
+  "job_role": "Poultry Farm Worker",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4305",
+  "job_role": "Poultry feed, food safety and labelling Supervisor",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4308",
+  "job_role": "",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q4403",
+  "job_role": "Chick Sexer and Grader",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0501",
+  "job_role": "Coffee Plantation Worker",
+  "nsqf_level": "4",
+  "notional_hours": "240",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0901",
+  "job_role": "Medicinal and Aromatic Plants Grower",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0701",
+  "job_role": "",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0503",
+  "job_role": "Coconut Grower cum Primary Processor",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0703",
+  "job_role": "",
+  "nsqf_level": "4",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0502",
+  "job_role": "Tea Plantation Worker",
+  "nsqf_level": "4",
+  "notional_hours": "240",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0508",
+  "job_role": "Technician- Coir Grow Media",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0301",
+  "job_role": "Banana Farmer cum Primary Processor",
+  "nsqf_level": "3",
+  "notional_hours": "300",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0310",
+  "job_role": "Min : 390 Max : 570",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0405",
+  "job_role": "",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0506",
+  "job_role": "Tea Maker (Production)",
+  "nsqf_level": "4",
+  "notional_hours": "570",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0507",
+  "job_role": "Tea Factory Assistant",
+  "nsqf_level": "4",
+  "notional_hours": "570",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0704",
+  "job_role": "Flower Packager and Palletizer",
+  "nsqf_level": "4",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0402",
+  "job_role": "Solanaceous Crop Cultivator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0306",
+  "job_role": "Makhana Grower cum Processor (Options: Makhana Products)",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0902",
+  "job_role": "Essential Oil Extractor",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0603",
+  "job_role": "Min : 390 Max : 600",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0509",
+  "job_role": "Plantation Worker (Option: Oilpalm, Palmyrah, Areca nut and Betelvine, Cocoa, Cashew Nut)",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q0304",
+  "job_role": "Vineyard Grower",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q1011",
+  "job_role": "Min : 480 Max : 660",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7101",
+  "job_role": "Quality Seed Grower",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7103",
+  "job_role": "Seed Analysis In Charge",
+  "nsqf_level": "5",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7105",
+  "job_role": "Seed Processing Plant - Supervisor",
+  "nsqf_level": "5",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7104",
+  "job_role": "Seed Processing Plant -Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q7102",
+  "job_role": "Seed Processing Worker",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q8103",
+  "job_role": "Soil & Water Testing Lab Analyst",
+  "nsqf_level": "5",
+  "notional_hours": "480",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q8102",
+  "job_role": "Soil & Water Testing Lab Technician",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6601",
+  "job_role": "Water Resource Community Mobilizer (Elective: Watershed, Springshed, Groundwater)",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6606",
+  "job_role": "Water Resource Coordinator",
+  "nsqf_level": "2",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6602",
+  "job_role": "Para Geohydrologist",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6607",
+  "job_role": "Water Resource Assistant",
+  "nsqf_level": "3",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "AGR/Q6605",
+  "job_role": "Water Resource Supervisor",
+  "nsqf_level": "2",
+  "notional_hours": "390",
+  "ssc": "ASCI",
+  "sector": "agriculture"
+ },
+ {
+  "qp_code": "TSC/Q0107",
+  "job_role": "Jute Selector cum Assorter",
+  "nsqf_level": "1",
+  "notional_hours": "270",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0108",
+  "job_role": "QG-02-TX-04112-2025-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "270",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0304",
+  "job_role": "Jute Weft Winding Operator",
+  "nsqf_level": "3",
+  "notional_hours": "270",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2104",
+  "job_role": "QG-02-TX-04115-2025-V2-TSC",
+  "nsqf_level": "4",
+  "notional_hours": "270",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q5103",
+  "job_role": "\"Textile Processing Preparatory Operator ( Electives: Singeing & Desizing , Continuous Bleaching Range )\"",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q5205",
+  "job_role": "Dyestuff & Chemical Preparation Operator r",
+  "nsqf_level": "6",
+  "notional_hours": "270",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q5207",
+  "job_role": "\"Textile Dyeing machine operator ( Electives: Jigger, Soft Flow Dyeing, Package Dyeing )\"",
+  "nsqf_level": "7",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q5208",
+  "job_role": "\"Textile Printing Machine operator ( Option: Printing Screen Making )\"",
+  "nsqf_level": "8",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q5404",
+  "job_role": "\"Textile Post Processing Machine Operator ( Electives: Washing Range, Drying Range, Folding, Balloon Squeezing, Calendar Machine )\"",
+  "nsqf_level": "9",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q5405",
+  "job_role": "\"Textile Finishing Machine Operator ( Electives: Stenter, Sanforiser, Relax Dryer, Compactor )\"",
+  "nsqf_level": "10",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7402",
+  "job_role": "Kalamkari Artisan Elective 1 – Textile MSME Elective 2 – Textile Mill",
+  "nsqf_level": "2",
+  "notional_hours": "270",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7404",
+  "job_role": "QG-02-TX-04105-2025-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "270",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0101",
+  "job_role": "QG-02-TX-01921-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0102",
+  "job_role": "QG-02-TX-01922-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0103",
+  "job_role": "Combing Preparatory Operator",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0104",
+  "job_role": "QG-02-TX-01924-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0105",
+  "job_role": "QG-02-TX-01925-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0106",
+  "job_role": "Speed Frame Operator - Tenter and Doffer",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0201",
+  "job_role": "QG-02-TX-01927-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0202",
+  "job_role": "QG-02-TX-01928-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0203",
+  "job_role": "QG-02-TX-01929-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0205",
+  "job_role": "\"Ring Frame Operator ( Option: Manual doffing, Automatic doffing )\"",
+  "nsqf_level": "2",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0301",
+  "job_role": "QG-02-TX-02060-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0302",
+  "job_role": "Cone Winding Operator-Manual & Assembly Winding",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0303",
+  "job_role": "QG-02-TX-01933-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0305",
+  "job_role": "\"Winding Tenter ( Electives: Autoconer, Manual cone winding, Doubler winding )\"",
+  "nsqf_level": "2",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0306",
+  "job_role": "\"Finished Package Checker-cum-Packer - Spinning ( Option: Yarn Conditioning )\"",
+  "nsqf_level": "2",
+  "notional_hours": "",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2101",
+  "job_role": "Warper - Direct Warping Machine",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2102",
+  "job_role": "QG-02-TX-01937-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "330",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2103",
+  "job_role": "QG-02-TX-01938-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "30",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2205",
+  "job_role": "QG-02-TX-01939-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "31",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2206",
+  "job_role": "Pirn Winding Machine Operator",
+  "nsqf_level": "2",
+  "notional_hours": "32",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2210",
+  "job_role": "\"Shuttle loom operator cum pirn winder ( Electives: Power loom, Automatic shuttle loom )\"",
+  "nsqf_level": "2",
+  "notional_hours": "33",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2211",
+  "job_role": "\"Shuttleless Loom Operator ( Electives: Airjet loom, Rapier loom, Waterjet loom, Projectile loom )\"",
+  "nsqf_level": "2",
+  "notional_hours": "34",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2301",
+  "job_role": "QG-02-TX-01943-2024-V2-TSC",
+  "nsqf_level": "2",
+  "notional_hours": "35",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2302",
+  "job_role": "Fabric Mender - Textiles r",
+  "nsqf_level": "2",
+  "notional_hours": "36",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q4101",
+  "job_role": "Knitting Machine Operator Circular Knitting",
+  "nsqf_level": "2",
+  "notional_hours": "37",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q4102",
+  "job_role": "Knitting Machine Operator Flat Bed Knitting",
+  "nsqf_level": "2",
+  "notional_hours": "38",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q4103",
+  "job_role": "Knitting Machine Operator Warp Knitting",
+  "nsqf_level": "2",
+  "notional_hours": "39",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7201",
+  "job_role": "QG-03-TX-03345-2024-V2-TSC",
+  "nsqf_level": "3",
+  "notional_hours": "40",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7301",
+  "job_role": "Cone Winder-cum-Pirn Winder",
+  "nsqf_level": "2",
+  "notional_hours": "41",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7302",
+  "job_role": "QG-03-TX-03703-2025-V2-TSC",
+  "nsqf_level": "3",
+  "notional_hours": "42",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7303",
+  "job_role": "QG-03-TX-03347-2024-V2-TSC",
+  "nsqf_level": "3",
+  "notional_hours": "43",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7306",
+  "job_role": "Jacquard Weaver - Handloom",
+  "nsqf_level": "3",
+  "notional_hours": "44",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7307",
+  "job_role": "QG-03-TX-03346-2024-V2-TSC",
+  "nsqf_level": "3",
+  "notional_hours": "45",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7401",
+  "job_role": "Card Puncher (Automatic Machine)",
+  "nsqf_level": "2",
+  "notional_hours": "46",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7403",
+  "job_role": "Assistant Design Maker - Textiles",
+  "nsqf_level": "4",
+  "notional_hours": "47",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7901",
+  "job_role": "\"Hand Spinning Operator ( Electives: Traditional Charkha, New Model Charkha ) ( Option: Solar Power Drive )\"",
+  "nsqf_level": "2",
+  "notional_hours": "48",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q8201",
+  "job_role": "QG-03-TX-04108-2025-V2-TSC",
+  "nsqf_level": "3",
+  "notional_hours": "49",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q8301",
+  "job_role": "QG-03-TX-04109-2025-V2-TSC",
+  "nsqf_level": "3",
+  "notional_hours": "50",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q8401",
+  "job_role": "Circular loom operator (Shuttle type)",
+  "nsqf_level": "3",
+  "notional_hours": "51",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0204",
+  "job_role": "Junior Supervisor - Jute Spinning",
+  "nsqf_level": "4",
+  "notional_hours": "52",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0401",
+  "job_role": "Fitter Spinning Preparatory",
+  "nsqf_level": "4",
+  "notional_hours": "53",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0402",
+  "job_role": "QG-04-TX-04102-2025-V2-TSC",
+  "nsqf_level": "4",
+  "notional_hours": "54",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0403",
+  "job_role": "QG-04-TX-04103-2025-V2-TSC",
+  "nsqf_level": "4",
+  "notional_hours": "55",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2401",
+  "job_role": "Fitter Weaving Preparatory",
+  "nsqf_level": "4",
+  "notional_hours": "56",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q2405",
+  "job_role": "Fitter - Shuttleless Weaving Machine: Air-Jet",
+  "nsqf_level": "4",
+  "notional_hours": "57",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q5701",
+  "job_role": "Fitter - Chemical Processing (Textiles)",
+  "nsqf_level": "4",
+  "notional_hours": "58",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q7801",
+  "job_role": "QG-05-TX-01920-2024-V1.1-TSC",
+  "nsqf_level": "5",
+  "notional_hours": "59",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q4501",
+  "job_role": "Entrepreneur - Textile Waste Management & Recycling",
+  "nsqf_level": "6",
+  "notional_hours": "60",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0114",
+  "job_role": "Textile Waste Recycler - Collection and Segregation",
+  "nsqf_level": "2",
+  "notional_hours": "61",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q0121",
+  "job_role": "Textile Waste Recycling Machine Operator",
+  "nsqf_level": "2",
+  "notional_hours": "62",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "TSC/Q8102",
+  "job_role": "Operator - Pultrusion (Composites)",
+  "nsqf_level": "3",
+  "notional_hours": "65",
+  "ssc": "TSC",
+  "sector": "handloom_textile"
+ },
+ {
+  "qp_code": "AMH/Q0201",
+  "job_role": "QG-02-AP-03279-2024-V2-AMHSSC",
+  "nsqf_level": "1",
+  "notional_hours": "240",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0610",
+  "job_role": "QG-05-AP-03278-2024-V2-AMHSSC",
+  "nsqf_level": "2",
+  "notional_hours": "510",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1105",
+  "job_role": "QG-04-AP-03282-2024-V2-AMHSSC",
+  "nsqf_level": "3",
+  "notional_hours": "420",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0401",
+  "job_role": "QG-2.5-AP-03283-2024-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "300",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1603",
+  "job_role": "Export Manager-Stitched Items",
+  "nsqf_level": "5",
+  "notional_hours": "600",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0920",
+  "job_role": "Sourcing Manager-Stitched Items",
+  "nsqf_level": "6",
+  "notional_hours": "600",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1910",
+  "job_role": "QG-06-AP-03280-2024-V2-AMHSSC",
+  "nsqf_level": "7",
+  "notional_hours": "600",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1201",
+  "job_role": "QG-05-AP-01773-2024-V2-AMHSSC",
+  "nsqf_level": "8",
+  "notional_hours": "570",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q2101",
+  "job_role": "QG-05-AP-01777-2024-V2-AMHSSC",
+  "nsqf_level": "9",
+  "notional_hours": "570",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0301",
+  "job_role": "QG-2.5-AP-01866-2024-V1.1-AMHSSC",
+  "nsqf_level": "10",
+  "notional_hours": "300",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0305",
+  "job_role": "QG-2.5-AP-01867-2024-V1.1-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "300",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q2255",
+  "job_role": "QG-2.5-AP-01869-2024-V1.1-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "300",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q2301",
+  "job_role": "Specialized Sewing Machine Operator",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1810",
+  "job_role": "QG-2.5-AP-01870-2024-V1.1-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "300",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1947",
+  "job_role": "QG-2.5-AP-01868-2024-V1.1-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "300",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1001",
+  "job_role": "QG-2-AP-01865-2024-V1.1-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "270",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0801",
+  "job_role": "QG-03-AP-03571-2025-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "390",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1920",
+  "job_role": "Record Keeper-Sewn Items Manufacturing",
+  "nsqf_level": "4",
+  "notional_hours": "300",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1210",
+  "job_role": "Assistant Designer- Apparel, Made-Ups & Home Furnishings",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0103",
+  "job_role": "QG-3.5-AP-03570-2025-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0615",
+  "job_role": "Processing Supervisor (Dyeing & Printing)",
+  "nsqf_level": "4",
+  "notional_hours": "480",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0701",
+  "job_role": "QG-04-AP-01767-2024-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "420",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1101",
+  "job_role": "QG-05-AP-03568-2025-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1602",
+  "job_role": "Export Executive- Stitched Items",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q2201",
+  "job_role": "QG-06-AP-03574-2025-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "600",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q2001",
+  "job_role": "Industrial Engineer (IE)-Apparel",
+  "nsqf_level": "4",
+  "notional_hours": "600",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0911",
+  "job_role": "Merchandiser – Apparel, Made-Ups & Home Furnishings",
+  "nsqf_level": "4",
+  "notional_hours": "570",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1401",
+  "job_role": "QC Executive - Stitched Items",
+  "nsqf_level": "4",
+  "notional_hours": "570",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1801",
+  "job_role": "QG-05-AP-03580-2025-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "510",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1510",
+  "job_role": "QG-2.5-AP-03573-2025-V2-AMHSSC",
+  "nsqf_level": "4",
+  "notional_hours": "30",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0503",
+  "job_role": "Apparel Inventory Data Analyst",
+  "nsqf_level": "1",
+  "notional_hours": "31",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q2102",
+  "job_role": "Apparel Operations Data Specialist",
+  "nsqf_level": "1",
+  "notional_hours": "32",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0104",
+  "job_role": "QG-05-AP-04758-2026-V1-AMHSSC",
+  "nsqf_level": "1",
+  "notional_hours": "33",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1232",
+  "job_role": "Digital Designer-Apparel Trends",
+  "nsqf_level": "1",
+  "notional_hours": "34",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q0502",
+  "job_role": "QG-05-AP-05317-2026-V1-AMHFSSC",
+  "nsqf_level": "1",
+  "notional_hours": "35",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1233",
+  "job_role": "QG-05-AP-05295-2026-V1-AMHFSSC",
+  "nsqf_level": "1",
+  "notional_hours": "36",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ },
+ {
+  "qp_code": "AMH/Q1949",
+  "job_role": "QG-05-AP-05294-2026-V1-AMHFSSC",
+  "nsqf_level": "1",
+  "notional_hours": "37",
+  "ssc": "AMHSSC",
+  "sector": "apparel"
+ }
+]
