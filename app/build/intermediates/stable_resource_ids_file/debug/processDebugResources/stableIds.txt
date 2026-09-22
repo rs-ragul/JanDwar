@@ -1,0 +1,12 @@
+in.jandwar.app:style/AppTheme = 0x7f040000
+in.jandwar.app:color/paper = 0x7f010003
+in.jandwar.app:string/app_name = 0x7f030000
+in.jandwar.app:drawable/splash_bg = 0x7f020005
+in.jandwar.app:drawable/logo_premium = 0x7f020004
+in.jandwar.app:drawable/chip_plain = 0x7f020002
+in.jandwar.app:color/brand_indigo = 0x7f010000
+in.jandwar.app:drawable/button_primary = 0x7f020000
+in.jandwar.app:drawable/chip_selected = 0x7f020003
+in.jandwar.app:color/brand_teal = 0x7f010002
+in.jandwar.app:drawable/card_bg = 0x7f020001
+in.jandwar.app:color/brand_saffron = 0x7f010001

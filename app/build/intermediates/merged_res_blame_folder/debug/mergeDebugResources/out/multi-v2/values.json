@@ -1,0 +1,62 @@
+{
+    "logs": [
+        {
+            "outputFile": "in.jandwar.app-mergeDebugResources-2:/values/values.xml",
+            "map": [
+                {
+                    "source": "G:\\Project\\ThozhilThunai\\app\\src\\main\\res\\values\\colors.xml",
+                    "from": {
+                        "startLines": "1,3,2,4",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "16,108,63,156",
+                        "endColumns": "46,47,44,39",
+                        "endOffsets": "58,151,103,191"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,102,150,195",
+                        "endColumns": "46,47,44,39",
+                        "endOffsets": "97,145,190,230"
+                    }
+                },
+                {
+                    "source": "G:\\Project\\ThozhilThunai\\app\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "1",
+                        "startColumns": "4",
+                        "startOffsets": "16",
+                        "endLines": "7",
+                        "endColumns": "12",
+                        "endOffsets": "427"
+                    },
+                    "to": {
+                        "startLines": "7",
+                        "startColumns": "4",
+                        "startOffsets": "280",
+                        "endLines": "13",
+                        "endColumns": "12",
+                        "endOffsets": "691"
+                    }
+                },
+                {
+                    "source": "G:\\Project\\ThozhilThunai\\app\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "1",
+                        "startColumns": "4",
+                        "startOffsets": "16",
+                        "endColumns": "44",
+                        "endOffsets": "56"
+                    },
+                    "to": {
+                        "startLines": "6",
+                        "startColumns": "4",
+                        "startOffsets": "235",
+                        "endColumns": "44",
+                        "endOffsets": "275"
+                    }
+                }
+            ]
+        }
+    ]
+}

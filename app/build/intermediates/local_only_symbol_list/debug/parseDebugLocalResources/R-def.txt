@@ -1,0 +1,14 @@
+R_DEF: Internal format may change without notice
+local
+color brand_indigo
+color brand_saffron
+color brand_teal
+color paper
+drawable button_primary
+drawable card_bg
+drawable chip_plain
+drawable chip_selected
+drawable logo_premium
+drawable splash_bg
+string app_name
+style AppTheme

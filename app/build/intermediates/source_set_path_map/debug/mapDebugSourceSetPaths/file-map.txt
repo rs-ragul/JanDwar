@@ -1,0 +1,7 @@
+in.jandwar.app-pngs-0 G:\Project\ThozhilThunai\app\build\generated\res\pngs\debug
+in.jandwar.app-resValues-1 G:\Project\ThozhilThunai\app\build\generated\res\resValues\debug
+in.jandwar.app-packageDebugResources-2 G:\Project\ThozhilThunai\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+in.jandwar.app-packageDebugResources-3 G:\Project\ThozhilThunai\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+in.jandwar.app-debug-4 G:\Project\ThozhilThunai\app\build\intermediates\merged_res\debug\mergeDebugResources
+in.jandwar.app-debug-5 G:\Project\ThozhilThunai\app\src\debug\res
+in.jandwar.app-main-6 G:\Project\ThozhilThunai\app\src\main\res
