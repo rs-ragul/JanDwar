@@ -18,7 +18,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
+import android.view.animation.ScaleAnimation;
+import android.speech.RecognitionListener;
+import android.speech.SpeechRecognizer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,7 +58,18 @@ public class MainActivity extends Activity {
     private JSONArray roles;
     private JSONArray centres;
     private JSONArray districts;
+    private static final String SCREEN_SPLASH = "splash";
+    private static final String SCREEN_LANGUAGE = "language";
+    private static final String SCREEN_ONBOARDING = "onboarding";
+    private static final String SCREEN_HOME = "home";
+    private static final String SCREEN_SETTINGS = "settings";
+    private static final String SCREEN_INTAKE = "intake";
+    private static final String SCREEN_RESULTS = "results";
+    private static final String SCREEN_DETAIL = "detail";
+    private static final String SCREEN_COURSES = "courses";
+    private static final String SCREEN_VOICE = "voice";
     private String lang = "";
+    private String currentScreen = SCREEN_SPLASH;
     private int onboardingPage = 0;
 
     private String selectedEdu = "edu_10";
@@ -64,7 +77,10 @@ public class MainActivity extends Activity {
     private String selectedTravel = "travel_district";
     private String selectedDistrict = "Erode";
     private final Set<String> selectedInterests = new HashSet<>();
-    private EditText sentenceInput;
+    private SpeechRecognizer speechRecognizer;
+    private boolean voiceActive;
+    private TextView voiceTranscript;
+    private TextView voiceStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +120,7 @@ public class MainActivity extends Activity {
     }
 
     private void showLanguage() {
+        currentScreen = SCREEN_LANGUAGE;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(heroHeader("JanDwar", "Choose Language", true));
@@ -136,6 +153,7 @@ public class MainActivity extends Activity {
     }
 
     private void showOnboarding() {
+        currentScreen = SCREEN_ONBOARDING;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(heroHeader(tr("name"), tr("tagline"), true));
@@ -179,6 +197,8 @@ public class MainActivity extends Activity {
     }
 
     private void showHome() {
+        stopVoice();
+        currentScreen = SCREEN_HOME;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(appHeader(tr("name"), tr("tagline"), tr("settings"), new View.OnClickListener() {
@@ -236,6 +256,7 @@ public class MainActivity extends Activity {
     }
 
     private void showAllCourses() {
+        currentScreen = SCREEN_COURSES;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(appHeader(tr("browse_title"), tr("browse_sub"), tr("back"), new View.OnClickListener() {
@@ -258,6 +279,7 @@ public class MainActivity extends Activity {
     }
 
     private void showSettings() {
+        currentScreen = SCREEN_SETTINGS;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(appHeader(tr("settings"), tr("tagline"), tr("back"), new View.OnClickListener() {
@@ -277,6 +299,7 @@ public class MainActivity extends Activity {
     }
 
     private void showIntake() {
+        currentScreen = SCREEN_INTAKE;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(appHeader(tr("intake"), tr("start_intake"), tr("back"), new View.OnClickListener() {
@@ -313,23 +336,7 @@ public class MainActivity extends Activity {
             });
             content.addView(chip);
         }
-        addSpace(content, 12);
-        content.addView(sectionTitle(tr("offline_search")));
-        content.addView(text(tr("offline_search_sub"), 15, MUTED, Typeface.NORMAL));
-        sentenceInput = new EditText(this);
-        sentenceInput.setMinLines(2);
-        sentenceInput.setTextSize(17);
-        sentenceInput.setHint(tr("tap_hint"));
-        sentenceInput.setTextColor(INK);
-        sentenceInput.setHintTextColor(MUTED);
-        sentenceInput.setBackgroundResource(android.R.drawable.edit_text);
-        content.addView(sentenceInput, wideLp());
-        TextView useSentence = chip(tr("use"), false);
-        useSentence.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { parseSentence(sentenceInput.getText().toString()); showIntake(); }
-        });
-        content.addView(useSentence);
-        addSpace(content, 8);
+        addSpace(content, 18);
         TextView submit = primary(tr("submit"));
         submit.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { showResults(match()); }
@@ -339,6 +346,7 @@ public class MainActivity extends Activity {
     }
 
     private void showResults(List<Rec> recs) {
+        currentScreen = SCREEN_RESULTS;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(appHeader(tr("options"), selectedDistrict, tr("back"), new View.OnClickListener() {
@@ -363,6 +371,7 @@ public class MainActivity extends Activity {
     }
 
     private void showDetail(final Rec rec) {
+        currentScreen = SCREEN_DETAIL;
         LinearLayout content = pageBase(true);
         content.setPadding(dp(18), dp(18), dp(18), dp(22));
         content.addView(appHeader(tr("details"), selectedDistrict, tr("back"), new View.OnClickListener() {
@@ -422,26 +431,127 @@ public class MainActivity extends Activity {
             requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, VOICE_REQUEST);
             return;
         }
-        try {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, tr("listening"));
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, speechLocale());
-            startActivityForResult(intent, VOICE_REQUEST);
-        } catch (Exception e) {
-            Toast.makeText(this, tr("tap_hint"), Toast.LENGTH_LONG).show();
+        voiceActive = true;
+        currentScreen = SCREEN_VOICE;
+        showVoiceScreen();
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+            voiceStatus.setText(tr("voice_unavailable"));
+            return;
+        }
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override public void onReadyForSpeech(Bundle params) { voiceStatus.setText(tr("voice_listening")); }
+            @Override public void onBeginningOfSpeech() { voiceStatus.setText(tr("voice_hearing")); }
+            @Override public void onRmsChanged(float rmsdB) { }
+            @Override public void onBufferReceived(byte[] buffer) { }
+            @Override public void onEndOfSpeech() { if (voiceActive) restartVoiceRecognition(); }
+            @Override public void onError(int error) { if (voiceActive) restartVoiceRecognition(); }
+            @Override public void onResults(Bundle results) {
+                ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                if (matches != null && !matches.isEmpty()) {
+                    String sentence = matches.get(0);
+                    voiceTranscript.setText(sentence);
+                    parseSentence(sentence);
+                }
+                if (voiceActive) restartVoiceRecognition();
+            }
+            @Override public void onPartialResults(Bundle partialResults) {
+                ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                if (matches != null && !matches.isEmpty()) voiceTranscript.setText(matches.get(0));
+            }
+            @Override public void onEvent(int eventType, Bundle params) { }
+        });
+        restartVoiceRecognition();
+    }
+
+    private void showVoiceScreen() {
+        LinearLayout content = pageBase(true);
+        content.setGravity(Gravity.CENTER_HORIZONTAL);
+        content.setPadding(dp(22), dp(26), dp(22), dp(28));
+        content.addView(appHeader(tr("voice_intro"), tr("voice_sub"), tr("close"), new View.OnClickListener() {
+            @Override public void onClick(View v) { stopVoice(); showHome(); }
+        }));
+        addSpace(content, 28);
+        TextView eyebrow = text(tr("voice_listening"), 16, TEAL, Typeface.BOLD);
+        eyebrow.setGravity(Gravity.CENTER);
+        content.addView(eyebrow);
+        addSpace(content, 18);
+        TextView orb = text("", 1, Color.TRANSPARENT, Typeface.NORMAL);
+        orb.setBackground(roundedGradient(100, INDIGO, TEAL));
+        orb.setElevation(dp(12));
+        content.addView(orb, new LinearLayout.LayoutParams(dp(174), dp(174)));
+        ScaleAnimation pulse = new ScaleAnimation(1f, 1.08f, 1f, 1.08f, 1, 0.5f, 1, 0.5f);
+        pulse.setDuration(900);
+        pulse.setRepeatMode(android.view.animation.Animation.REVERSE);
+        pulse.setRepeatCount(android.view.animation.Animation.INFINITE);
+        orb.startAnimation(pulse);
+        addSpace(content, 24);
+        voiceStatus = text(tr("voice_hearing"), 20, INK, Typeface.BOLD);
+        voiceStatus.setGravity(Gravity.CENTER);
+        content.addView(voiceStatus);
+        voiceTranscript = text(tr("voice_prompt"), 17, MUTED, Typeface.NORMAL);
+        voiceTranscript.setGravity(Gravity.CENTER);
+        voiceTranscript.setPadding(dp(8), dp(14), dp(8), dp(14));
+        content.addView(voiceTranscript, wideLp());
+        addSpace(content, 22);
+        TextView stop = primary(tr("stop_listening"));
+        stop.setBackground(roundedStroke(28, Color.rgb(210, 58, 62), Color.TRANSPARENT, 0));
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                stopVoice();
+                showIntake();
+            }
+        });
+        content.addView(stop);
+        transitionTo(scroll(content));
+    }
+
+    private void restartVoiceRecognition() {
+        if (!voiceActive || speechRecognizer == null) return;
+        speechRecognizer.cancel();
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, speechLocale());
+        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        speechRecognizer.startListening(intent);
+    }
+
+    private void stopVoice() {
+        voiceActive = false;
+        if (speechRecognizer != null) {
+            speechRecognizer.stopListening();
+            speechRecognizer.cancel();
+            speechRecognizer.destroy();
+            speechRecognizer = null;
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == VOICE_REQUEST && resultCode == RESULT_OK && data != null) {
-            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (result != null && !result.isEmpty()) {
-                parseSentence(result.get(0));
-                showIntake();
-            }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == VOICE_REQUEST && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startVoice();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (SCREEN_VOICE.equals(currentScreen)) {
+            stopVoice();
+            showHome();
+        } else if (SCREEN_HOME.equals(currentScreen) || SCREEN_LANGUAGE.equals(currentScreen) || SCREEN_SPLASH.equals(currentScreen)) {
+            super.onBackPressed();
+        } else if (SCREEN_ONBOARDING.equals(currentScreen)) {
+            if (onboardingPage > 0) { onboardingPage--; showOnboarding(); }
+            else showLanguage();
+        } else if (SCREEN_SETTINGS.equals(currentScreen) || SCREEN_INTAKE.equals(currentScreen) || SCREEN_COURSES.equals(currentScreen)) {
+            showHome();
+        } else if (SCREEN_RESULTS.equals(currentScreen)) {
+            showIntake();
+        } else if (SCREEN_DETAIL.equals(currentScreen)) {
+            showResults(match());
+        } else {
+            showHome();
         }
     }
 
@@ -554,13 +664,16 @@ public class MainActivity extends Activity {
         LinearLayout titleBlock = new LinearLayout(this);
         titleBlock.setOrientation(LinearLayout.VERTICAL);
         titleBlock.setPadding(dp(12), 0, dp(8), 0);
-        titleBlock.addView(text(title, 24, Color.WHITE, Typeface.BOLD));
+        TextView titleText = text(title, 20, Color.WHITE, Typeface.BOLD);
+        titleText.setMaxLines(2);
+        titleBlock.addView(titleText);
         TextView sub = text(subtitle, 14, Color.WHITE, Typeface.NORMAL);
         sub.setAlpha(0.88f);
         titleBlock.addView(sub);
         row.addView(titleBlock, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
         TextView right = pill(action, Color.WHITE, Color.argb(42, 255, 255, 255), Color.TRANSPARENT);
+        right.setMaxLines(1);
         right.setOnClickListener(listener);
         row.addView(right);
         header.addView(row);
@@ -578,7 +691,7 @@ public class MainActivity extends Activity {
 
         TextView main = text(label, code.equals("en") ? 24 : 27, INK, Typeface.BOLD);
         main.setGravity(Gravity.CENTER);
-        main.setMaxLines(1);
+        main.setMaxLines(2);
         card.addView(main);
         TextView sub = text(languageEnglishName(code), 14, Color.rgb(28, 31, 38), Typeface.NORMAL);
         sub.setGravity(Gravity.CENTER);
@@ -702,7 +815,7 @@ public class MainActivity extends Activity {
     }
 
     private LinearLayout.LayoutParams halfLp(boolean left) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(104), 1);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(124), 1);
         if (left) lp.setMargins(0, 0, dp(8), 0);
         else lp.setMargins(dp(8), 0, 0, 0);
         return lp;
@@ -830,6 +943,10 @@ public class MainActivity extends Activity {
         t.setTypeface(Typeface.DEFAULT, style);
         t.setLineSpacing(dp(2), 1.05f);
         t.setIncludeFontPadding(true);
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            t.setBreakStrategy(android.text.Layout.BREAK_STRATEGY_HIGH_QUALITY);
+            t.setHyphenationFrequency(android.text.Layout.HYPHENATION_FREQUENCY_NORMAL);
+        }
         return t;
     }
 
@@ -959,6 +1076,12 @@ public class MainActivity extends Activity {
         en.put("browse_note", "516 qualification packs are bundled in this app. Tap a course for its details.");
         en.put("offline_search", "Offline search");
         en.put("offline_search_sub", "Tap the choices below. No internet or account is needed.");
+        en.put("close", "Close");
+        en.put("voice_listening", "Listening");
+        en.put("voice_hearing", "I am listening to you");
+        en.put("voice_prompt", "Speak naturally. Tap stop when you are finished.");
+        en.put("stop_listening", "Stop listening");
+        en.put("voice_unavailable", "Voice input is not available on this phone.");
 
         if ("en".equals(lang) || lang.length() == 0) return en.getOrDefault(key, "");
         Map<String, String> local = new HashMap<>(en);
@@ -1166,6 +1289,12 @@ public class MainActivity extends Activity {
             local.put("browse_note", "இந்த செயலியில் 516 தகுதி பாடத்திட்டங்கள் உள்ளன. விவரங்களுக்கு ஒன்றைத் தட்டுங்கள்.");
             local.put("offline_search", "ஆஃப்லைன் தேடல்");
             local.put("offline_search_sub", "கீழே உள்ள தேர்வுகளைத் தட்டுங்கள். இணையம் அல்லது கணக்கு தேவையில்லை.");
+            local.put("close", "மூடு");
+            local.put("voice_listening", "கேட்கிறோம்");
+            local.put("voice_hearing", "நான் உங்களைக் கேட்கிறேன்");
+            local.put("voice_prompt", "இயல்பாக பேசுங்கள். முடிந்ததும் நிறுத்தவும்.");
+            local.put("stop_listening", "கேட்பதை நிறுத்து");
+            local.put("voice_unavailable", "இந்த தொலைபேசியில் குரல் வசதி இல்லை.");
         } else if ("hi".equals(lang)) {
             local.put("voice_intro", "अपने वॉइस सहायक से मिलें");
             local.put("voice_title", "JanDwar को अपनी जरूरत बताएं");
@@ -1179,6 +1308,12 @@ public class MainActivity extends Activity {
             local.put("browse_note", "इस ऐप में 516 योग्यता पैक हैं। विवरण के लिए कोई कोर्स चुनें।");
             local.put("offline_search", "ऑफलाइन खोज");
             local.put("offline_search_sub", "नीचे विकल्प दबाएं। इंटरनेट या खाते की जरूरत नहीं है।");
+            local.put("close", "बंद करें");
+            local.put("voice_listening", "सुन रहे हैं");
+            local.put("voice_hearing", "मैं आपकी बात सुन रहा हूं");
+            local.put("voice_prompt", "स्वाभाविक रूप से बोलें। पूरा होने पर रोकें।");
+            local.put("stop_listening", "सुनना रोकें");
+            local.put("voice_unavailable", "इस फोन पर वॉइस सुविधा उपलब्ध नहीं है।");
         } else if ("te".equals(lang)) {
             local.put("voice_intro", "మీ వాయిస్ సహాయకుడిని కలవండి");
             local.put("voice_title", "JanDwar కు మీ అవసరాన్ని చెప్పండి");
@@ -1192,6 +1327,12 @@ public class MainActivity extends Activity {
             local.put("browse_note", "ఈ యాప్‌లో 516 అర్హత ప్యాక్‌లు ఉన్నాయి. వివరాల కోసం కోర్సును నొక్కండి.");
             local.put("offline_search", "ఆఫ్లైన్ శోధన");
             local.put("offline_search_sub", "క్రింద ఎంపికలను నొక్కండి. ఇంటర్నెట్ లేదా ఖాతా అవసరం లేదు.");
+            local.put("close", "మూసివేయి");
+            local.put("voice_listening", "వింటున్నాం");
+            local.put("voice_hearing", "నేను మీ మాట వింటున్నాను");
+            local.put("voice_prompt", "సహజంగా మాట్లాడండి. పూర్తయ్యాక ఆపండి.");
+            local.put("stop_listening", "వినడం ఆపండి");
+            local.put("voice_unavailable", "ఈ ఫోన్‌లో వాయిస్ సౌకర్యం లేదు.");
         } else if ("kn".equals(lang)) {
             local.put("voice_intro", "ನಿಮ್ಮ ಧ್ವನಿ ಸಹಾಯಕನನ್ನು ಭೇಟಿ ಮಾಡಿ");
             local.put("voice_title", "JanDwar ಗೆ ನಿಮ್ಮ ಅಗತ್ಯವನ್ನು ಹೇಳಿ");
@@ -1205,6 +1346,12 @@ public class MainActivity extends Activity {
             local.put("browse_note", "ಈ ಆಪ್‌ನಲ್ಲಿ 516 ಅರ್ಹತಾ ಪ್ಯಾಕ್‌ಗಳಿವೆ. ವಿವರಗಳಿಗಾಗಿ ಕೋರ್ಸ್ ಒತ್ತಿರಿ.");
             local.put("offline_search", "ಆಫ್‌ಲೈನ್ ಹುಡುಕಾಟ");
             local.put("offline_search_sub", "ಕೆಳಗಿನ ಆಯ್ಕೆಗಳನ್ನು ಒತ್ತಿರಿ. ಇಂಟರ್ನೆಟ್ ಅಥವಾ ಖಾತೆ ಅಗತ್ಯವಿಲ್ಲ.");
+            local.put("close", "ಮುಚ್ಚಿ");
+            local.put("voice_listening", "ಕೇಳುತ್ತಿದ್ದೇವೆ");
+            local.put("voice_hearing", "ನಾನು ನಿಮ್ಮ ಮಾತು ಕೇಳುತ್ತಿದ್ದೇನೆ");
+            local.put("voice_prompt", "ಸಹಜವಾಗಿ ಮಾತನಾಡಿ. ಮುಗಿದ ನಂತರ ನಿಲ್ಲಿಸಿ.");
+            local.put("stop_listening", "ಕೇಳುವುದನ್ನು ನಿಲ್ಲಿಸಿ");
+            local.put("voice_unavailable", "ಈ ಫೋನ್‌ನಲ್ಲಿ ಧ್ವನಿ ಸೌಲಭ್ಯವಿಲ್ಲ.");
         } else if ("ml".equals(lang)) {
             local.put("voice_intro", "നിങ്ങളുടെ വോയ്സ് സഹായിയെ പരിചയപ്പെടൂ");
             local.put("voice_title", "JanDwar-നോട് നിങ്ങളുടെ ആവശ്യം പറയൂ");
@@ -1218,6 +1365,12 @@ public class MainActivity extends Activity {
             local.put("browse_note", "ഈ ആപ്പിൽ 516 യോഗ്യതാ പാക്കുകളുണ്ട്. വിശദാംശങ്ങൾക്ക് ഒരു കോഴ്സ് തിരഞ്ഞെടുക്കൂ.");
             local.put("offline_search", "ഓഫ്‌ലൈൻ തിരയൽ");
             local.put("offline_search_sub", "താഴെയുള്ള ഓപ്ഷനുകൾ അമർത്തൂ. ഇന്റർനെറ്റോ അക്കൗണ്ടോ ആവശ്യമില്ല.");
+            local.put("close", "അടയ്ക്കുക");
+            local.put("voice_listening", "കേൾക്കുന്നു");
+            local.put("voice_hearing", "ഞാൻ നിങ്ങളെ കേൾക്കുന്നു");
+            local.put("voice_prompt", "സ്വാഭാവികമായി സംസാരിക്കൂ. തീർന്നാൽ നിർത്തൂ.");
+            local.put("stop_listening", "കേൾക്കുന്നത് നിർത്തുക");
+            local.put("voice_unavailable", "ഈ ഫോണിൽ വോയ്സ് സൗകര്യം ലഭ്യമല്ല.");
         }
     }
 

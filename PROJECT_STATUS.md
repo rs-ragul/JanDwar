@@ -56,6 +56,37 @@ The previous UI placed the voice wording inside onboarding and placed the microp
 - Added `README.md` with run instructions, structure, data locations, language guidance, Bhashini integration guidance, and known limitations.
 - Added this file as the handoff source of truth for future AI sessions.
 
+## Latest continuation changes
+
+### Custom voice experience
+
+- Replaced the Android system speech-recognition activity with an in-app voice screen.
+- The screen has a JanDwar-branded animated listening orb, live partial transcript, listening status, and an explicit Stop listening button.
+- Recognition restarts after each completed phrase while the user remains on the voice screen, so the session continues until Stop, Close, or mobile Back is used.
+- Android `SpeechRecognizer` is still the local engine. Bhashini is not connected yet.
+
+### Mobile back behavior
+
+- Added explicit screen state and `onBackPressed()` handling.
+- Home, language selection, and splash retain normal exit behavior.
+- Settings, personalized finder, and course catalogue return to Home.
+- Results return to the finder; course details return to Results.
+- Voice Back/Close stops recognition and returns Home.
+- Onboarding moves to the previous page before returning to language selection.
+
+### Personalized finder cleanup
+
+- Removed the typed sentence field, `Use this sentence` action, and the redundant `Offline search` section from the personalized finder.
+- The finder is now tap-based only. The voice experience is a separate first-class path from Home.
+
+### Multilingual layout hardening
+
+- Long language labels can wrap to two lines in language cards.
+- App-header titles can wrap to two lines while the action remains compact.
+- Added high-quality Android line breaking and normal hyphenation frequency to shared text creation.
+- Increased language-card height to reduce Tamil/Malayalam clipping and alignment shifts.
+- Added translations for the custom voice status, prompt, close, stop, and unavailable states.
+
 ## Verification
 
 Command executed successfully:
@@ -91,3 +122,13 @@ The build still emits the pre-existing Android SDK XML compatibility warning and
 4. Consider moving the catalogue to a lazy list before production if browse-all performance is poor on low-end devices.
 5. Replace deprecated activity-result and permission APIs when modernizing the project architecture.
 6. Only then consider a larger Compose migration; it is not required to test the current prototype.
+
+## Handoff instruction for the next AI
+
+Read this file and `README.md` first. The latest implementation is in `MainActivity.java`. Test on a small phone in Tamil and Malayalam, verify the custom voice session really continues until Stop, and verify mobile Back from every screen before making broader UI changes.
+
+Suggested commit message after review:
+
+```text
+feat: add custom continuous voice flow and app navigation
+```

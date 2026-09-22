@@ -29,8 +29,8 @@ The APK is written to `app/build/outputs/apk/debug/app-debug.apk`.
    - a personalized course finder;
    - a browse-all-courses catalogue;
    - offline and verified-data statistics.
-5. Voice input through Android SpeechRecognizer when available.
-6. Offline search using education, work preference, travel range, district, interests, and an optional typed sentence.
+5. A custom in-app voice screen backed by Android SpeechRecognizer, with live transcript and Stop control.
+6. Tap-based personalized matching using education, work preference, travel range, district, and interests.
 7. Deterministic matching of bundled qualification packs.
 8. Course details with local verified-centre information or an explicit TAHDCO data-gap message.
 9. Settings with language switching and privacy/offline-data notes.
@@ -53,7 +53,7 @@ Add the language to `data/i18n.json` and the packaged copy under `app/src/main/a
 
 ## Wiring Bhashini later
 
-The current voice path deliberately uses Android `SpeechRecognizer` so the prototype works without an API key. To add Bhashini, introduce a small `SpeechGateway` implementation behind the existing `startVoice()` entry point. Keep credentials outside the APK, use a backend or local configuration mechanism, and preserve the Android recognizer as an offline/graceful fallback. Voice should only produce text/fields; course selection must remain deterministic and data-backed.
+The current voice path deliberately uses Android `SpeechRecognizer` inside a custom in-app screen so the prototype works without an API key. The session continues until the user taps Stop, closes it, or presses mobile Back. To add Bhashini, introduce a small `SpeechGateway` implementation behind the existing `startVoice()` entry point. Keep credentials outside the APK, use a backend or local configuration mechanism, and preserve the Android recognizer as an offline/graceful fallback. Voice should only produce text/fields; course selection must remain deterministic and data-backed.
 
 ## Product safeguards
 
@@ -66,6 +66,7 @@ The current voice path deliberately uses Android `SpeechRecognizer` so the proto
 
 - The project is currently a compact native Java/View implementation, not the Compose/Hilt architecture described in the original build prompt.
 - Android SpeechRecognizer availability depends on the device and installed speech service.
+- Continuous listening is implemented as repeated Android recognizer sessions; a production Bhashini gateway should provide a true streaming session where available.
 - The browse-all catalogue is intentionally local and currently loads the full bundled list into one scrollable screen.
 - The repository has no automated unit or UI test suite yet.
 - Gradle reports the existing Android SDK XML compatibility warning and the existing deprecated-API note for the legacy activity result/permission APIs; the debug build succeeds.
