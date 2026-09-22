@@ -69,9 +69,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setStatusBarColor(PAPER);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         loadData();
         root = new FrameLayout(this);
         root.setBackgroundColor(PAPER);
+        root.setPadding(0, getStatusBarInset(), 0, 0);
         setContentView(root);
         selectedInterests.add("dairy");
         lang = getPrefs().getString("lang", "");
@@ -181,24 +184,76 @@ public class MainActivity extends Activity {
         content.addView(appHeader(tr("name"), tr("tagline"), tr("settings"), new View.OnClickListener() {
             @Override public void onClick(View v) { showSettings(); }
         }));
-        addSpace(content, 18);
-        TextView search = searchBox(tr("home_title"));
-        search.setOnClickListener(new View.OnClickListener() {
+        addSpace(content, 16);
+        content.addView(voiceAssistantCard());
+        content.addView(sectionTitle(tr("choose_path")));
+        content.addView(actionCard(tr("personalized_title"), tr("personalized_sub"), tr("start_intake"), new View.OnClickListener() {
             @Override public void onClick(View v) { showIntake(); }
-        });
-        content.addView(search);
-        addSpace(content, 14);
+        }));
+        content.addView(actionCard(tr("browse_title"), tr("browse_sub"), tr("browse_action"), new View.OnClickListener() {
+            @Override public void onClick(View v) { showAllCourses(); }
+        }));
+        addSpace(content, 8);
         content.addView(statCard("516", tr("stat_roles"), "343", tr("stat_fundable")));
         content.addView(statCard("38", tr("stat_districts"), "20", tr("stat_centres")));
-        addSpace(content, 8);
-        content.addView(sectionTitle(tr("home_sub")));
-        TextView start = primary(tr("start_intake"));
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { showIntake(); }
-        });
-        content.addView(start);
         TextView note = cardText(tr("honesty_note"), 16, MUTED, Typeface.NORMAL);
         content.addView(note);
+        transitionTo(scroll(content));
+    }
+
+    private LinearLayout voiceAssistantCard() {
+        LinearLayout card = card();
+        LinearLayout row = new LinearLayout(this);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        TextView mic = text("●", 30, Color.WHITE, Typeface.BOLD);
+        mic.setGravity(Gravity.CENTER);
+        mic.setBackground(oval(SAFFRON));
+        row.addView(mic, new LinearLayout.LayoutParams(dp(62), dp(62)));
+        LinearLayout copy = new LinearLayout(this);
+        copy.setOrientation(LinearLayout.VERTICAL);
+        copy.setPadding(dp(14), 0, 0, 0);
+        copy.addView(text(tr("voice_title"), 21, INK, Typeface.BOLD));
+        copy.addView(text(tr("voice_sub"), 15, MUTED, Typeface.NORMAL));
+        row.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        TextView speak = pill(tr("speak_button"), Color.WHITE, TEAL, Color.TRANSPARENT);
+        speak.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { startVoice(); }
+        });
+        row.addView(speak);
+        card.addView(row);
+        return card;
+    }
+
+    private LinearLayout actionCard(String title, String subtitle, String action, View.OnClickListener listener) {
+        LinearLayout card = card();
+        card.setOnClickListener(listener);
+        card.addView(text(title, 20, INK, Typeface.BOLD));
+        card.addView(text(subtitle, 15, MUTED, Typeface.NORMAL));
+        TextView link = text(action + "  ->", 15, TEAL, Typeface.BOLD);
+        link.setPadding(0, dp(10), 0, 0);
+        card.addView(link);
+        return card;
+    }
+
+    private void showAllCourses() {
+        LinearLayout content = pageBase(true);
+        content.setPadding(dp(18), dp(18), dp(18), dp(22));
+        content.addView(appHeader(tr("browse_title"), tr("browse_sub"), tr("back"), new View.OnClickListener() {
+            @Override public void onClick(View v) { showHome(); }
+        }));
+        content.addView(cardText(tr("browse_note"), 15, MUTED, Typeface.NORMAL));
+        for (int i = 0; i < roles.length(); i++) {
+            JSONObject obj = roles.optJSONObject(i);
+            if (obj == null) continue;
+            Role role = new Role(obj);
+            if (!role.validName()) continue;
+            final Rec rec = new Rec(role, 0, tr("reason_base"));
+            LinearLayout course = courseCard(rec);
+            course.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) { showDetail(rec); }
+            });
+            content.addView(course);
+        }
         transitionTo(scroll(content));
     }
 
@@ -259,12 +314,8 @@ public class MainActivity extends Activity {
             content.addView(chip);
         }
         addSpace(content, 12);
-        content.addView(text(tr("voice"), 21, INK, Typeface.BOLD));
-        TextView speak = cardText(tr("mic_label") + "  " + tr("speak_button"), 19, INK, Typeface.BOLD);
-        speak.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { startVoice(); }
-        });
-        content.addView(speak);
+        content.addView(sectionTitle(tr("offline_search")));
+        content.addView(text(tr("offline_search_sub"), 15, MUTED, Typeface.NORMAL));
         sentenceInput = new EditText(this);
         sentenceInput.setMinLines(2);
         sentenceInput.setTextSize(17);
@@ -833,6 +884,11 @@ public class MainActivity extends Activity {
         return (int) (value * getResources().getDisplayMetrics().density + 0.5f);
     }
 
+    private int getStatusBarInset() {
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return resourceId == 0 ? dp(24) : getResources().getDimensionPixelSize(resourceId);
+    }
+
     private String tr(String key) {
         if ("name".equals(key)) return "JanDwar";
         String extra = extra(key);
@@ -891,9 +947,22 @@ public class MainActivity extends Activity {
         en.put("on_0", "Use big taps or one spoken sentence. No form stress.");
         en.put("on_1", "Recommendations follow PM-AJAY rules and education gates.");
         en.put("on_2", "Centres are shown only when verified for your district.");
+        en.put("voice_intro", "Meet your voice assistant");
+        en.put("voice_title", "Tell JanDwar what you need");
+        en.put("voice_sub", "Speak naturally. We will find a useful starting point.");
+        en.put("choose_path", "Choose your path");
+        en.put("personalized_title", "Personalized course finder");
+        en.put("personalized_sub", "Answer three simple questions and get matched options.");
+        en.put("browse_title", "Browse all courses");
+        en.put("browse_sub", "Explore every course in the offline catalogue.");
+        en.put("browse_action", "See all courses");
+        en.put("browse_note", "516 qualification packs are bundled in this app. Tap a course for its details.");
+        en.put("offline_search", "Offline search");
+        en.put("offline_search_sub", "Tap the choices below. No internet or account is needed.");
 
         if ("en".equals(lang) || lang.length() == 0) return en.getOrDefault(key, "");
         Map<String, String> local = new HashMap<>(en);
+        addFlowTranslations(local);
         if ("ta".equals(lang)) {
             local.put("tagline", "மக்களுக்கான நுழைவாயில்");
             local.put("continue", "தொடரவும்");
@@ -1083,6 +1152,75 @@ public class MainActivity extends Activity {
         return local.getOrDefault(key, "");
     }
 
+    private void addFlowTranslations(Map<String, String> local) {
+        if ("ta".equals(lang)) {
+            local.put("voice_intro", "உங்கள் குரல் உதவியாளரை சந்திக்கவும்");
+            local.put("voice_title", "JanDwar-ிடம் உங்கள் தேவையை சொல்லுங்கள்");
+            local.put("voice_sub", "இயல்பாக பேசுங்கள். தொடங்க ஒரு நல்ல வழியை காண்போம்.");
+            local.put("choose_path", "உங்கள் வழியை தேர்ந்தெடுக்கவும்");
+            local.put("personalized_title", "உங்களுக்கான பயிற்சி தேடல்");
+            local.put("personalized_sub", "மூன்று எளிய கேள்விகளுக்கு பதில் அளித்து விருப்பங்களை பெறுங்கள்.");
+            local.put("browse_title", "அனைத்து பயிற்சிகளையும் பார்க்கவும்");
+            local.put("browse_sub", "ஆஃப்லைன் பட்டியலில் உள்ள அனைத்து பயிற்சிகளையும் பாருங்கள்.");
+            local.put("browse_action", "அனைத்து பயிற்சிகள்");
+            local.put("browse_note", "இந்த செயலியில் 516 தகுதி பாடத்திட்டங்கள் உள்ளன. விவரங்களுக்கு ஒன்றைத் தட்டுங்கள்.");
+            local.put("offline_search", "ஆஃப்லைன் தேடல்");
+            local.put("offline_search_sub", "கீழே உள்ள தேர்வுகளைத் தட்டுங்கள். இணையம் அல்லது கணக்கு தேவையில்லை.");
+        } else if ("hi".equals(lang)) {
+            local.put("voice_intro", "अपने वॉइस सहायक से मिलें");
+            local.put("voice_title", "JanDwar को अपनी जरूरत बताएं");
+            local.put("voice_sub", "स्वाभाविक रूप से बोलें। हम शुरुआत के लिए सही रास्ता खोजेंगे।");
+            local.put("choose_path", "अपना रास्ता चुनें");
+            local.put("personalized_title", "आपके लिए कोर्स खोजें");
+            local.put("personalized_sub", "तीन सरल सवालों के जवाब देकर विकल्प पाएं।");
+            local.put("browse_title", "सभी कोर्स देखें");
+            local.put("browse_sub", "ऑफलाइन सूची के हर कोर्स को देखें।");
+            local.put("browse_action", "सभी कोर्स देखें");
+            local.put("browse_note", "इस ऐप में 516 योग्यता पैक हैं। विवरण के लिए कोई कोर्स चुनें।");
+            local.put("offline_search", "ऑफलाइन खोज");
+            local.put("offline_search_sub", "नीचे विकल्प दबाएं। इंटरनेट या खाते की जरूरत नहीं है।");
+        } else if ("te".equals(lang)) {
+            local.put("voice_intro", "మీ వాయిస్ సహాయకుడిని కలవండి");
+            local.put("voice_title", "JanDwar కు మీ అవసరాన్ని చెప్పండి");
+            local.put("voice_sub", "సహజంగా మాట్లాడండి. ప్రారంభించడానికి సరైన మార్గం కనుగొంటాం.");
+            local.put("choose_path", "మీ మార్గాన్ని ఎంచుకోండి");
+            local.put("personalized_title", "మీ కోసం కోర్సు వెతకండి");
+            local.put("personalized_sub", "మూడు సులభమైన ప్రశ్నలకు సమాధానం ఇచ్చి ఎంపికలు పొందండి.");
+            local.put("browse_title", "అన్ని కోర్సులు చూడండి");
+            local.put("browse_sub", "ఆఫ్లైన్ జాబితాలోని ప్రతి కోర్సును చూడండి.");
+            local.put("browse_action", "అన్ని కోర్సులు");
+            local.put("browse_note", "ఈ యాప్‌లో 516 అర్హత ప్యాక్‌లు ఉన్నాయి. వివరాల కోసం కోర్సును నొక్కండి.");
+            local.put("offline_search", "ఆఫ్లైన్ శోధన");
+            local.put("offline_search_sub", "క్రింద ఎంపికలను నొక్కండి. ఇంటర్నెట్ లేదా ఖాతా అవసరం లేదు.");
+        } else if ("kn".equals(lang)) {
+            local.put("voice_intro", "ನಿಮ್ಮ ಧ್ವನಿ ಸಹಾಯಕನನ್ನು ಭೇಟಿ ಮಾಡಿ");
+            local.put("voice_title", "JanDwar ಗೆ ನಿಮ್ಮ ಅಗತ್ಯವನ್ನು ಹೇಳಿ");
+            local.put("voice_sub", "ಸಹಜವಾಗಿ ಮಾತನಾಡಿ. ಪ್ರಾರಂಭಿಸಲು ಸರಿಯಾದ ದಾರಿ ಹುಡುಕುತ್ತೇವೆ.");
+            local.put("choose_path", "ನಿಮ್ಮ ದಾರಿಯನ್ನು ಆರಿಸಿ");
+            local.put("personalized_title", "ನಿಮಗಾಗಿ ಕೋರ್ಸ್ ಹುಡುಕಿ");
+            local.put("personalized_sub", "ಮೂರು ಸರಳ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ ಆಯ್ಕೆಗಳನ್ನು ಪಡೆಯಿರಿ.");
+            local.put("browse_title", "ಎಲ್ಲಾ ಕೋರ್ಸ್‌ಗಳನ್ನು ನೋಡಿ");
+            local.put("browse_sub", "ಆಫ್‌ಲೈನ್ ಪಟ್ಟಿಯಲ್ಲಿರುವ ಎಲ್ಲಾ ಕೋರ್ಸ್‌ಗಳನ್ನು ನೋಡಿ.");
+            local.put("browse_action", "ಎಲ್ಲಾ ಕೋರ್ಸ್‌ಗಳು");
+            local.put("browse_note", "ಈ ಆಪ್‌ನಲ್ಲಿ 516 ಅರ್ಹತಾ ಪ್ಯಾಕ್‌ಗಳಿವೆ. ವಿವರಗಳಿಗಾಗಿ ಕೋರ್ಸ್ ಒತ್ತಿರಿ.");
+            local.put("offline_search", "ಆಫ್‌ಲೈನ್ ಹುಡುಕಾಟ");
+            local.put("offline_search_sub", "ಕೆಳಗಿನ ಆಯ್ಕೆಗಳನ್ನು ಒತ್ತಿರಿ. ಇಂಟರ್ನೆಟ್ ಅಥವಾ ಖಾತೆ ಅಗತ್ಯವಿಲ್ಲ.");
+        } else if ("ml".equals(lang)) {
+            local.put("voice_intro", "നിങ്ങളുടെ വോയ്സ് സഹായിയെ പരിചയപ്പെടൂ");
+            local.put("voice_title", "JanDwar-നോട് നിങ്ങളുടെ ആവശ്യം പറയൂ");
+            local.put("voice_sub", "സ്വാഭാവികമായി സംസാരിക്കൂ. തുടങ്ങാനുള്ള ശരിയായ വഴി കണ്ടെത്താം.");
+            local.put("choose_path", "നിങ്ങളുടെ വഴി തിരഞ്ഞെടുക്കൂ");
+            local.put("personalized_title", "നിങ്ങൾക്കായുള്ള കോഴ്സ് കണ്ടെത്തൽ");
+            local.put("personalized_sub", "മൂന്ന് ലളിതമായ ചോദ്യങ്ങൾക്ക് ഉത്തരം നൽകി ഓപ്ഷനുകൾ നേടൂ.");
+            local.put("browse_title", "എല്ലാ കോഴ്സുകളും കാണൂ");
+            local.put("browse_sub", "ഓഫ്‌ലൈൻ പട്ടികയിലെ എല്ലാ കോഴ്സുകളും പരിശോധിക്കൂ.");
+            local.put("browse_action", "എല്ലാ കോഴ്സുകളും");
+            local.put("browse_note", "ഈ ആപ്പിൽ 516 യോഗ്യതാ പാക്കുകളുണ്ട്. വിശദാംശങ്ങൾക്ക് ഒരു കോഴ്സ് തിരഞ്ഞെടുക്കൂ.");
+            local.put("offline_search", "ഓഫ്‌ലൈൻ തിരയൽ");
+            local.put("offline_search_sub", "താഴെയുള്ള ഓപ്ഷനുകൾ അമർത്തൂ. ഇന്റർനെറ്റോ അക്കൗണ്ടോ ആവശ്യമില്ല.");
+        }
+    }
+
     private String languageMeaning(String code) {
         if ("ta".equals(code)) return "மக்களுக்கான நுழைவாயில்";
         if ("hi".equals(code)) return "नागरिकों का प्रवेश द्वार";
@@ -1102,7 +1240,7 @@ public class MainActivity extends Activity {
     }
 
     private String onTitle(int page) {
-        if (page == 0) return tr("voice") + ", " + tr("q_int");
+        if (page == 0) return tr("voice_intro");
         if (page == 1) return tr("fundable_badge");
         return tr("centre");
     }
