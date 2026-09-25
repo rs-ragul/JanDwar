@@ -72,10 +72,10 @@ public class MainActivity extends Activity {
     private String currentScreen = SCREEN_SPLASH;
     private int onboardingPage = 0;
 
-    private String selectedEdu = "edu_10";
-    private String selectedPref = "pref_self";
-    private String selectedTravel = "travel_district";
-    private String selectedDistrict = "Erode";
+    private String selectedEdu = "";
+    private String selectedPref = "";
+    private String selectedTravel = "";
+    private String selectedDistrict = "";
     private final Set<String> selectedInterests = new HashSet<>();
     private SpeechRecognizer speechRecognizer;
     private boolean voiceActive;
@@ -92,7 +92,6 @@ public class MainActivity extends Activity {
         root.setBackgroundColor(PAPER);
         root.setPadding(0, getStatusBarInset(), 0, 0);
         setContentView(root);
-        selectedInterests.add("dairy");
         lang = getPrefs().getString("lang", "");
         showSplash();
     }
@@ -236,6 +235,7 @@ public class MainActivity extends Activity {
         copy.addView(text(tr("voice_sub"), 15, MUTED, Typeface.NORMAL));
         row.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         TextView speak = pill(tr("speak_button"), Color.WHITE, TEAL, Color.TRANSPARENT);
+        addRipple(speak);
         speak.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { startVoice(); }
         });
@@ -246,6 +246,7 @@ public class MainActivity extends Activity {
 
     private LinearLayout actionCard(String title, String subtitle, String action, View.OnClickListener listener) {
         LinearLayout card = card();
+        addRipple(card);
         card.setOnClickListener(listener);
         card.addView(text(title, 20, INK, Typeface.BOLD));
         card.addView(text(subtitle, 15, MUTED, Typeface.NORMAL));
@@ -270,6 +271,7 @@ public class MainActivity extends Activity {
             if (!role.validName()) continue;
             final Rec rec = new Rec(role, 0, tr("reason_base"));
             LinearLayout course = courseCard(rec);
+            addRipple(course);
             course.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) { showDetail(rec); }
             });
@@ -307,31 +309,45 @@ public class MainActivity extends Activity {
         }));
         addSpace(content, 14);
         addQuestion(content, "q_edu", new String[]{"edu_below8", "edu_8", "edu_10", "edu_12", "edu_grad"}, selectedEdu, new SelectListener() {
-            @Override public void set(String key) { selectedEdu = key; showIntake(); }
+            @Override public void set(String key) { selectedEdu = key; }
         });
         addQuestion(content, "q_pref", new String[]{"pref_self", "pref_wage"}, selectedPref, new SelectListener() {
-            @Override public void set(String key) { selectedPref = key; showIntake(); }
+            @Override public void set(String key) { selectedPref = key; }
         });
         addQuestion(content, "q_travel", new String[]{"travel_local", "travel_district", "travel_any"}, selectedTravel, new SelectListener() {
-            @Override public void set(String key) { selectedTravel = key; showIntake(); }
+            @Override public void set(String key) { selectedTravel = key; }
         });
         content.addView(sectionTitle(tr("q_dist")));
-        TextView district = cardText(selectedDistrict, 20, INK, Typeface.BOLD);
+        final TextView district = text(selectedDistrict.isEmpty() ? tr("select_district") : selectedDistrict, 20, INK, Typeface.BOLD);
+        district.setBackgroundResource(getResources().getIdentifier("card_bg", "drawable", getPackageName()));
+        district.setPadding(dp(18), dp(18), dp(18), dp(18));
+        LinearLayout.LayoutParams dlp = wideLp();
+        dlp.setMargins(0, dp(8), 0, dp(10));
+        district.setLayoutParams(dlp);
+        if (android.os.Build.VERSION.SDK_INT >= 21) district.setElevation(dp(4));
         district.setGravity(Gravity.CENTER_VERTICAL);
+        addRipple(district);
         district.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { pickDistrict(); }
+            @Override public void onClick(View v) { pickDistrict(district); }
         });
         content.addView(district);
         addSpace(content, 10);
         content.addView(sectionTitle(tr("q_int")));
         String[] interests = {"dairy", "cattle", "goat", "poultry", "farming", "food", "machine", "textile", "construction", "tailor"};
         for (final String key : interests) {
-            TextView chip = chip(interest(key), selectedInterests.contains(key));
+            final TextView chip = chip(interest(key), selectedInterests.contains(key));
+            addRipple(chip);
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    if (selectedInterests.contains(key)) selectedInterests.remove(key);
-                    else selectedInterests.add(key);
-                    showIntake();
+                    if (selectedInterests.contains(key)) {
+                        selectedInterests.remove(key);
+                        chip.setTextColor(INK);
+                        chip.setBackgroundResource(getResources().getIdentifier("chip_plain", "drawable", getPackageName()));
+                    } else {
+                        selectedInterests.add(key);
+                        chip.setTextColor(INDIGO);
+                        chip.setBackgroundResource(getResources().getIdentifier("chip_selected", "drawable", getPackageName()));
+                    }
                 }
             });
             content.addView(chip);
@@ -339,7 +355,13 @@ public class MainActivity extends Activity {
         addSpace(content, 18);
         TextView submit = primary(tr("submit"));
         submit.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { showResults(match()); }
+            @Override public void onClick(View v) { 
+                if (selectedEdu.isEmpty() || selectedPref.isEmpty() || selectedTravel.isEmpty() || selectedDistrict.isEmpty() || selectedInterests.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please answer all questions.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showResults(match()); 
+            }
         });
         content.addView(submit);
         transitionTo(scroll(content));
@@ -412,7 +434,7 @@ public class MainActivity extends Activity {
         transitionTo(scroll(content));
     }
 
-    private void pickDistrict() {
+    private void pickDistrict(final TextView districtText) {
         final String[] names = new String[districts.length()];
         for (int i = 0; i < districts.length(); i++) names[i] = districts.optString(i);
         new AlertDialog.Builder(this)
@@ -420,7 +442,9 @@ public class MainActivity extends Activity {
                 .setItems(names, new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         selectedDistrict = names[which];
-                        showIntake();
+                        if (districtText != null) {
+                            districtText.setText(selectedDistrict);
+                        }
                     }
                 })
                 .show();
@@ -674,6 +698,7 @@ public class MainActivity extends Activity {
 
         TextView right = pill(action, Color.WHITE, Color.argb(42, 255, 255, 255), Color.TRANSPARENT);
         right.setMaxLines(1);
+        addRipple(right);
         right.setOnClickListener(listener);
         row.addView(right);
         header.addView(row);
@@ -821,12 +846,22 @@ public class MainActivity extends Activity {
         return lp;
     }
 
-    private void addQuestion(LinearLayout content, String title, String[] keys, String selected, final SelectListener listener) {
+    private void addQuestion(LinearLayout content, String title, final String[] keys, String selected, final SelectListener listener) {
         content.addView(sectionTitle(tr(title)));
+        final List<TextView> chips = new ArrayList<>();
         for (final String key : keys) {
-            TextView item = chip(tr(key), key.equals(selected));
+            final TextView item = chip(tr(key), key.equals(selected));
+            addRipple(item);
+            chips.add(item);
             item.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) { listener.set(key); }
+                @Override public void onClick(View v) {
+                    listener.set(key);
+                    for (int i = 0; i < keys.length; i++) {
+                        boolean isSelected = keys[i].equals(key);
+                        chips.get(i).setTextColor(isSelected ? INDIGO : INK);
+                        chips.get(i).setBackgroundResource(getResources().getIdentifier(isSelected ? "chip_selected" : "chip_plain", "drawable", getPackageName()));
+                    }
+                }
             });
             content.addView(item);
         }
@@ -895,33 +930,34 @@ public class MainActivity extends Activity {
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
         card.setBackgroundResource(getResources().getIdentifier("card_bg", "drawable", getPackageName()));
-        card.setPadding(dp(18), dp(16), dp(18), dp(16));
+        card.setPadding(dp(20), dp(20), dp(20), dp(20));
         LinearLayout.LayoutParams lp = wideLp();
-        lp.setMargins(0, dp(8), 0, dp(10));
+        lp.setMargins(0, dp(8), 0, dp(12));
         card.setLayoutParams(lp);
-        if (android.os.Build.VERSION.SDK_INT >= 21) card.setElevation(dp(2));
+        if (android.os.Build.VERSION.SDK_INT >= 21) card.setElevation(dp(4));
         return card;
     }
 
     private TextView cardText(String value, int sp, int color, int style) {
         TextView t = text(value, sp, color, style);
         t.setBackgroundResource(getResources().getIdentifier("card_bg", "drawable", getPackageName()));
-        t.setPadding(dp(18), dp(16), dp(18), dp(16));
+        t.setPadding(dp(20), dp(20), dp(20), dp(20));
         LinearLayout.LayoutParams lp = wideLp();
-        lp.setMargins(0, dp(8), 0, dp(10));
+        lp.setMargins(0, dp(8), 0, dp(12));
         t.setLayoutParams(lp);
-        if (android.os.Build.VERSION.SDK_INT >= 21) t.setElevation(dp(2));
+        if (android.os.Build.VERSION.SDK_INT >= 21) t.setElevation(dp(4));
         return t;
     }
 
     private TextView primary(String label) {
-        TextView t = text(label, 18, Color.WHITE, Typeface.BOLD);
+        TextView t = text(label, 20, Color.WHITE, Typeface.BOLD);
         t.setGravity(Gravity.CENTER);
         t.setBackgroundResource(getResources().getIdentifier("button_primary", "drawable", getPackageName()));
-        t.setPadding(dp(18), dp(15), dp(18), dp(15));
+        t.setPadding(dp(18), dp(18), dp(18), dp(18));
         LinearLayout.LayoutParams lp = wideLp();
         lp.setMargins(0, dp(12), 0, dp(12));
         t.setLayoutParams(lp);
+        addRipple(t);
         return t;
     }
 
@@ -1042,6 +1078,7 @@ public class MainActivity extends Activity {
         en.put("search", "Search");
         en.put("settings", "Settings");
         en.put("settings_sub", "Keep the app simple, private and ready for village use.");
+        en.put("select_district", "Select District");
         en.put("offline_data", "Offline data");
         en.put("offline_data_text", "Job roles, districts and centre details are stored inside the app.");
         en.put("privacy", "Privacy");
@@ -1529,6 +1566,15 @@ public class MainActivity extends Activity {
             String n = name.toLowerCase(Locale.ROOT);
             return n.contains("assistant") || n.contains("operator") || n.contains("technician")
                     || n.contains("worker") || n.contains("supervisor");
+        }
+    }
+
+    private void addRipple(View view) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            android.graphics.drawable.Drawable bg = view.getBackground();
+            android.content.res.ColorStateList color = android.content.res.ColorStateList.valueOf(Color.argb(40, 0, 0, 0));
+            android.graphics.drawable.RippleDrawable ripple = new android.graphics.drawable.RippleDrawable(color, bg, null);
+            view.setBackground(ripple);
         }
     }
 }
