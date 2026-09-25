@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-22:12
-INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-22:12
-INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-22:12
-INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-22:12
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-24:12
+INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-24:12
+INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-24:12
+INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:1:1-24:12
 	package
 		INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml
 	android:versionName
@@ -20,41 +20,49 @@ uses-permission#android.permission.CALL_PHONE
 ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:3:5-69
 	android:name
 		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:3:22-66
+uses-permission#android.permission.INTERNET
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:4:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:5:5-79
+	android:name
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:5:22-76
 application
-ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:5:5-21:19
-INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:5:5-21:19
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:7:5-23:19
+INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:7:5-23:19
 	android:extractNativeLibs
 		INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml
 	android:supportsRtl
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:10:9-35
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:12:9-35
 	android:label
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:8:9-41
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:10:9-41
 	android:roundIcon
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:9:9-51
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:11:9-51
 	android:icon
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:7:9-46
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:9:9-46
 	android:allowBackup
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:6:9-35
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:8:9-35
 	android:theme
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:11:9-40
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:13:9-40
 activity#in.jandwar.app.MainActivity
-ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:12:9-20:20
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:14:9-22:20
 	android:screenOrientation
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:15:13-49
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:17:13-49
 	android:exported
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:14:13-36
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:16:13-36
 	android:name
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:13:13-41
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:15:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:16:13-19:29
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:18:13-21:29
 action#android.intent.action.MAIN
-ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:17:17-69
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:19:17-69
 	android:name
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:17:25-66
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:19:25-66
 category#android.intent.category.LAUNCHER
-ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:18:17-77
+ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:20:17-77
 	android:name
-		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:18:27-74
+		ADDED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml:20:27-74
 uses-sdk
 INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from G:\Project\ThozhilThunai\app\src\main\AndroidManifest.xml

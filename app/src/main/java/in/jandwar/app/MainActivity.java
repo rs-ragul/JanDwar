@@ -44,6 +44,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import in.jandwar.app.ai.AiConfig;
+import in.jandwar.app.ai.BhashiniGateway;
+import in.jandwar.app.ai.ConversationController;
+import in.jandwar.app.ai.NluExtractor;
+import in.jandwar.app.ai.ProfileFragment;
+import in.jandwar.app.ai.TieredNluExtractor;
+
 public class MainActivity extends Activity {
     private static final int INDIGO = Color.rgb(27, 58, 140);
     private static final int TEAL = Color.rgb(15, 163, 163);
@@ -82,18 +89,46 @@ public class MainActivity extends Activity {
     private TextView voiceTranscript;
     private TextView voiceStatus;
 
+    // ── AI voice conversation ──────────────────────────────────────────────────
+    private BhashiniGateway bhashiniGateway;
+    private TieredNluExtractor nluExtractor;
+    private ConversationController conversation;
+    // Live conversation UI refs (populated in showConversationScreen)
+    private TextView convQuestionText;
+    private TextView convTranscriptText;
+    private TextView convStatusText;
+    private View convOrbView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(PAPER);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         loadData();
+        // Load API keys from assets/config.json
+        AiConfig.load(this);
+        // Initialise AI stack
+        bhashiniGateway = new BhashiniGateway();
+        nluExtractor = new TieredNluExtractor(bhashiniGateway);
         root = new FrameLayout(this);
         root.setBackgroundColor(PAPER);
         root.setPadding(0, getStatusBarInset(), 0, 0);
         setContentView(root);
         lang = getPrefs().getString("lang", "");
         showSplash();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop mic + TTS if user switches apps mid-conversation
+        stopConversation();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopConversation();
     }
 
     private void showSplash() {
@@ -295,6 +330,21 @@ public class MainActivity extends Activity {
         });
         content.addView(language);
         content.addView(infoLine(tr("offline_data"), tr("offline_data_text")));
+        
+        // Offline AI Download Option
+        TextView aiDownload = cardText(tr("offline_ai"), 20, INK, Typeface.BOLD);
+        TextView aiDesc = text(tr("offline_ai_text"), 15, MUTED, Typeface.NORMAL);
+        aiDesc.setPadding(dp(18), 0, dp(18), dp(16));
+        aiDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Downloading offline AI model...", Toast.LENGTH_SHORT).show();
+                // TODO: Trigger actual download logic for Gemma3-270M/SmolLM2
+            }
+        });
+        content.addView(aiDownload);
+        content.addView(aiDesc);
+
         content.addView(infoLine(tr("privacy"), tr("privacy_text")));
         content.addView(infoLine(tr("app_name_label"), "JanDwar · " + tr("tagline")));
         transitionTo(scroll(content));
@@ -455,98 +505,194 @@ public class MainActivity extends Activity {
             requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, VOICE_REQUEST);
             return;
         }
-        voiceActive = true;
         currentScreen = SCREEN_VOICE;
-        showVoiceScreen();
-        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
-            voiceStatus.setText(tr("voice_unavailable"));
-            return;
-        }
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-        speechRecognizer.setRecognitionListener(new RecognitionListener() {
-            @Override public void onReadyForSpeech(Bundle params) { voiceStatus.setText(tr("voice_listening")); }
-            @Override public void onBeginningOfSpeech() { voiceStatus.setText(tr("voice_hearing")); }
-            @Override public void onRmsChanged(float rmsdB) { }
-            @Override public void onBufferReceived(byte[] buffer) { }
-            @Override public void onEndOfSpeech() { if (voiceActive) restartVoiceRecognition(); }
-            @Override public void onError(int error) { if (voiceActive) restartVoiceRecognition(); }
-            @Override public void onResults(Bundle results) {
-                ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                if (matches != null && !matches.isEmpty()) {
-                    String sentence = matches.get(0);
-                    voiceTranscript.setText(sentence);
-                    parseSentence(sentence);
-                }
-                if (voiceActive) restartVoiceRecognition();
-            }
-            @Override public void onPartialResults(Bundle partialResults) {
-                ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                if (matches != null && !matches.isEmpty()) voiceTranscript.setText(matches.get(0));
-            }
-            @Override public void onEvent(int eventType, Bundle params) { }
-        });
-        restartVoiceRecognition();
+        showConversationScreen();
     }
 
-    private void showVoiceScreen() {
+    /**
+     * New AI-driven conversational voice screen.
+     * Builds the UI first, then starts the ConversationController which drives itself.
+     */
+    private void showConversationScreen() {
         LinearLayout content = pageBase(true);
         content.setGravity(Gravity.CENTER_HORIZONTAL);
         content.setPadding(dp(22), dp(26), dp(22), dp(28));
         content.addView(appHeader(tr("voice_intro"), tr("voice_sub"), tr("close"), new View.OnClickListener() {
-            @Override public void onClick(View v) { stopVoice(); showHome(); }
+            @Override public void onClick(View v) { stopConversation(); showHome(); }
         }));
-        addSpace(content, 28);
-        TextView eyebrow = text(tr("voice_listening"), 16, TEAL, Typeface.BOLD);
-        eyebrow.setGravity(Gravity.CENTER);
-        content.addView(eyebrow);
-        addSpace(content, 18);
+        addSpace(content, 20);
+
+        // Pulsing orb
         TextView orb = text("", 1, Color.TRANSPARENT, Typeface.NORMAL);
         orb.setBackground(roundedGradient(100, INDIGO, TEAL));
-        orb.setElevation(dp(12));
-        content.addView(orb, new LinearLayout.LayoutParams(dp(174), dp(174)));
+        if (android.os.Build.VERSION.SDK_INT >= 21) orb.setElevation(dp(12));
+        content.addView(orb, new LinearLayout.LayoutParams(dp(160), dp(160)));
+        convOrbView = orb;
         ScaleAnimation pulse = new ScaleAnimation(1f, 1.08f, 1f, 1.08f, 1, 0.5f, 1, 0.5f);
         pulse.setDuration(900);
         pulse.setRepeatMode(android.view.animation.Animation.REVERSE);
         pulse.setRepeatCount(android.view.animation.Animation.INFINITE);
         orb.startAnimation(pulse);
-        addSpace(content, 24);
-        voiceStatus = text(tr("voice_hearing"), 20, INK, Typeface.BOLD);
-        voiceStatus.setGravity(Gravity.CENTER);
-        content.addView(voiceStatus);
-        voiceTranscript = text(tr("voice_prompt"), 17, MUTED, Typeface.NORMAL);
-        voiceTranscript.setGravity(Gravity.CENTER);
-        voiceTranscript.setPadding(dp(8), dp(14), dp(8), dp(14));
-        content.addView(voiceTranscript, wideLp());
-        addSpace(content, 22);
+        addSpace(content, 18);
+
+        // Status label (Listening… / Thinking…)
+        convStatusText = text(tr("voice_listening"), 17, TEAL, Typeface.BOLD);
+        convStatusText.setGravity(Gravity.CENTER);
+        content.addView(convStatusText);
+        addSpace(content, 10);
+
+        // Current question
+        LinearLayout qCard = card();
+        convQuestionText = text("...", 21, INK, Typeface.BOLD);
+        convQuestionText.setGravity(Gravity.CENTER);
+        convQuestionText.setPadding(dp(4), dp(8), dp(4), dp(8));
+        qCard.addView(convQuestionText);
+        content.addView(qCard);
+
+        // User's transcript
+        convTranscriptText = text(tr("voice_prompt"), 16, MUTED, Typeface.NORMAL);
+        convTranscriptText.setGravity(Gravity.CENTER);
+        convTranscriptText.setPadding(dp(8), dp(14), dp(8), dp(14));
+        content.addView(convTranscriptText, wideLp());
+        addSpace(content, 16);
+
+        // Stop button
         TextView stop = primary(tr("stop_listening"));
         stop.setBackground(roundedStroke(28, Color.rgb(210, 58, 62), Color.TRANSPARENT, 0));
+        addRipple(stop);
         stop.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                stopVoice();
-                showIntake();
-            }
+            @Override public void onClick(View v) { stopConversation(); showHome(); }
         });
         content.addView(stop);
         transitionTo(scroll(content));
+
+        // Start conversation controller
+        conversation = new ConversationController(
+                this,
+                lang,
+                nluExtractor,
+                bhashiniGateway,
+                new ConversationController.Listener() {
+                    @Override
+                    public void onQuestion(String questionText) {
+                        if (convQuestionText != null) convQuestionText.setText(questionText);
+                        if (convTranscriptText != null) convTranscriptText.setText(tr("voice_prompt"));
+                    }
+                    @Override
+                    public void onPartialTranscript(String partial) {
+                        if (convTranscriptText != null) convTranscriptText.setText(partial);
+                    }
+                    @Override
+                    public void onTranscriptResult(String full) {
+                        if (convTranscriptText != null) convTranscriptText.setText(full);
+                    }
+                    @Override
+                    public void onFieldExtracted(ProfileFragment updated) {
+                        // Sync extracted profile back to our selection state
+                        applyProfileFragment(updated);
+                    }
+                    @Override
+                    public void onDone(ProfileFragment finalProfile) {
+                        applyProfileFragment(finalProfile);
+                        stopConversation();
+                        // Speak result summary, then show results
+                        speakResultSummary(finalProfile, () -> showResults(match()));
+                    }
+                    @Override
+                    public void onStatus(String statusText) {
+                        if (convStatusText != null) convStatusText.setText(statusText);
+                    }
+                    @Override
+                    public void onSpeaking(boolean isSpeaking) {
+                        if (convOrbView != null) {
+                            float scale = isSpeaking ? 1.15f : 1.0f;
+                            convOrbView.animate().scaleX(scale).scaleY(scale).setDuration(200).start();
+                        }
+                    }
+                }
+        );
+        conversation.start();
     }
 
-    private void restartVoiceRecognition() {
-        if (!voiceActive || speechRecognizer == null) return;
-        speechRecognizer.cancel();
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, speechLocale());
-        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        speechRecognizer.startListening(intent);
-    }
-
-    private void stopVoice() {
+    private void stopConversation() {
+        if (conversation != null) {
+            conversation.stop();
+            conversation = null;
+        }
+        // Legacy voice
         voiceActive = false;
         if (speechRecognizer != null) {
             speechRecognizer.stopListening();
             speechRecognizer.cancel();
             speechRecognizer.destroy();
             speechRecognizer = null;
+        }
+    }
+
+    private void stopVoice() {
+        stopConversation();
+    }
+
+    /** Apply extracted profile fields to the legacy selection state. */
+    private void applyProfileFragment(ProfileFragment frag) {
+        if (frag == null) return;
+        if (frag.hasEdu()) {
+            // Map AI edu values to app's edu keys
+            switch (frag.edu) {
+                case "none": case "class5": selectedEdu = "edu_below8"; break;
+                case "class8":  selectedEdu = "edu_8";   break;
+                case "class10": selectedEdu = "edu_10";  break;
+                case "class12": selectedEdu = "edu_12";  break;
+                case "graduate": selectedEdu = "edu_grad"; break;
+            }
+        }
+        if (frag.hasPref()) {
+            selectedPref = frag.preference.equals("self_employment") ? "pref_self" : "pref_wage";
+        }
+        if (frag.hasMobility()) {
+            switch (frag.mobility) {
+                case "local":    selectedTravel = "travel_local";    break;
+                case "district": selectedTravel = "travel_district"; break;
+                case "state":    selectedTravel = "travel_any";      break;
+            }
+        }
+        if (frag.hasDistrict()) selectedDistrict = frag.district;
+        if (frag.hasInterests()) {
+            for (String i : frag.interests) selectedInterests.add(i);
+        }
+    }
+
+    /** Speak the final result summary using Bhashini TTS → then run onDone. */
+    private void speakResultSummary(ProfileFragment profile, Runnable onDone) {
+        String summary = buildResultSummaryText(profile);
+        if (bhashiniGateway != null && bhashiniGateway.isAvailable()) {
+            bhashiniGateway.tts(summary, lang, new BhashiniGateway.TtsCallback() {
+                @Override public void onAudio(byte[] audio) { onDone.run(); }
+                @Override public void onError(String r) { onDone.run(); }
+            });
+        } else {
+            // Use Android TTS
+            final android.speech.tts.TextToSpeech[] ttsArr = {null};
+            ttsArr[0] = new android.speech.tts.TextToSpeech(this, status -> {
+                if (status == android.speech.tts.TextToSpeech.SUCCESS) {
+                    ttsArr[0].speak(summary, android.speech.tts.TextToSpeech.QUEUE_FLUSH, null, "summary");
+                    new Handler().postDelayed(() -> {
+                        ttsArr[0].shutdown();
+                        onDone.run();
+                    }, 3500);
+                } else {
+                    onDone.run();
+                }
+            });
+        }
+    }
+
+    private String buildResultSummaryText(ProfileFragment p) {
+        switch (lang) {
+            case "ta": return "உங்கள் பதில்களின் அடிப்படையில் சிறந்த படிப்பு வாய்ப்புகள் கண்டறியப்பட்டுள்ளன. தயவுசெய்து முடிவுகளை பாருங்கள்.";
+            case "hi": return "आपके जवाबों के आधार पर बेहतरीन कोर्स के विकल्प मिले हैं। कृपया नतीजे देखें।";
+            case "te": return "మీ సమాధానాల ఆధారంగా ఉత్తమ కోర్సు ఎంపికలు కనుగొనబడ్డాయి. దయచేసి ఫలితాలు చూడండి.";
+            default:   return "Based on your answers, I found some great course options. Please see the results.";
         }
     }
 
@@ -560,6 +706,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        stopConversation(); // Stop mic + TTS if playing
         if (SCREEN_VOICE.equals(currentScreen)) {
             stopVoice();
             showHome();
@@ -1081,6 +1228,8 @@ public class MainActivity extends Activity {
         en.put("select_district", "Select District");
         en.put("offline_data", "Offline data");
         en.put("offline_data_text", "Job roles, districts and centre details are stored inside the app.");
+        en.put("offline_ai", "Download Offline AI (45MB)");
+        en.put("offline_ai_text", "Get the small local AI model to use voice without internet.");
         en.put("privacy", "Privacy");
         en.put("privacy_text", "No personal details are saved or uploaded in this prototype.");
         en.put("app_name_label", "App");
@@ -1140,6 +1289,8 @@ public class MainActivity extends Activity {
             local.put("settings_sub", "கிராம பயன்பாட்டிற்கு எளிமையாகவும் தனியுரிமையுடனும் வைத்திருக்கவும்.");
             local.put("offline_data", "ஆஃப்லைன் தரவு");
             local.put("offline_data_text", "பணிகள், மாவட்டங்கள், மைய விவரங்கள் செயலிக்குள் சேமிக்கப்பட்டுள்ளன.");
+            local.put("offline_ai", "ஆஃப்லைன் AI பதிவிறக்கம் (45MB)");
+            local.put("offline_ai_text", "இணையம் இல்லாமல் குரலைப் பயன்படுத்த சிறிய உள் மாடலைப் பெறுங்கள்.");
             local.put("privacy", "தனியுரிமை");
             local.put("privacy_text", "இந்த முன்மாதிரியில் தனிப்பட்ட விவரங்கள் சேமிக்கப்படவோ பதிவேற்றப்படவோ இல்லை.");
             local.put("app_name_label", "செயலி");
@@ -1177,6 +1328,8 @@ public class MainActivity extends Activity {
             local.put("settings_sub", "ऐप को सरल, निजी और गांव के उपयोग के लिए तैयार रखें।");
             local.put("offline_data", "ऑफलाइन डेटा");
             local.put("offline_data_text", "भूमिकाएं, जिले और केंद्र विवरण ऐप के अंदर रखे गए हैं।");
+            local.put("offline_ai", "ऑफलाइन AI डाउनलोड (45MB)");
+            local.put("offline_ai_text", "बिना इंटरनेट आवाज़ का उपयोग करने के लिए छोटा लोकल मॉडल डाउनलोड करें।");
             local.put("privacy", "गोपनीयता");
             local.put("privacy_text", "इस प्रोटोटाइप में निजी जानकारी सेव या अपलोड नहीं होती।");
             local.put("app_name_label", "ऐप");
@@ -1214,6 +1367,8 @@ public class MainActivity extends Activity {
             local.put("settings_sub", "యాప్‌ను సులభంగా, ప్రైవేట్‌గా, గ్రామ వినియోగానికి సిద్ధంగా ఉంచండి.");
             local.put("offline_data", "ఆఫ్లైన్ డేటా");
             local.put("offline_data_text", "పాత్రలు, జిల్లాలు, కేంద్ర వివరాలు యాప్‌లోనే నిల్వ ఉన్నాయి.");
+            local.put("offline_ai", "ఆఫ్‌లైన్ AI డౌన్‌లోడ్ (45MB)");
+            local.put("offline_ai_text", "ఇంటర్నెట్ లేకుండా వాయిస్‌ని ఉపయోగించడానికి చిన్న లోకల్ మోడల్‌ను పొందండి.");
             local.put("privacy", "గోప్యత");
             local.put("privacy_text", "ఈ నమూనాలో వ్యక్తిగత వివరాలు సేవ్ లేదా అప్లోడ్ చేయబడవు.");
             local.put("app_name_label", "యాప్");
@@ -1251,6 +1406,8 @@ public class MainActivity extends Activity {
             local.put("settings_sub", "ಆಪ್ ಅನ್ನು ಸರಳ, ಖಾಸಗಿ ಮತ್ತು ಗ್ರಾಮ ಬಳಕೆಗೆ ಸಿದ್ಧವಾಗಿರಿಸಿ.");
             local.put("offline_data", "ಆಫ್ಲೈನ್ ಡೇಟಾ");
             local.put("offline_data_text", "ಪಾತ್ರಗಳು, ಜಿಲ್ಲೆಗಳು ಮತ್ತು ಕೇಂದ್ರ ವಿವರಗಳು ಆಪ್ ಒಳಗೆ ಸಂಗ್ರಹವಾಗಿವೆ.");
+            local.put("offline_ai", "ಆಫ್‌ಲೈನ್ AI ಡೌನ್‌ಲೋಡ್ (45MB)");
+            local.put("offline_ai_text", "ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆ ಧ್ವನಿಯನ್ನು ಬಳಸಲು ಸಣ್ಣ ಸ್ಥಳೀಯ ಮಾದರಿಯನ್ನು ಪಡೆಯಿರಿ.");
             local.put("privacy", "ಗೌಪ್ಯತೆ");
             local.put("privacy_text", "ಈ ಮಾದರಿಯಲ್ಲಿ ವೈಯಕ್ತಿಕ ವಿವರಗಳನ್ನು ಉಳಿಸಲಾಗುವುದಿಲ್ಲ ಅಥವಾ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ.");
             local.put("app_name_label", "ಆಪ್");
@@ -1288,6 +1445,8 @@ public class MainActivity extends Activity {
             local.put("settings_sub", "ആപ്പ് ലളിതവും സ്വകാര്യവും ഗ്രാമ ഉപയോഗത്തിന് തയ്യാറുമായിരിക്കുക.");
             local.put("offline_data", "ഓഫ്‌ലൈൻ ഡാറ്റ");
             local.put("offline_data_text", "ജോലികൾ, ജില്ലകൾ, കേന്ദ്ര വിവരങ്ങൾ ആപ്പിനുള്ളിൽ സൂക്ഷിച്ചിരിക്കുന്നു.");
+            local.put("offline_ai", "ഓഫ്‌ലൈൻ AI ഡൗൺലോഡ് (45MB)");
+            local.put("offline_ai_text", "ഇന്റർനെറ്റ് ഇല്ലാതെ വോയ്‌സ് ഉപയോഗിക്കാൻ ചെറിയ ലോക്കൽ മോഡൽ നേടുക.");
             local.put("privacy", "സ്വകാര്യത");
             local.put("privacy_text", "ഈ മാതൃകയിൽ വ്യക്തിഗത വിവരങ്ങൾ സംരക്ഷിക്കുകയോ അപ്‌ലോഡ് ചെയ്യുകയോ ഇല്ല.");
             local.put("app_name_label", "ആപ്പ്");

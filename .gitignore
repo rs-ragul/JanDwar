@@ -1,0 +1,7 @@
+# Never commit API keys
+app/src/main/assets/config.json
+
+# Gradle
+.gradle/
+build/
+app/build/
