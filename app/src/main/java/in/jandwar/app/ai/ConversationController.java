@@ -158,15 +158,15 @@ public class ConversationController {
         }
         if (dynamicQuestionNative != null) {
             listener.onQuestion(dynamicQuestionNative);
-            speakThenListen(dynamicQuestionNative);
+            speakThenListen(dynamicQuestionNative, true);
         } else {
-            // If the AI failed to generate a question (e.g., network error or parse error), use a fallback.
-            String fallback = "en".equals(langCode) ? "Could you please tell me more?" : 
-                              "hi".equals(langCode) ? "कृपया मुझे और बता सकते हैं?" : 
-                              "ta".equals(langCode) ? "தயவுசெய்து மேலும் சொல்ல முடியுமா?" : 
-                              "te".equals(langCode) ? "దయచేసి నాకు మరింత చెప్పగలరా?" : "Could you please tell me more?";
+            // If the AI failed to generate a question but there was no fatal error, ask them to continue
+            String fallback = "en".equals(langCode) ? "Could you please elaborate?" : 
+                              "hi".equals(langCode) ? "क्या आप विस्तार से बता सकते हैं?" : 
+                              "ta".equals(langCode) ? "மேலும் விவரங்களைச் சொல்ல முடியுமா?" : 
+                              "te".equals(langCode) ? "దయచేసి మరిన్ని వివరాలు చెప్పగలరా?" : "Could you please elaborate?";
             listener.onQuestion(fallback);
-            speakThenListen(fallback);
+            speakThenListen(fallback, true);
         }
     }
 
@@ -215,7 +215,15 @@ public class ConversationController {
             public void onError(String reason) {
                 if (stopped) return;
                 listener.onStatus("AI Error: " + reason);
-                nextStep(null);
+                
+                // Speak a proper error apology instead of a dumb fallback question
+                String errorApology = "en".equals(langCode) ? "Sorry, I am facing a connection issue." : 
+                                      "hi".equals(langCode) ? "क्षमा करें, कनेक्शन में समस्या है।" : 
+                                      "ta".equals(langCode) ? "மன்னிக்கவும், நெட்வொர்க் பிழை ஏற்பட்டுள்ளது." : 
+                                      "te".equals(langCode) ? "క్షమించండి, నెట్‌వర్క్ సమస్య ఉంది." : "Connection error.";
+                
+                // Speak the error and do NOT start listening again immediately to prevent looping
+                speakThenListen(errorApology, false);
             }
         });
     }
@@ -236,13 +244,13 @@ public class ConversationController {
         return text;
     }
 
-    private void speakThenListen(String text) {
+    private void speakThenListen(String text, boolean listenAfter) {
         if (stopped) return;
         listener.onSpeaking(true);
 
         String cleanText = formatForTts(text);
         if (cleanText.isEmpty()) {
-            startListening();
+            if (listenAfter) startListening();
             return;
         }
 
@@ -262,27 +270,33 @@ public class ConversationController {
             }
         }
 
+        Runnable onSpeechDone = () -> {
+            if (!stopped && listenAfter) {
+                startListening();
+            }
+        };
+
         if (useBhashini) {
             bhashini.tts(cleanText, langCode, new BhashiniGateway.TtsCallback() {
                 @Override public void onAudio(byte[] audio) {
-                    playAudio(audio, () -> { if (!stopped) startListening(); });
+                    playAudio(audio, onSpeechDone);
                 }
                 @Override public void onError(String err) {
-                    speakWithAndroidTts(cleanText, () -> { if (!stopped) startListening(); });
+                    speakWithAndroidTts(cleanText, onSpeechDone);
                 }
             });
         } else if (useSarvam) {
             new SarvamGateway().synthesize(cleanText, langCode, new SarvamGateway.Callback() {
                 @Override public void onSuccess(byte[] audio) {
-                    playAudio(audio, () -> { if (!stopped) startListening(); });
+                    playAudio(audio, onSpeechDone);
                 }
                 @Override public void onError(String error) {
-                    speakWithAndroidTts(cleanText, () -> { if (!stopped) startListening(); });
+                    speakWithAndroidTts(cleanText, onSpeechDone);
                 }
             });
         } else {
             // Android TTS (network or offline based on setTtsLanguage)
-            speakWithAndroidTts(cleanText, () -> { if (!stopped) startListening(); });
+            speakWithAndroidTts(cleanText, onSpeechDone);
         }
     }
 
