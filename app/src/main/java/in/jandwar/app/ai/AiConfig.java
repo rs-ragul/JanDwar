@@ -12,6 +12,7 @@ public final class AiConfig {
     public static String bhashiniInferenceKey = "";
     public static String bhashiniAppId = "";
     public static String groqApiKey = "";
+    public static String sarvamApiKey = "";
 
     private static boolean loaded = false;
 
@@ -29,6 +30,7 @@ public final class AiConfig {
             bhashiniInferenceKey = obj.optString("bhashini_inference_key", "");
             bhashiniAppId       = obj.optString("bhashini_app_id", "");
             groqApiKey          = obj.optString("groq_api_key", "");
+            sarvamApiKey        = obj.optString("sarvam_api_key", "");
             loaded = true;
         } catch (Exception ignored) { /* keys stay empty; app degrades gracefully */ }
     }

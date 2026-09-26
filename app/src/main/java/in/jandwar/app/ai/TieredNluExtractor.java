@@ -9,12 +9,10 @@ package in.jandwar.app.ai;
 public class TieredNluExtractor implements NluExtractor {
 
     private final GroqExtractor groq;
-    private final DeterministicParser deterministic;
     private final BhashiniGateway bhashini;
 
     public TieredNluExtractor(BhashiniGateway bhashiniGateway) {
         this.groq = new GroqExtractor();
-        this.deterministic = new DeterministicParser();
         this.bhashini = bhashiniGateway;
     }
 
@@ -23,8 +21,8 @@ public class TieredNluExtractor implements NluExtractor {
         if (isOnline && groq.isConfigured()) {
             runGroq(text, langCode, currentProfile, callback);
         } else {
-            // Offline → Tier 3 (deterministic)
-            callback.onResult(deterministic.parse(text));
+            // Offline - user requested NO deterministic parser. Only AI.
+            callback.onError("AI requires internet connection. Please connect to Wi-Fi or use mobile data.");
         }
     }
 
@@ -33,16 +31,11 @@ public class TieredNluExtractor implements NluExtractor {
         groq.extract(text, srcLang, currentProfile, true, new Callback() {
             @Override
             public void onResult(ProfileFragment fragment) {
-                // Validate against original text too
-                ProfileFragment validated = deterministic.validate(fragment, text);
-                // Keep nextQuestion which might have been lost in validation
-                if (fragment.nextQuestion != null) validated.nextQuestion = fragment.nextQuestion;
-                callback.onResult(validated);
+                callback.onResult(fragment);
             }
             @Override
             public void onError(String reason) {
-                // Groq failed → fall back to Tier 3
-                callback.onResult(deterministic.parse(text));
+                callback.onError(reason);
             }
         });
     }

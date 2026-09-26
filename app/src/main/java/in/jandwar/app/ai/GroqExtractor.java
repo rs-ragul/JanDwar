@@ -1,5 +1,6 @@
 package in.jandwar.app.ai;
 
+
 import android.os.Handler;
 import android.os.Looper;
 import okhttp3.Call;
@@ -20,11 +21,10 @@ import java.util.concurrent.TimeUnit;
 public class GroqExtractor implements NluExtractor {
 
     private static final String GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-    private static final String MODEL = "qwen/qwen3.8-27b";
+    private static final String MODEL = "openai/gpt-oss-120b";
     private static final MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     private final OkHttpClient client;
-    private final DeterministicParser validator;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public GroqExtractor() {
@@ -32,7 +32,6 @@ public class GroqExtractor implements NluExtractor {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(15, TimeUnit.SECONDS)
                 .build();
-        validator = new DeterministicParser();
     }
 
     public boolean isConfigured() {
@@ -78,8 +77,19 @@ public class GroqExtractor implements NluExtractor {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                if (!response.isSuccessful()) {
+                    try {
+                        JSONObject errJson = new JSONObject(responseBody);
+                        String errMsg = errJson.getJSONObject("error").getString("message");
+                        mainHandler.post(() -> callback.onError("API Error: " + errMsg));
+                    } catch (Exception e) {
+                        mainHandler.post(() -> callback.onError("HTTP Error: " + response.code()));
+                    }
+                    return;
+                }
+                
                 try {
-                    String responseBody = response.body().string();
                     JSONObject resp = new JSONObject(responseBody);
                     String content = resp
                             .getJSONArray("choices")
@@ -98,17 +108,32 @@ public class GroqExtractor implements NluExtractor {
                         content = content.substring(0, content.length()-3).trim();
                     }
                     
-                    ProfileFragment frag = validator.fromJson(content);
+                    int start = content.indexOf('{');
+                    int end = content.lastIndexOf('}');
+                    if (start >= 0 && end > start) {
+                        content = content.substring(start, end + 1);
+                    }
+                    
+                    ProfileFragment frag = new ProfileFragment();
                     try {
                         JSONObject outJson = new JSONObject(content);
+                        if (outJson.has("edu") && !outJson.isNull("edu")) frag.edu = outJson.getString("edu");
+                        if (outJson.has("preference") && !outJson.isNull("preference")) frag.preference = outJson.getString("preference");
+                        if (outJson.has("district") && !outJson.isNull("district")) frag.district = outJson.getString("district");
+                        if (outJson.has("mobility") && !outJson.isNull("mobility")) frag.mobility = outJson.getString("mobility");
+                        if (outJson.has("interests") && !outJson.isNull("interests")) {
+                            JSONArray arr = outJson.getJSONArray("interests");
+                            frag.interests = new java.util.ArrayList<>();
+                            for (int i = 0; i < arr.length(); i++) {
+                                frag.interests.add(arr.getString(i));
+                            }
+                        }
                         if (outJson.has("next_question_native") && !outJson.isNull("next_question_native")) {
                             frag.nextQuestion = outJson.getString("next_question_native");
                         }
                     } catch (Exception ignored) {}
 
-                    ProfileFragment validated = validator.validate(frag, text);
-                    if (frag.nextQuestion != null) validated.nextQuestion = frag.nextQuestion;
-                    mainHandler.post(() -> callback.onResult(validated));
+                    mainHandler.post(() -> callback.onResult(frag));
                 } catch (Exception e) {
                     mainHandler.post(() -> callback.onError("Groq parse error: " + e.getMessage()));
                 }
@@ -130,12 +155,12 @@ public class GroqExtractor implements NluExtractor {
                 "Extract structured profile data from their spoken answer AND generate a natural, empathetic follow-up question to ask them next. " +
                 "They are missing the following information: " + missing + "\n\n" +
                 "Extract ONLY these fields if mentioned in the answer (use null if not mentioned):\n" +
-                "- edu: The user's education level or qualification.\n" +
-                "- preference: What they prefer to do (e.g. self employment, wage employment, own business, government job, etc).\n" +
-                "- interests: Array of strings representing their work interests or skills.\n" +
-                "- district: The district in Tamil Nadu they are from or want to work in (null if not mentioned).\n" +
-                "- mobility: How far they are willing to travel for work (e.g. local village, nearby district, anywhere in state).\n" +
-                "- next_question_native: A natural, conversational, and empathetic follow-up question (written directly in the user's regional language code '" + langCode + "') to ask for one of the missing pieces of information. This question will be spoken directly to the user, so it must be completely in the target regional language, NOT English.\n\n" +
+                "- edu: The user's education level. MUST be one of: [\"none\", \"class5\", \"class8\", \"class10\", \"class12\", \"graduate\"].\n" +
+                "- preference: What they prefer to do. MUST be one of: [\"pref_self\", \"pref_wage\"].\n" +
+                "- interests: Array of strings representing work interests. Valid strings: [\"dairy\", \"cattle\", \"goat\", \"poultry\", \"farming\", \"food\", \"machine\", \"textile\", \"construction\", \"tailor\"].\n" +
+                "- district: The district in Tamil Nadu they are from (e.g., \"Madurai\", \"Chennai\").\n" +
+                "- mobility: How far they can travel. MUST be one of: [\"local\", \"district\", \"state\"].\n" +
+                "- next_question_native: A natural, conversational, and empathetic follow-up question (written directly in the user's regional language code '" + langCode + "') to ask for one of the missing pieces of information. This question will be spoken directly to the user, so it must be completely in the target regional language, NOT English. Make it a SHORT spoken utterance (1-2 simple sentences max, warm tone), never a paragraph.\n\n" +
                 "Respond ONLY with valid JSON. No markdown. Example:\n" +
                 "{\"edu\":\"class8\",\"preference\":null,\"interests\":[\"cattle\"],\"district\":null,\"mobility\":null, \"next_question_native\": \"உங்கள் கல்வி தகுதி என்ன?\"}\n\n" +
                 "User's answer: \"" + userText + "\"";

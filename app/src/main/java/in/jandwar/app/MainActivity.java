@@ -384,6 +384,29 @@ public class MainActivity extends Activity {
         content.addView(aiDownload);
         content.addView(aiDesc);
         content.addView(pb);
+        
+        // Developer Settings (TTS engine)
+        content.addView(cardText("Developer Settings (TTS Engine)", 20, INK, Typeface.BOLD));
+        TextView ttsSetting = text("Current Engine: " + getPrefs().getString("tts_engine", "auto"), 15, MUTED, Typeface.NORMAL);
+        ttsSetting.setPadding(dp(18), 0, dp(18), dp(16));
+        content.addView(ttsSetting);
+        
+        TextView ttsBtn = primary("Select TTS Engine");
+        addRipple(ttsBtn);
+        ttsBtn.setOnClickListener(v -> {
+            String[] options = {"auto (Android en/hi, Bhashini regional)", "sarvam (Premium Online)", "bhashini (AI4Bharat)", "android (Network)", "android_offline"};
+            final String[] values = {"auto", "sarvam", "bhashini", "android", "android_offline"};
+            new android.app.AlertDialog.Builder(MainActivity.this)
+                .setTitle("Select TTS Engine")
+                .setItems(options, (d, which) -> {
+                    getPrefs().edit().putString("tts_engine", values[which]).apply();
+                    ttsSetting.setText("Current Engine: " + values[which]);
+                    Toast.makeText(MainActivity.this, "TTS set to " + values[which], Toast.LENGTH_SHORT).show();
+                })
+                .show();
+        });
+        content.addView(ttsBtn);
+        addSpace(content, 16);
 
         content.addView(infoLine(tr("privacy"), tr("privacy_text")));
         content.addView(infoLine(tr("app_name_label"), "JanDwar · " + tr("tagline")));
@@ -595,6 +618,41 @@ public class MainActivity extends Activity {
         convQuestionText.setPadding(dp(4), dp(8), dp(4), dp(8));
         qCard.addView(convQuestionText);
         content.addView(qCard);
+        addSpace(content, 20);
+
+        // Text input fallback for offline / noise
+        LinearLayout inputLayout = new LinearLayout(this);
+        inputLayout.setOrientation(LinearLayout.HORIZONTAL);
+        inputLayout.setGravity(Gravity.CENTER_VERTICAL);
+        inputLayout.setBackground(roundedStroke(12, Color.parseColor("#F5F5F5"), Color.TRANSPARENT, 0));
+        inputLayout.setPadding(dp(12), 0, dp(12), 0);
+
+        android.widget.EditText textInput = new android.widget.EditText(this);
+        textInput.setHint("Or type your answer here...");
+        textInput.setTextSize(16);
+        textInput.setTextColor(INK);
+        textInput.setBackgroundColor(Color.TRANSPARENT);
+        textInput.setPadding(0, dp(16), dp(12), dp(16));
+        textInput.setMaxLines(3);
+        LinearLayout.LayoutParams inputLp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        inputLayout.addView(textInput, inputLp);
+
+        TextView sendBtn = new TextView(this);
+        sendBtn.setText("Send");
+        sendBtn.setTextColor(TEAL);
+        sendBtn.setTypeface(null, Typeface.BOLD);
+        sendBtn.setTextSize(16);
+        sendBtn.setPadding(dp(12), dp(12), dp(12), dp(12));
+        sendBtn.setOnClickListener(v -> {
+            String ans = textInput.getText().toString().trim();
+            if (!ans.isEmpty() && conversation != null) {
+                textInput.setText("");
+                conversation.processAnswer(ans);
+            }
+        });
+        inputLayout.addView(sendBtn);
+
+        content.addView(inputLayout, wideLp());
 
         // User's transcript
         convTranscriptText = text(tr("voice_prompt"), 16, MUTED, Typeface.NORMAL);
@@ -694,7 +752,7 @@ public class MainActivity extends Activity {
             }
         }
         if (frag.hasPref()) {
-            selectedPref = frag.preference.equals("self_employment") ? "pref_self" : "pref_wage";
+            selectedPref = frag.preference.equals("pref_self") || frag.preference.equals("self_employment") ? "pref_self" : "pref_wage";
         }
         if (frag.hasMobility()) {
             switch (frag.mobility) {

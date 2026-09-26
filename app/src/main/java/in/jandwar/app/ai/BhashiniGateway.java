@@ -150,7 +150,7 @@ public class BhashiniGateway {
         language.put("sourceLanguage", lang);
         config.put("language", language);
         config.put("gender", "female");
-        config.put("samplingRate", 8000);
+        config.put("samplingRate", 22050);
         task.put("config", config);
         tasks.put(task);
         body.put("pipelineTasks", tasks);
