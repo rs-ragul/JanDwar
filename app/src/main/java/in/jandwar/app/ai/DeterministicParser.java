@@ -20,7 +20,7 @@ public class DeterministicParser implements NluExtractor {
     ));
 
     @Override
-    public void extract(String text, String langCode, Callback callback) {
+    public void extract(String text, String langCode, ProfileFragment currentProfile, boolean isOnline, Callback callback) {
         callback.onResult(parse(text));
     }
 
@@ -93,11 +93,7 @@ public class DeterministicParser implements NluExtractor {
         if (!llmResult.hasDistrict() && deterministic.hasDistrict()) llmResult.district = deterministic.district;
         if (!llmResult.hasInterests() && deterministic.hasInterests()) llmResult.interests = deterministic.interests;
 
-        // Validate edu enum
-        if (llmResult.edu != null) {
-            Set<String> valid = new HashSet<>(Arrays.asList("none","class5","class8","class10","class12","graduate"));
-            if (!valid.contains(llmResult.edu)) llmResult.edu = deterministic.edu;
-        }
+        // Removed strict enum validation to allow AI to extract any valid value
 
         return llmResult;
     }
@@ -119,8 +115,8 @@ public class DeterministicParser implements NluExtractor {
             JSONArray arr = obj.optJSONArray("interests");
             if (arr != null) {
                 for (int i = 0; i < arr.length(); i++) {
-                    String item = arr.optString(i, "");
-                    if (INTEREST_KEYS.contains(item)) frag.interests.add(item);
+                    String item = arr.optString(i, "").trim();
+                    if (!item.isEmpty()) frag.interests.add(item);
                 }
             }
         } catch (Exception ignored) {}

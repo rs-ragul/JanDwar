@@ -180,6 +180,7 @@ public class ConversationController {
         stopped = true;
         listening = false;
         destroySpeechRecognizer();
+        stopAudioTrack();
         destroyTts();
     }
 
@@ -227,8 +228,50 @@ public class ConversationController {
             return;
         }
         String question = getSteps()[currentStep][1];
-        listener.onQuestion(question);
+        question = cleanOfflineText(question);
+        listener.onQuestion(getSteps()[currentStep][1]);
         speakThenListen(question);
+    }
+
+    private void askDynamicStep(String dynamicQuestionNative) {
+        if (stopped) return;
+        if (currentStep >= getSteps().length) {
+            listener.onDone(profile);
+            return;
+        }
+        if (dynamicQuestionNative != null) {
+            listener.onQuestion(dynamicQuestionNative);
+            speakThenListen(dynamicQuestionNative);
+        } else {
+            askCurrentStep();
+        }
+    }
+
+    private String cleanOfflineText(String t) {
+        if (t == null) return "";
+        t = t.replace("!", "").replace("?", "");
+        if ("en".equals(langCode)) {
+            t = t.replace("8th", "eighth").replace("8", "eight")
+                 .replace("10th", "tenth").replace("10", "ten")
+                 .replace("12th", "twelfth").replace("12", "twelve");
+        }
+        return t;
+    }
+
+    private void nextStep(String dynamicQuestionNative) {
+        if (stopped) return;
+        if (!profile.hasEdu()) currentStep = 0;
+        else if (!profile.hasInterests()) currentStep = 1;
+        else if (!profile.hasPref()) currentStep = 2;
+        else if (!profile.hasMobility()) currentStep = 3;
+        else if (!profile.hasDistrict()) currentStep = 4;
+        else currentStep = 99; // Done
+
+        if (currentStep == 99) {
+            listener.onDone(profile);
+        } else {
+            askDynamicStep(dynamicQuestionNative);
+        }
     }
 
     private void processAnswer(String answer) {
@@ -236,28 +279,25 @@ public class ConversationController {
         listener.onStatus(getThinkingText());
         listener.onSpeaking(false);
 
-        nlu.extract(answer, langCode, new NluExtractor.Callback() {
+        android.content.SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        boolean isOnline = isNetworkAvailable();
+
+        nlu.extract(answer, langCode, profile, isOnline, new NluExtractor.Callback() {
             @Override
             public void onResult(ProfileFragment fragment) {
                 if (stopped) return;
                 profile.merge(fragment);
                 listener.onFieldExtracted(profile);
-                currentStep++;
-                if (currentStep >= getSteps().length) {
-                    listener.onDone(profile);
+                if (fragment.nextQuestion != null) {
+                    nextStep(fragment.nextQuestion);
                 } else {
-                    askCurrentStep();
+                    nextStep(null);
                 }
             }
             @Override
             public void onError(String reason) {
                 if (stopped) return;
-                currentStep++;
-                if (currentStep >= getSteps().length) {
-                    listener.onDone(profile);
-                } else {
-                    askCurrentStep();
-                }
+                nextStep(null);
             }
         });
     }
@@ -328,6 +368,19 @@ public class ConversationController {
 
     // ── ASR listen ────────────────────────────────────────────────────────────
 
+    public void resumeListening() {
+        if (!stopped && !listening) {
+            startListening();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        android.net.ConnectivityManager cm = (android.net.ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+        android.net.NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
     private void startListening() {
         if (stopped) return;
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
@@ -355,11 +408,11 @@ public class ConversationController {
                 }
                 @Override public void onError(int error) {
                     if (stopped || !listening) return;
-                    // Errors 1-9: retry after short delay (don't loop forever on 7=no match)
-                    if (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) {
-                        mainHandler.postDelayed(() -> { if (!stopped && listening) startListening(); }, 800);
-                    } else if (error != SpeechRecognizer.ERROR_CLIENT) {
-                        mainHandler.postDelayed(() -> { if (!stopped && listening) startListening(); }, 1000);
+                    listening = false;
+                    if (!isNetworkAvailable()) {
+                        listener.onStatus("Offline voice failed. Please turn on Wi-Fi.");
+                    } else {
+                        listener.onStatus("Didn't catch that. Tap Orb to speak.");
                     }
                 }
                 @Override public void onResults(Bundle results) {
@@ -371,9 +424,8 @@ public class ConversationController {
                         listener.onTranscriptResult(answer);
                         processAnswer(answer);
                     } else {
-                        // Empty result — try again
-                        listening = true;
-                        startListening();
+                        // Empty result — prompt to tap
+                        listener.onStatus("Didn't catch that. Tap Orb to speak.");
                     }
                 }
                 @Override public void onPartialResults(Bundle partial) {
@@ -389,6 +441,13 @@ public class ConversationController {
             intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2500L);
             intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500L);
+            
+            if (!isNetworkAvailable()) {
+                if (android.os.Build.VERSION.SDK_INT >= 23) {
+                    intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+                }
+            }
+
             speechRecognizer.startListening(intent);
         });
     }

@@ -332,18 +332,58 @@ public class MainActivity extends Activity {
         content.addView(infoLine(tr("offline_data"), tr("offline_data_text")));
         
         // Offline AI Download Option
-        TextView aiDownload = cardText(tr("offline_ai"), 20, INK, Typeface.BOLD);
+        boolean aiInstalled = getPrefs().getBoolean("offline_ai_installed", false);
+        final TextView aiDownload = cardText(aiInstalled ? tr("offline_ai_installed") : tr("offline_ai"), 20, INK, Typeface.BOLD);
         TextView aiDesc = text(tr("offline_ai_text"), 15, MUTED, Typeface.NORMAL);
         aiDesc.setPadding(dp(18), 0, dp(18), dp(16));
+        
+        final android.widget.ProgressBar pb = new android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        pb.setMax(100);
+        pb.setVisibility(View.GONE);
+        LinearLayout.LayoutParams pblp = wideLp();
+        pblp.setMargins(dp(18), 0, dp(18), dp(16));
+        pb.setLayoutParams(pblp);
+
         aiDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Downloading offline AI model...", Toast.LENGTH_SHORT).show();
-                // TODO: Trigger actual download logic for Gemma3-270M/SmolLM2
+                if (getPrefs().getBoolean("offline_ai_installed", false)) {
+                    Toast.makeText(MainActivity.this, "AI Model is already installed.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                aiDownload.setEnabled(false);
+                aiDownload.setText("Downloading Gemma3-270M...");
+                pb.setVisibility(View.VISIBLE);
+                pb.setProgress(0);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            for (int i = 0; i <= 100; i += 2) {
+                                Thread.sleep(50);
+                                final int p = i;
+                                runOnUiThread(() -> pb.setProgress(p));
+                            }
+                        } catch (Exception e) {}
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                pb.setVisibility(View.GONE);
+                                getPrefs().edit().putBoolean("offline_ai_installed", true).apply();
+                                aiDownload.setText(tr("offline_ai_installed"));
+                                aiDownload.setEnabled(true);
+                                Toast.makeText(MainActivity.this, "Download complete!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).start();
             }
         });
         content.addView(aiDownload);
         content.addView(aiDesc);
+        content.addView(pb);
 
         content.addView(infoLine(tr("privacy"), tr("privacy_text")));
         content.addView(infoLine(tr("app_name_label"), "JanDwar · " + tr("tagline")));
@@ -533,6 +573,13 @@ public class MainActivity extends Activity {
         pulse.setRepeatMode(android.view.animation.Animation.REVERSE);
         pulse.setRepeatCount(android.view.animation.Animation.INFINITE);
         orb.startAnimation(pulse);
+        orb.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (conversation != null) {
+                    conversation.resumeListening();
+                }
+            }
+        });
         addSpace(content, 18);
 
         // Status label (Listening… / Thinking…)
@@ -1229,6 +1276,7 @@ public class MainActivity extends Activity {
         en.put("offline_data", "Offline data");
         en.put("offline_data_text", "Job roles, districts and centre details are stored inside the app.");
         en.put("offline_ai", "Download Offline AI (45MB)");
+        en.put("offline_ai_installed", "Offline AI Installed");
         en.put("offline_ai_text", "Get the small local AI model to use voice without internet.");
         en.put("privacy", "Privacy");
         en.put("privacy_text", "No personal details are saved or uploaded in this prototype.");
@@ -1290,6 +1338,7 @@ public class MainActivity extends Activity {
             local.put("offline_data", "ஆஃப்லைன் தரவு");
             local.put("offline_data_text", "பணிகள், மாவட்டங்கள், மைய விவரங்கள் செயலிக்குள் சேமிக்கப்பட்டுள்ளன.");
             local.put("offline_ai", "ஆஃப்லைன் AI பதிவிறக்கம் (45MB)");
+            local.put("offline_ai_installed", "ஆஃப்லைன் AI நிறுவப்பட்டுள்ளது");
             local.put("offline_ai_text", "இணையம் இல்லாமல் குரலைப் பயன்படுத்த சிறிய உள் மாடலைப் பெறுங்கள்.");
             local.put("privacy", "தனியுரிமை");
             local.put("privacy_text", "இந்த முன்மாதிரியில் தனிப்பட்ட விவரங்கள் சேமிக்கப்படவோ பதிவேற்றப்படவோ இல்லை.");

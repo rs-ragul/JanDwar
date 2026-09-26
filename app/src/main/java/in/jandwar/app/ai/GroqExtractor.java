@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class GroqExtractor implements NluExtractor {
 
     private static final String GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-    private static final String MODEL = "llama-3.1-8b-instant";
+    private static final String MODEL = "qwen/qwen3.8-27b";
     private static final MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     private final OkHttpClient client;
@@ -40,13 +40,13 @@ public class GroqExtractor implements NluExtractor {
     }
 
     @Override
-    public void extract(String text, String langCode, NluExtractor.Callback callback) {
+    public void extract(String text, String langCode, ProfileFragment currentProfile, boolean isOnline, NluExtractor.Callback callback) {
         if (!isConfigured()) {
             callback.onError("Groq not configured");
             return;
         }
 
-        String prompt = buildPrompt(text);
+        String prompt = buildPrompt(text, currentProfile, langCode);
         JSONObject body = new JSONObject();
         try {
             JSONArray messages = new JSONArray();
@@ -56,8 +56,8 @@ public class GroqExtractor implements NluExtractor {
             messages.put(msg);
             body.put("model", MODEL);
             body.put("messages", messages);
-            body.put("temperature", 0.1);
-            body.put("max_tokens", 150);
+            body.put("temperature", 0.7); // higher temperature for natural questions
+            body.put("max_tokens", 250);
         } catch (Exception e) {
             callback.onError("JSON build error: " + e.getMessage());
             return;
@@ -86,8 +86,28 @@ public class GroqExtractor implements NluExtractor {
                             .getJSONObject(0)
                             .getJSONObject("message")
                             .getString("content");
+                    
+                    // The content might have markdown json blocks, strip it if necessary
+                    content = content.trim();
+                    if (content.startsWith("```json")) {
+                        content = content.substring(7).trim();
+                    } else if (content.startsWith("```")) {
+                        content = content.substring(3).trim();
+                    }
+                    if (content.endsWith("```")) {
+                        content = content.substring(0, content.length()-3).trim();
+                    }
+                    
                     ProfileFragment frag = validator.fromJson(content);
+                    try {
+                        JSONObject outJson = new JSONObject(content);
+                        if (outJson.has("next_question_native") && !outJson.isNull("next_question_native")) {
+                            frag.nextQuestion = outJson.getString("next_question_native");
+                        }
+                    } catch (Exception ignored) {}
+
                     ProfileFragment validated = validator.validate(frag, text);
+                    if (frag.nextQuestion != null) validated.nextQuestion = frag.nextQuestion;
                     mainHandler.post(() -> callback.onResult(validated));
                 } catch (Exception e) {
                     mainHandler.post(() -> callback.onError("Groq parse error: " + e.getMessage()));
@@ -96,16 +116,28 @@ public class GroqExtractor implements NluExtractor {
         });
     }
 
-    private String buildPrompt(String userText) {
-        return "You are an AI assistant helping extract structured profile data from a rural Indian " +
-                "user's spoken answer. Extract ONLY these fields if present (use null if not mentioned):\n" +
-                "- edu: one of [none, class5, class8, class10, class12, graduate]\n" +
-                "- preference: one of [self_employment, wage_employment]\n" +
-                "- interests: array from [dairy, cattle, goat, poultry, farming, food, machine, textile, construction, tailor]\n" +
-                "- district: district name in Tamil Nadu (null if not a TN district name)\n" +
-                "- mobility: one of [local, district, state]\n\n" +
-                "Respond ONLY with valid JSON. No explanation. No markdown. Example:\n" +
-                "{\"edu\":\"class8\",\"preference\":null,\"interests\":[\"cattle\"],\"district\":null,\"mobility\":null}\n\n" +
+    private String buildPrompt(String userText, ProfileFragment profile, String langCode) {
+        String missing = "";
+        if (profile != null) {
+            if (!profile.hasEdu()) missing += "education, ";
+            if (!profile.hasPref()) missing += "preference (self-employment vs wage), ";
+            if (!profile.hasInterests()) missing += "work interests/skills, ";
+            if (!profile.hasDistrict()) missing += "district in Tamil Nadu, ";
+            if (!profile.hasMobility()) missing += "mobility (local vs district vs state), ";
+        }
+        
+        return "You are a highly empathetic AI livelihood assistant conducting a conversational interview with a rural Indian beneficiary. " +
+                "Extract structured profile data from their spoken answer AND generate a natural, empathetic follow-up question to ask them next. " +
+                "They are missing the following information: " + missing + "\n\n" +
+                "Extract ONLY these fields if mentioned in the answer (use null if not mentioned):\n" +
+                "- edu: The user's education level or qualification.\n" +
+                "- preference: What they prefer to do (e.g. self employment, wage employment, own business, government job, etc).\n" +
+                "- interests: Array of strings representing their work interests or skills.\n" +
+                "- district: The district in Tamil Nadu they are from or want to work in (null if not mentioned).\n" +
+                "- mobility: How far they are willing to travel for work (e.g. local village, nearby district, anywhere in state).\n" +
+                "- next_question_native: A natural, conversational, and empathetic follow-up question (written directly in the user's regional language code '" + langCode + "') to ask for one of the missing pieces of information. This question will be spoken directly to the user, so it must be completely in the target regional language, NOT English.\n\n" +
+                "Respond ONLY with valid JSON. No markdown. Example:\n" +
+                "{\"edu\":\"class8\",\"preference\":null,\"interests\":[\"cattle\"],\"district\":null,\"mobility\":null, \"next_question_native\": \"உங்கள் கல்வி தகுதி என்ன?\"}\n\n" +
                 "User's answer: \"" + userText + "\"";
     }
 }

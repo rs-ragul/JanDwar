@@ -6,7 +6,7 @@ package in.jandwar.app.ai;
  * DeterministicParser (Tier 3 / JSON validator).
  */
 public interface NluExtractor {
-    void extract(String text, String langCode, Callback callback);
+    void extract(String text, String langCode, ProfileFragment currentProfile, boolean isOnline, Callback callback);
 
     interface Callback {
         void onResult(ProfileFragment fragment);

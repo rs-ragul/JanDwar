@@ -13,6 +13,7 @@ public class ProfileFragment {
     public List<String> interests;  // dairy, cattle, goat, poultry, farming, food, machine, textile, construction, tailor
     public String district;         // district name (Tamil Nadu)
     public String mobility;         // local | district | state
+    public String nextQuestion;     // AI-generated follow-up question
 
     public ProfileFragment() {
         interests = new ArrayList<>();

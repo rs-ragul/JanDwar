@@ -64,13 +64,20 @@ public class BhashiniGateway {
      * Translate text from a regional language to English using Bhashini NMT.
      */
     public void translate(String text, String sourceLang, TranslateCallback callback) {
-        if (!isAvailable() || "en".equals(sourceLang)) {
-            callback.onResult(text); // already English or Bhashini not available
+        translate(text, sourceLang, "en", callback);
+    }
+
+    /**
+     * Translate text from source to target using Bhashini NMT.
+     */
+    public void translate(String text, String sourceLang, String targetLang, TranslateCallback callback) {
+        if (!isAvailable() || sourceLang.equals(targetLang)) {
+            callback.onResult(text);
             return;
         }
         new Thread(() -> {
             try {
-                JSONObject body = buildNmtBody(text, sourceLang, "en");
+                JSONObject body = buildNmtBody(text, sourceLang, targetLang);
                 String response = post(body.toString());
                 String translated = parseNmtResponse(response);
                 mainHandler.post(() -> callback.onResult(translated != null ? translated : text));
