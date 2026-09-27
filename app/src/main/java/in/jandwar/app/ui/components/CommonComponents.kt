@@ -98,11 +98,11 @@ fun StatCard(a: String, aLabel: String, b: String, bLabel: String) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(a, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = BrandIndigo)
-                Text(aLabel, fontSize = 14.sp, color = Muted, fontWeight = FontWeight.Bold)
+                Text(aLabel, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(b, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = BrandIndigo)
-                Text(bLabel, fontSize = 14.sp, color = Muted, fontWeight = FontWeight.Bold)
+                Text(bLabel, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -146,10 +146,10 @@ fun ChipItem(text: String, selected: Boolean, onClick: () -> Unit, modifier: Mod
             selectedContainerColor = BrandTeal.copy(alpha = 0.15f),
             selectedLabelColor = BrandIndigo,
             containerColor = MaterialTheme.colorScheme.surface,
-            labelColor = Ink
+            labelColor = MaterialTheme.colorScheme.onSurface
         ),
         border = FilterChipDefaults.filterChipBorder(
-            borderColor = if (selected) BrandTeal else BorderLight,
+            borderColor = if (selected) BrandTeal else MaterialTheme.colorScheme.outline,
             selectedBorderColor = BrandTeal,
             enabled = true,
             selected = selected,

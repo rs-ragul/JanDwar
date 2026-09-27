@@ -45,7 +45,7 @@ fun ResultsScreen(
                 Text(
                     "${results.size} ${viewModel.tr("found")}",
                     fontSize = 14.sp,
-                    color = Muted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 if (viewModel.profile.familyOccupation.isNotBlank()) {
                     Text(
@@ -63,7 +63,7 @@ fun ResultsScreen(
 
         if (results.isEmpty()) {
             PremiumCard {
-                Text(viewModel.tr("no_results"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
+                Text(viewModel.tr("no_results"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
             }
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.weight(1f)) {
@@ -113,8 +113,8 @@ fun CourseCard(rec: MatchedRole, viewModel: AppViewModel, onDetail: () -> Unit) 
                 }
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(rec.role.job_role, fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Ink, maxLines = 3)
-                    Text("${rec.role.qp_code} · ${rec.role.ssc}", fontSize = 13.sp, color = Muted, fontWeight = FontWeight.Bold)
+                    Text(rec.role.job_role, fontSize = 17.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, maxLines = 3)
+                    Text("${rec.role.qp_code} · ${rec.role.ssc}", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                 }
                 AssistChip(
                     onClick = {},
@@ -128,20 +128,20 @@ fun CourseCard(rec: MatchedRole, viewModel: AppViewModel, onDetail: () -> Unit) 
             Spacer(Modifier.height(10.dp))
 
             Row {
-                Surface(shape = RoundedCornerShape(14.dp), color = Color(0xFFF8FAFD), modifier = Modifier.padding(end = 4.dp)) {
+                Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.padding(end = 4.dp)) {
                     Text(
                         if (rec.role.isLongTerm()) viewModel.tr("long_term") else viewModel.tr("short_term"),
                         fontSize = 12.sp,
-                        color = Muted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
                     )
                 }
-                Surface(shape = RoundedCornerShape(14.dp), color = Color(0xFFF8FAFD)) {
+                Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
                     Text(
                         "${viewModel.tr("level")} ${rec.role.levelLabel(viewModel.tr("level"))}",
                         fontSize = 12.sp,
-                        color = Muted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
                     )
@@ -150,50 +150,31 @@ fun CourseCard(rec: MatchedRole, viewModel: AppViewModel, onDetail: () -> Unit) 
 
             Spacer(Modifier.height(8.dp))
 
-            Text(rec.reason, fontSize = 13.sp, color = Ink, fontWeight = FontWeight.Medium)
+            Text(rec.reason, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium)
 
             Spacer(Modifier.height(8.dp))
 
-            // Family fit note per problem statement
             if (rec.familyFitNote.isNotBlank()) {
-                Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFFFFF3E0), modifier = Modifier.fillMaxWidth()) {
+                Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f), modifier = Modifier.fillMaxWidth()) {
                     Row(modifier = Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text("👨‍👩‍👧‍👦 ", fontSize = 14.sp)
-                        Text(
-                            rec.familyFitNote,
-                            fontSize = 13.sp,
-                            color = Color(0xFFBF360C),
-                            fontWeight = FontWeight.Bold
-                        )
+                        Text(rec.familyFitNote, fontSize = 13.sp, color = MaterialTheme.colorScheme.onTertiaryContainer, fontWeight = FontWeight.Bold)
                     }
                 }
                 Spacer(Modifier.height(6.dp))
             }
 
-            // Skill gap note
-            Surface(shape = RoundedCornerShape(12.dp), color = BrandTeal.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    rec.skillGapNote,
-                    fontSize = 13.sp,
-                    color = BrandIndigo,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(10.dp)
-                )
+            Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), modifier = Modifier.fillMaxWidth()) {
+                Text(rec.skillGapNote, fontSize = 13.sp, color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.Bold, modifier = Modifier.padding(10.dp))
             }
 
             Spacer(Modifier.height(6.dp))
 
-            // Region opportunity per problem statement
             if (rec.regionOpportunity.isNotBlank()) {
-                Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFFE8F5E9), modifier = Modifier.fillMaxWidth()) {
+                Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f), modifier = Modifier.fillMaxWidth()) {
                     Row(modifier = Modifier.padding(10.dp), verticalAlignment = Alignment.Top) {
                         Text("📍 ", fontSize = 14.sp)
-                        Text(
-                            rec.regionOpportunity,
-                            fontSize = 12.sp,
-                            color = Color(0xFF2E7D32),
-                            fontWeight = FontWeight.Medium
-                        )
+                        Text(rec.regionOpportunity, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSecondaryContainer, fontWeight = FontWeight.Medium)
                     }
                 }
                 Spacer(Modifier.height(6.dp))
@@ -202,7 +183,7 @@ fun CourseCard(rec: MatchedRole, viewModel: AppViewModel, onDetail: () -> Unit) 
             Text(
                 rec.centre?.name ?: viewModel.tr("no_centre"),
                 fontSize = 14.sp,
-                color = if (rec.centre == null) BrandSaffron else Muted,
+                color = if (rec.centre == null) BrandSaffron else MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Bold
             )
 

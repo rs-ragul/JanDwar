@@ -44,7 +44,6 @@ fun HomeScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // Voice assistant card
         PremiumCard {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
@@ -57,8 +56,8 @@ fun HomeScreen(
                     }
                 }
                 Column(modifier = Modifier.weight(1f).padding(start = 14.dp)) {
-                    Text(viewModel.tr("voice_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-                    Text(viewModel.tr("voice_sub"), fontSize = 13.sp, color = Muted)
+                    Text(viewModel.tr("voice_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                    Text(viewModel.tr("voice_sub"), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 AssistChip(
                     onClick = onNavigateVoice,
@@ -69,24 +68,22 @@ fun HomeScreen(
         }
 
         Spacer(Modifier.height(12.dp))
-        Text(viewModel.tr("choose_path"), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Ink, modifier = Modifier.padding(2.dp))
+        Text(viewModel.tr("choose_path"), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(2.dp))
 
-        // Personalized card
         PremiumCard {
             Column {
-                Text(viewModel.tr("personalized_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-                Text(viewModel.tr("personalized_sub"), fontSize = 14.sp, color = Muted, modifier = Modifier.padding(top = 4.dp))
+                Text(viewModel.tr("personalized_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                Text(viewModel.tr("personalized_sub"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
                 TextButton(onClick = onNavigateIntake) {
                     Text(viewModel.tr("start_intake") + "  ->", color = BrandTeal, fontWeight = FontWeight.Bold)
                 }
             }
         }
 
-        // Browse card
         PremiumCard {
             Column {
-                Text(viewModel.tr("browse_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-                Text(viewModel.tr("browse_sub"), fontSize = 14.sp, color = Muted, modifier = Modifier.padding(top = 4.dp))
+                Text(viewModel.tr("browse_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                Text(viewModel.tr("browse_sub"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
                 TextButton(onClick = onNavigateCourses) {
                     Text(viewModel.tr("browse_action") + "  ->", color = BrandTeal, fontWeight = FontWeight.Bold)
                 }
@@ -101,7 +98,7 @@ fun HomeScreen(
 
         Spacer(Modifier.height(12.dp))
         PremiumCard {
-            Text(viewModel.tr("honesty_note"), fontSize = 14.sp, color = Muted)
+            Text(viewModel.tr("honesty_note"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

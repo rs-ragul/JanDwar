@@ -18,8 +18,6 @@ import `in`.jandwar.app.ui.components.PremiumCard
 import `in`.jandwar.app.ui.theme.BrandIndigo
 import `in`.jandwar.app.ui.theme.BrandSaffron
 import `in`.jandwar.app.ui.theme.BrandTeal
-import `in`.jandwar.app.ui.theme.Ink
-import `in`.jandwar.app.ui.theme.Muted
 import `in`.jandwar.app.ui.viewmodel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,6 +30,47 @@ fun IntakeScreen(
     var showDistrictSheet by remember { mutableStateOf(false) }
     val districts = viewModel.getDistricts()
 
+    fun famOccLabel(): String = when(viewModel.currentLang) {
+        "ta" -> "குடும்ப / பரம்பரை தொழில்"
+        "hi" -> "परिवार / पारंपरिक व्यवसाय"
+        "te" -> "కుటుంబ / సాంప్రదాయ వృత్తి"
+        "kn" -> "ಕುಟುಂಬ / ಸಾಂಪ್ರದಾಯಿಕ ಉದ್ಯೋಗ"
+        "ml" -> "കുടുംബ / പരമ്പരാഗത തൊഴിൽ"
+        else -> "Family / Traditional Occupation"
+    }
+    fun famOccSub(): String = when(viewModel.currentLang) {
+        "ta" -> "குடும்ப தொழில் புரிந்து கொள்ள"
+        "hi" -> "परिवार के काम को समझना"
+        "te" -> "కుటుంబ వృత్తిని అర్థం చేసుకోవడానికి"
+        "kn" -> "ಕುಟುಂಬದ ಕೆಲಸವನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು"
+        "ml" -> "കുടുംബ തൊഴിൽ മനസ്സിലാക്കാൻ"
+        else -> "Helps avoid mismatch"
+    }
+    fun currLabel(): String = when(viewModel.currentLang) {
+        "ta" -> "தற்போதைய வாழ்வாதாரம்"
+        "hi" -> "वर्तमान आजीविका"
+        "te" -> "ప్రస్తుత జీవనోపాధి"
+        "kn" -> "ಪ್ರಸ್ತುತ ಜೀವನೋಪಾಯ"
+        "ml" -> "നിലവിലെ ഉപജീവനം"
+        else -> "Current Livelihood Activities"
+    }
+    fun physLabel(): String = when(viewModel.currentLang) {
+        "ta" -> "உடல் தடை ஏதேனும்?"
+        "hi" -> "कोई शारीरिक परेशानी?"
+        "te" -> "శారీరక ఇబ్బందులు?"
+        "kn" -> "ದೈಹಿಕ ತೊಂದರೆ?"
+        "ml" -> "ശാരീരിക ബുദ്ധിമുട്ട്?"
+        else -> "Physical Constraints (if any)"
+    }
+    fun localLabel(): String = when(viewModel.currentLang) {
+        "ta" -> "உங்கள் ஊரில் என்ன வேலை கிடைக்கும்?"
+        "hi" -> "आपके गाँव में क्या काम मिलता है?"
+        "te" -> "మీ ఊరిలో ఏ పనులు దొరుకుతాయి?"
+        "kn" -> "ನಿಮ್ಮ ಊರಲ್ಲಿ ಏನು ಕೆಲಸ ಸಿಗುತ್ತದೆ?"
+        "ml" -> "നിങ്ങളുടെ ഗ്രാമത്തിൽ എന്ത് ജോലി കിട്ടും?"
+        else -> "Local Economic Realities"
+    }
+
     Column(modifier = Modifier.fillMaxSize().padding(18.dp)) {
         GradientHeader(
             title = viewModel.tr("intake"),
@@ -43,9 +82,7 @@ fun IntakeScreen(
 
         Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
 
-            // Education - Required
-            Text(viewModel.tr("q_edu"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-            Text("Educational background - as per PM-AJAY guidelines", fontSize = 12.sp, color = Muted)
+            Text(viewModel.tr("q_edu"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.height(8.dp))
             listOf(
                 EducationLevel.BELOW_8 to viewModel.tr("edu_below8"),
@@ -69,16 +106,15 @@ fun IntakeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Family Occupation - NEW per problem statement
             PremiumCard {
                 Column {
-                    Text("Family / Traditional Occupation", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Ink)
-                    Text("Existing or traditional family occupations - helps avoid mismatch", fontSize = 12.sp, color = Muted, modifier = Modifier.padding(top = 2.dp))
+                    Text(famOccLabel(), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                    Text(famOccSub(), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(
                         value = viewModel.profile.familyOccupation,
                         onValueChange = { viewModel.updateFamilyOccupation(it) },
-                        placeholder = { Text("e.g., Farming, Cattle rearing, Tailoring, Construction labour") },
+                        placeholder = { Text(if (viewModel.currentLang=="ta") "விவசாயம், அரசு, தையல்..." else "e.g., Farming, Government, Tailoring") },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
                         maxLines = 2
@@ -88,16 +124,14 @@ fun IntakeScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // Current Livelihood - NEW
             PremiumCard {
                 Column {
-                    Text("Current Livelihood Activities", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Ink)
-                    Text("What do you do currently? Daily wage, farming, unemployed, student", fontSize = 12.sp, color = Muted, modifier = Modifier.padding(top = 2.dp))
+                    Text(currLabel(), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(
                         value = viewModel.profile.currentLivelihood,
                         onValueChange = { viewModel.updateCurrentLivelihood(it) },
-                        placeholder = { Text("e.g., Daily wage labour, Farmer, Unemployed, Student") },
+                        placeholder = { Text(if (viewModel.currentLang=="ta") "மாணவர், விவசாயி, கூலி..." else "e.g., Student, Farmer, Daily wage") },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
                         maxLines = 2
@@ -107,9 +141,7 @@ fun IntakeScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // Preference
-            Text(viewModel.tr("q_pref"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-            Text("Preference for self-employment or wage employment", fontSize = 12.sp, color = Muted)
+            Text(viewModel.tr("q_pref"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.height(8.dp))
             listOf(
                 Preference.SELF to viewModel.tr("pref_self"),
@@ -130,9 +162,7 @@ fun IntakeScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // Mobility + Physical Constraints - NEW
-            Text(viewModel.tr("q_travel"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-            Text("Mobility and physical constraints - per problem statement", fontSize = 12.sp, color = Muted)
+            Text(viewModel.tr("q_travel"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.height(8.dp))
             listOf(
                 Mobility.LOCAL to viewModel.tr("travel_local"),
@@ -155,11 +185,11 @@ fun IntakeScreen(
             Spacer(Modifier.height(8.dp))
             PremiumCard {
                 Column {
-                    Text("Physical Constraints (if any)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Ink)
+                    Text(physLabel(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     OutlinedTextField(
                         value = viewModel.profile.physicalConstraints,
                         onValueChange = { viewModel.updatePhysicalConstraints(it) },
-                        placeholder = { Text("e.g., Cannot do heavy lifting, cannot walk long distance") },
+                        placeholder = { Text(if (viewModel.currentLang=="ta") "பாரமான வேலை செய்ய முடியாது..." else "e.g., Cannot do heavy lifting") },
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         shape = RoundedCornerShape(14.dp),
                         maxLines = 2
@@ -169,9 +199,7 @@ fun IntakeScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // District
-            Text(viewModel.tr("q_dist"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-            Text("Local economic realities and opportunities", fontSize = 12.sp, color = Muted)
+            Text(viewModel.tr("q_dist"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.height(8.dp))
             Card(
                 onClick = { showDistrictSheet = true },
@@ -184,7 +212,7 @@ fun IntakeScreen(
                     if (viewModel.profile.district.isBlank()) viewModel.tr("select_district") else viewModel.profile.district,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Ink,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(18.dp)
                 )
             }
@@ -192,12 +220,11 @@ fun IntakeScreen(
             Spacer(Modifier.height(8.dp))
             PremiumCard {
                 Column {
-                    Text("Local Economic Realities", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Ink)
-                    Text("What work is available in your village/area? Local market demand", fontSize = 12.sp, color = Muted)
+                    Text(localLabel(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     OutlinedTextField(
                         value = viewModel.profile.localOpportunity,
                         onValueChange = { viewModel.updateLocalOpportunity(it) },
-                        placeholder = { Text("e.g., Dairy demand high, no construction work, textile mills nearby") },
+                        placeholder = { Text(if (viewModel.currentLang=="ta") "பால் தேவை அதிகம்..." else "e.g., Dairy demand high") },
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         shape = RoundedCornerShape(14.dp),
                         maxLines = 3
@@ -207,9 +234,7 @@ fun IntakeScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // Interests
-            Text(viewModel.tr("q_int"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Ink)
-            Text("Skills and interests - assessed for NSQF mapping", fontSize = 12.sp, color = Muted)
+            Text(viewModel.tr("q_int"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.height(8.dp))
             viewModel.getInterestChips().forEach { chip ->
                 val selected = viewModel.profile.interests.contains(chip.key)
@@ -245,10 +270,8 @@ fun IntakeScreen(
                 Text(viewModel.tr("submit"), fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
             if (!canSubmit) {
-                Text("Please answer required questions (education, preference, mobility, district, interests)", color = BrandSaffron, fontSize = 13.sp, modifier = Modifier.padding(top = 8.dp))
+                Text(viewModel.tr("no_results").ifBlank { "Please answer required questions" }, color = BrandSaffron, fontSize = 13.sp, modifier = Modifier.padding(top = 8.dp))
             }
-            Spacer(Modifier.height(8.dp))
-            Text("Family occupation, current livelihood, physical constraints are optional but help AI give more empathetic, accurate recommendations per PM-AJAY", fontSize = 11.sp, color = Muted)
             Spacer(Modifier.height(24.dp))
         }
     }
@@ -256,7 +279,7 @@ fun IntakeScreen(
     if (showDistrictSheet) {
         ModalBottomSheet(onDismissRequest = { showDistrictSheet = false }) {
             Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-                Text("Select District", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 12.dp))
+                Text(viewModel.tr("select_district"), fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 12.dp))
                 districts.forEach { district ->
                     TextButton(
                         onClick = {
