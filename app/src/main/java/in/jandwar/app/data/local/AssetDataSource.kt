@@ -65,6 +65,30 @@ class AssetDataSource @Inject constructor(
         }
     }
 
+    /**
+     * Read a `lang -> key -> text` object out of [obj] under [name] into [into].
+     * Absent or malformed sections are skipped rather than failing the load.
+     */
+    private fun readLangMap(
+        obj: JSONObject,
+        name: String,
+        into: MutableMap<String, Map<String, String>>
+    ) {
+        val section = obj.optJSONObject(name) ?: return
+        val langs = section.keys()
+        while (langs.hasNext()) {
+            val lang = langs.next()
+            val inner = section.optJSONObject(lang) ?: continue
+            val map = mutableMapOf<String, String>()
+            val keys = inner.keys()
+            while (keys.hasNext()) {
+                val key = keys.next()
+                map[key] = inner.optString(key)
+            }
+            into[lang] = map
+        }
+    }
+
     fun loadI18n(): I18nData {
         return try {
             val text = readAsset("i18n.json")
@@ -95,38 +119,15 @@ class AssetDataSource @Inject constructor(
                 }
             }
             val interests = mutableMapOf<String, Map<String, String>>()
-            obj.optJSONObject("interest")?.let { interestObj ->
-                val keys = interestObj.keys()
-                while (keys.hasNext()) {
-                    val lang = keys.next()
-                    val map = mutableMapOf<String, String>()
-                    val inner = interestObj.optJSONObject(lang)
-                    inner?.keys()?.let { k ->
-                        while (k.hasNext()) {
-                            val key = k.next()
-                            map[key] = inner.optString(key)
-                        }
-                    }
-                    interests[lang] = map
-                }
-            }
-            // Also support "interests" key
-            obj.optJSONObject("interests")?.let { interestObj ->
-                val keys = interestObj.keys()
-                while (keys.hasNext()) {
-                    val lang = keys.next()
-                    val map = mutableMapOf<String, String>()
-                    val inner = interestObj.optJSONObject(lang)
-                    inner?.keys()?.let { k ->
-                        while (k.hasNext()) {
-                            val key = k.next()
-                            map[key] = inner.optString(key)
-                        }
-                    }
-                    interests[lang] = map
-                }
-            }
-            I18nData(langs, strings, interests)
+            // "interest" is the current spelling; "interests" is accepted too so an
+            // older asset file still loads.
+            readLangMap(obj, "interest", interests)
+            readLangMap(obj, "interests", interests)
+
+            val occupations = mutableMapOf<String, Map<String, String>>()
+            readLangMap(obj, "occupation", occupations)
+
+            I18nData(langs, strings, interests, occupations)
         } catch (e: Exception) {
             e.printStackTrace()
             I18nData()
@@ -137,6 +138,15 @@ class AssetDataSource @Inject constructor(
         return try {
             val text = readAsset("config.json")
             JSONObject(text)
+        } catch (e: Exception) {
+            JSONObject()
+        }
+    }
+
+    /** Multilingual surface forms for the on-device NLU. */
+    fun loadLexicon(): JSONObject {
+        return try {
+            JSONObject(readAsset("lexicon.json"))
         } catch (e: Exception) {
             JSONObject()
         }

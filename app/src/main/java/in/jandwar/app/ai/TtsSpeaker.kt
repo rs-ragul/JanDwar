@@ -30,6 +30,19 @@ class TtsSpeaker @Inject constructor(
     var languageAvailable = true
         private set
 
+    /**
+     * When true, only voices that work without a network are considered.
+     * Driven by the "Voice engine" setting — the whole point of that control
+     * for a user on a patchy rural connection.
+     */
+    private var deviceVoicesOnly = false
+
+    fun setDeviceVoicesOnly(value: Boolean) {
+        if (deviceVoicesOnly == value) return
+        deviceVoicesOnly = value
+        tts?.let { applyLanguage(it) }
+    }
+
     fun init(langCode: String, onReady: (Boolean) -> Unit) {
         lang = langCode
         val existing = tts
@@ -84,9 +97,17 @@ class TtsSpeaker @Inject constructor(
 
     private fun selectBestVoice(engine: TextToSpeech, target: Locale) {
         try {
-            val candidates = engine.voices
+            val all = engine.voices
                 ?.filter { it.locale.language == target.language }
                 ?.takeIf { it.isNotEmpty() } ?: return
+
+            // Honour "on this phone only"; fall back to the full list if the
+            // language has no offline voice at all, so we never go silent.
+            val candidates = if (deviceVoicesOnly) {
+                all.filter { !it.isNetworkConnectionRequired }.takeIf { it.isNotEmpty() } ?: all
+            } else {
+                all
+            }
 
             val best = candidates.maxByOrNull { score(it, target) } ?: return
             engine.voice = best

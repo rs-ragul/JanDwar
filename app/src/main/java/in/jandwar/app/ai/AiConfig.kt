@@ -12,11 +12,12 @@ import javax.inject.Singleton
  *
  * The app is fully functional with an **empty** config: the on-device NLU,
  * Android SpeechRecognizer and Android TextToSpeech cover the whole journey
- * offline. Supplying keys upgrades the experience:
+ * offline. One optional key upgrades the experience:
  *
- *  - `groq_api_key`      → free-flowing LLM conversation (most natural)
- *  - `sarvam_api_key`    → high quality Indic neural TTS
- *  - `bhashini_*`        → Govt. of India ASR / TTS / translation
+ *  - `groq_api_key` → free-flowing LLM conversation (the most natural wording)
+ *
+ * Nothing else is read. Keys for services the app does not actually call were
+ * removed rather than left as dead configuration.
  *
  * See `assets/config.json` for the template.
  */
@@ -27,14 +28,6 @@ class AiConfig @Inject constructor(
     var groqApiKey: String = ""
         private set
     var groqModel: String = DEFAULT_GROQ_MODEL
-        private set
-    var sarvamApiKey: String = ""
-        private set
-    var bhashiniInferenceKey: String = ""
-        private set
-    var bhashiniUserId: String = ""
-        private set
-    var bhashiniAppId: String = ""
         private set
 
     @Volatile
@@ -55,12 +48,8 @@ class AiConfig @Inject constructor(
 
             groqApiKey = obj.readKey("groq_api_key")
             groqModel = obj.optString("groq_model", "").ifBlank { DEFAULT_GROQ_MODEL }
-            sarvamApiKey = obj.readKey("sarvam_api_key")
-            bhashiniInferenceKey = obj.readKey("bhashini_inference_key", "bhashini_inference_api_key")
-            bhashiniUserId = obj.readKey("bhashini_user_id", "bhashini_udyat_key", "bhashini_ulca_user_id")
-            bhashiniAppId = obj.readKey("bhashini_app_id", "app_id")
 
-            Log.i(TAG, "Config loaded · groq=${groqEnabled()} sarvam=${sarvamEnabled()} bhashini=${bhashiniEnabled()}")
+            Log.i(TAG, "Config loaded · groq=${groqEnabled()}")
         } catch (e: Exception) {
             // No config.json (or malformed) — this is a supported, normal state.
             Log.i(TAG, "No usable config.json; running fully on-device (${e.javaClass.simpleName})")
@@ -86,11 +75,6 @@ class AiConfig @Inject constructor(
     }
 
     fun groqEnabled(): Boolean = groqApiKey.isNotBlank()
-    fun sarvamEnabled(): Boolean = sarvamApiKey.isNotBlank()
-    fun bhashiniEnabled(): Boolean = bhashiniInferenceKey.isNotBlank()
-
-    /** True when any cloud voice engine can be used. */
-    fun cloudVoiceAvailable(): Boolean = sarvamEnabled() || bhashiniEnabled()
 
     companion object {
         private const val TAG = "AiConfig"

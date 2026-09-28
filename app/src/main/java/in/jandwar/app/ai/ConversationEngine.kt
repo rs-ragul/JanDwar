@@ -40,6 +40,9 @@ class ConversationEngine @Inject constructor(
         /** Waiting on the NLU. */
         THINKING,
 
+        /** Matching has run; the assistant is reading the summary aloud. */
+        SUMMARY,
+
         /** Interview complete — profile ready for matching. */
         DONE
     }
@@ -56,6 +59,12 @@ class ConversationEngine @Inject constructor(
         val profile: ProfileFragment = ProfileFragment(),
         val progress: Float = 0f,
         val inputMode: InputMode = InputMode.VOICE,
+        /**
+         * True only between onReadyForSpeech and the close of that recognition
+         * turn. The button must read this, not [phase] — the phase can say
+         * LISTENING for a moment before the recogniser has actually opened.
+         */
+        val micLive: Boolean = false,
         val usingCloud: Boolean = false,
         /** Localised, non-fatal hint (mic unavailable, offline, …). */
         val notice: String? = null,
@@ -227,14 +236,31 @@ class ConversationEngine @Inject constructor(
     private fun speakThenListen(line: String, alreadyShown: Boolean = false) {
         if (stopped) return
         if (!alreadyShown) addTurn(Turn(fromUser = false, text = line))
-        update { it.copy(phase = Phase.SPEAKING, partial = "") }
+        // Make sure no recogniser is running while we talk, otherwise the mic
+        // transcribes the assistant's own voice.
+        voice.cancel()
+        update { it.copy(phase = Phase.SPEAKING, partial = "", micLive = false) }
         tts.speak(line) {
             main.post {
                 if (stopped) return@post
-                if (_state.value.inputMode == InputMode.VOICE) beginListening()
-                else update { it.copy(phase = Phase.IDLE) }
+                if (_state.value.inputMode == InputMode.VOICE) {
+                    // TTS reports "done" when synthesis finishes, which can be
+                    // a beat before the audio has actually drained out of the
+                    // speaker. Opening the mic immediately makes the assistant
+                    // hear itself, so wait out the tail.
+                    main.postDelayed({ if (!stopped) beginListening() }, MIC_GUARD_MS)
+                } else {
+                    update { it.copy(phase = Phase.IDLE) }
+                }
             }
         }
+    }
+
+    /** Speaks a line without handing the turn back to the user. */
+    private fun speakOnly(line: String, onDone: () -> Unit) {
+        voice.cancel()
+        update { it.copy(micLive = false) }
+        tts.speak(line) { main.post { onDone() } }
     }
 
     private fun beginListening() {
@@ -243,21 +269,59 @@ class ConversationEngine @Inject constructor(
             update { it.copy(phase = Phase.IDLE) }
             return
         }
-        update { it.copy(phase = Phase.LISTENING, partial = "") }
+        update { it.copy(phase = Phase.LISTENING, partial = "", micLive = false) }
         voice.start()
     }
 
     private fun complete(profile: ProfileFragment) {
-        if (_state.value.phase == Phase.DONE) return
-        update { it.copy(phase = Phase.DONE, amplitude = 0f, partial = "") }
+        if (_state.value.phase == Phase.DONE || _state.value.phase == Phase.SUMMARY) return
+        // Matching runs next; stay on screen and narrate rather than jumping
+        // straight to the results page.
+        voice.cancel()
+        update {
+            it.copy(
+                phase = Phase.SUMMARY,
+                amplitude = 0f,
+                partial = "",
+                micLive = false
+            )
+        }
         onComplete?.invoke(profile)
+    }
+
+    /**
+     * Shows the spoken result summary as a normal assistant turn and reads it
+     * aloud. [onSpoken] fires when the reading finishes so the caller can move
+     * to the results page.
+     */
+    fun narrate(line: String, onSpoken: () -> Unit) {
+        if (line.isBlank()) {
+            onSpoken()
+            return
+        }
+        addTurn(Turn(fromUser = false, text = line))
+        update { it.copy(phase = Phase.SUMMARY) }
+        speakOnly(line) {
+            update { it.copy(phase = Phase.DONE) }
+            onSpoken()
+        }
+    }
+
+    /** Cuts the summary short when the user taps through to the results. */
+    fun stopNarration() {
+        tts.stop()
+        update { it.copy(phase = Phase.DONE) }
     }
 
     // ── Speech callbacks ────────────────────────────────────────────────────
 
     private val voiceCallbacks = object : VoiceListener.Listener {
         override fun onReady() {
-            update { it.copy(phase = Phase.LISTENING) }
+            update { it.copy(phase = Phase.LISTENING, micLive = true) }
+        }
+
+        override fun onMicClosed() {
+            update { it.copy(micLive = false, amplitude = 0f) }
         }
 
         override fun onAmplitude(level: Float) {
@@ -270,6 +334,7 @@ class ConversationEngine @Inject constructor(
 
         override fun onFinal(text: String) {
             consecutiveFailures = 0
+            update { it.copy(micLive = false) }
             addTurn(Turn(fromUser = true, text = text))
             think(text)
         }
@@ -281,6 +346,7 @@ class ConversationEngine @Inject constructor(
                     update {
                         it.copy(
                             phase = Phase.IDLE,
+                            micLive = false,
                             inputMode = InputMode.TEXT,
                             micPermissionNeeded = true,
                             notice = notice("mic_denied")
@@ -292,8 +358,22 @@ class ConversationEngine @Inject constructor(
                     update {
                         it.copy(
                             phase = Phase.IDLE,
+                            micLive = false,
                             inputMode = InputMode.TEXT,
                             notice = notice("mic_missing")
+                        )
+                    }
+                }
+
+                VoiceListener.Problem.LANGUAGE -> {
+                    // No speech model for this language on this handset. Do
+                    // not thrash the mic; say so once and let them type.
+                    update {
+                        it.copy(
+                            phase = Phase.IDLE,
+                            micLive = false,
+                            inputMode = InputMode.TEXT,
+                            notice = notice("lang_voice_missing")
                         )
                     }
                 }
@@ -311,7 +391,7 @@ class ConversationEngine @Inject constructor(
         when {
             consecutiveFailures == 1 -> {
                 // Just listen again quietly — most first failures are a pause.
-                update { it.copy(phase = Phase.IDLE) }
+                update { it.copy(phase = Phase.IDLE, micLive = false) }
                 main.postDelayed({ if (!stopped) beginListening() }, 350)
             }
 
@@ -325,6 +405,7 @@ class ConversationEngine @Inject constructor(
                 update {
                     it.copy(
                         phase = Phase.IDLE,
+                        micLive = false,
                         inputMode = InputMode.TEXT,
                         notice = notice(
                             if (problem == VoiceListener.Problem.OFFLINE) "asr_offline"
@@ -354,6 +435,13 @@ class ConversationEngine @Inject constructor(
 
     companion object {
         private const val TAG = "ConversationEngine"
+
+        /**
+         * Gap between the TTS engine reporting "done" and the mic opening.
+         * Without it the recogniser picks up the tail of the assistant's own
+         * sentence and answers its own question.
+         */
+        private const val MIC_GUARD_MS = 450L
 
         private val NOTICES: Map<String, Map<String, String>> = mapOf(
             "mic_missing" to mapOf(
@@ -387,6 +475,14 @@ class ConversationEngine @Inject constructor(
                 "te" to "ఇప్పుడు వాయిస్‌కు ఇంటర్నెట్ కావాలి. దయచేసి టైప్ చేయండి.",
                 "kn" to "ಈಗ ಧ್ವನಿಗೆ ಇಂಟರ್ನೆಟ್ ಬೇಕು. ದಯವಿಟ್ಟು ಟೈಪ್ ಮಾಡಿ.",
                 "ml" to "ഇപ്പോൾ ശബ്ദത്തിന് ഇന്റർനെറ്റ് വേണം. ദയവായി ടൈപ്പ് ചെയ്യൂ."
+            ),
+            "lang_voice_missing" to mapOf(
+                "en" to "Voice typing for this language is not installed on this phone. Install it in Android settings, or type your answers.",
+                "ta" to "இந்த மொழிக்கான குரல் வசதி இந்த மொபைலில் இல்லை. Android அமைப்புகளில் நிறுவுங்கள், அல்லது தட்டச்சு செய்யுங்கள்.",
+                "hi" to "इस भाषा के लिए वॉइस टाइपिंग इस फ़ोन में नहीं है। Android सेटिंग्स में इंस्टॉल करें, या टाइप करें।",
+                "te" to "ఈ భాషకు వాయిస్ టైపింగ్ ఈ ఫోన్‌లో లేదు. Android సెట్టింగ్‌లలో ఇన్‌స్టాల్ చేయండి, లేదా టైప్ చేయండి.",
+                "kn" to "ಈ ಭಾಷೆಗೆ ಧ್ವನಿ ಟೈಪಿಂಗ್ ಈ ಫೋನ್‌ನಲ್ಲಿ ಇಲ್ಲ. Android ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಸ್ಥಾಪಿಸಿ, ಅಥವಾ ಟೈಪ್ ಮಾಡಿ.",
+                "ml" to "ഈ ഭാഷയ്ക്കുള്ള വോയ്‌സ് ടൈപ്പിംഗ് ഈ ഫോണിൽ ഇല്ല. Android ക്രമീകരണങ്ങളിൽ ഇൻസ്റ്റാൾ ചെയ്യുക, അല്ലെങ്കിൽ ടൈപ്പ് ചെയ്യുക."
             ),
             "asr_hard" to mapOf(
                 "en" to "I am having trouble hearing you. Please type your answer instead.",

@@ -123,14 +123,26 @@ fun VoiceScreen(
         if (!permissionResolved) return@LaunchedEffect
         voiceViewModel.start(lang, micGranted) { profile ->
             appViewModel.completeInterview(profile) { results ->
+                // The summary is spoken *and* shown as an assistant turn; the
+                // move to the results page is driven by navigateToResults
+                // below, once the reading finishes or the user skips it.
                 voiceViewModel.narrateResults(
                     results = results,
                     profileSummary = profile.summaryLine()
-                ) {
-                    appViewModel.updateResultNarration(voiceViewModel.narration)
-                    onDone()
-                }
+                ) { }
             }
+        }
+    }
+
+    // Single exit point, so finishing the narration and tapping
+    // "See my results" can never both navigate.
+    var navigated by remember { mutableStateOf(false) }
+    LaunchedEffect(voiceViewModel.navigateToResults) {
+        if (voiceViewModel.navigateToResults && !navigated) {
+            navigated = true
+            appViewModel.updateResultNarration(voiceViewModel.narration)
+            voiceViewModel.consumeNavigation()
+            onDone()
         }
     }
 
@@ -170,9 +182,14 @@ fun VoiceScreen(
         }
 
         // ── Orb + status ────────────────────────────────────────────────────
-        val speaking = state.phase == ConversationEngine.Phase.SPEAKING
-        val listening = state.phase == ConversationEngine.Phase.LISTENING
+        val speaking = state.phase == ConversationEngine.Phase.SPEAKING ||
+                state.phase == ConversationEngine.Phase.SUMMARY
+        // The orb and the button must follow the microphone itself, not the
+        // phase: the phase flips to LISTENING a moment before the recogniser
+        // actually opens, which is why the button used to lie.
+        val listening = state.micLive
         val thinking = state.phase == ConversationEngine.Phase.THINKING
+        val summarising = state.phase == ConversationEngine.Phase.SUMMARY
 
         val orbScale by animateFloatAsState(
             targetValue = 1f + (state.amplitude * 0.10f),
@@ -194,16 +211,28 @@ fun VoiceScreen(
             )
         }
 
-        // ── Live captions: what the assistant just said, and what we hear ───
-        LiveCaption(
-            appViewModel = appViewModel,
-            state = state,
-            speaking = speaking,
-            listening = listening,
-            thinking = thinking
+        // Status line only — the words themselves live in the transcript
+        // below, so nothing is ever printed twice.
+        Text(
+            text = when {
+                speaking -> appViewModel.tr("speaking")
+                state.micLive -> appViewModel.tr("listening")
+                thinking -> appViewModel.tr("thinking")
+                summarising -> appViewModel.tr("summary_wait")
+                state.phase == ConversationEngine.Phase.DONE -> appViewModel.tr("done")
+                else -> appViewModel.tr("tap_to_speak")
+            },
+            style = MaterialTheme.typography.labelLarge,
+            color = when {
+                state.micLive -> BrandTeal
+                speaking -> BrandSaffron
+                else -> MaterialTheme.colorScheme.onSurfaceVariant
+            },
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 2.dp, bottom = 8.dp)
         )
-
-        Spacer(Modifier.height(8.dp))
 
         // ── Notice banner ───────────────────────────────────────────────────
         AnimatedVisibility(
@@ -262,11 +291,19 @@ fun VoiceScreen(
         ) {
             items(state.turns.size) { index ->
                 val turn = state.turns[index]
+                val isLastAssistant = !turn.fromUser &&
+                        index == state.turns.indexOfLast { !it.fromUser }
                 Bubble(
                     text = turn.text,
                     fromUser = turn.fromUser,
                     label = if (turn.fromUser) appViewModel.tr("you")
-                    else appViewModel.tr("name")
+                    else appViewModel.tr("name"),
+                    // The line currently coming out of the speaker is framed
+                    // and tagged instead of being repeated in a second card.
+                    highlight = isLastAssistant && speaking,
+                    statusLabel = if (isLastAssistant && speaking) {
+                        appViewModel.tr("speaking")
+                    } else null
                 )
             }
             if (state.partial.isNotBlank()) {
@@ -291,19 +328,39 @@ fun VoiceScreen(
                     .padding(horizontal = 18.dp, vertical = 14.dp)
                     .navigationBarsPadding()
             ) {
-                if (state.inputMode == ConversationEngine.InputMode.TEXT) {
-                    TextAnswerBar(appViewModel, voiceViewModel, micAvailable = micGranted)
-                } else {
-                    VoiceControlBar(
-                        appViewModel = appViewModel,
-                        voiceViewModel = voiceViewModel,
-                        listening = listening,
-                        busy = speaking || thinking
-                    )
+                when {
+                    // Matching is done and the assistant is reading the
+                    // summary. Stay here so it can be read on screen; the
+                    // user may jump ahead at any time.
+                    summarising || state.phase == ConversationEngine.Phase.DONE -> {
+                        PrimaryButton(
+                            text = appViewModel.tr("see_results"),
+                            icon = Icons.Rounded.Check,
+                            loading = voiceViewModel.isNarrating,
+                            onClick = { voiceViewModel.skipNarration() },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    state.inputMode == ConversationEngine.InputMode.TEXT -> {
+                        TextAnswerBar(appViewModel, voiceViewModel, micAvailable = micGranted)
+                    }
+
+                    else -> {
+                        VoiceControlBar(
+                            appViewModel = appViewModel,
+                            voiceViewModel = voiceViewModel,
+                            listening = listening,
+                            speaking = speaking,
+                            thinking = thinking,
+                            busy = speaking || thinking
+                        )
+                    }
                 }
 
                 if (state.canFinishEarly &&
-                    state.phase != ConversationEngine.Phase.DONE
+                    state.phase != ConversationEngine.Phase.DONE &&
+                    !summarising
                 ) {
                     Spacer(Modifier.height(10.dp))
                     GhostButton(
@@ -333,12 +390,27 @@ private fun UnderstoodRow(
             add(if (level != null) appViewModel.tr(level.key) else raw)
         }
         p.district?.let { add(it) }
-        p.familyOccupation?.let { add(it) }
-        p.currentLivelihood?.let { add(it) }
+        p.familyOccupation?.let { add(appViewModel.occupationLabel(it)) }
+        p.currentLivelihood?.let { add(appViewModel.occupationLabel(it)) }
         p.interests.forEach { add(appViewModel.interestLabel(it)) }
         p.preference?.let { add(appViewModel.tr(it)) }
-        p.mobility?.let { add(appViewModel.tr("travel_" + it.removePrefix("travel_"))) }
-    }.filter { it.isNotBlank() }.distinct()
+        p.mobility?.let { raw ->
+            // The NLU emits local / district / state; "any" is the legacy
+            // spelling of the widest option. Map every variant onto a real
+            // key so a raw slot value can never leak into the chip.
+            val key = when (val m = raw.removePrefix("travel_").lowercase()) {
+                "local" -> "travel_local"
+                "district" -> "travel_district"
+                "state", "any" -> "travel_state"
+                else -> "travel_$m"
+            }
+            add(appViewModel.tr(key))
+        }
+    }.filter { it.isNotBlank() }
+        // Free-text answers ("my father works in a government office in
+        // Dindigul") arrive verbatim; a chip is not a paragraph.
+        .map { if (it.length > 26) it.take(24).trimEnd() + "\u2026" else it }
+        .distinctBy { it.lowercase() }
 
     if (chips.isEmpty()) return
 
@@ -365,7 +437,9 @@ private fun Bubble(
     text: String,
     fromUser: Boolean,
     label: String,
-    ghost: Boolean = false
+    ghost: Boolean = false,
+    highlight: Boolean = false,
+    statusLabel: String? = null
 ) {
     val bg = when {
         ghost -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
@@ -386,11 +460,30 @@ private fun Bubble(
             horizontalAlignment = if (fromUser) Alignment.End else Alignment.Start,
             modifier = Modifier.fillMaxWidth(0.88f)
         ) {
-            Text(
-                label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (highlight) {
+                    Icon(
+                        Icons.Rounded.VolumeUp,
+                        null,
+                        tint = BrandSaffron,
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Spacer(Modifier.width(5.dp))
+                }
+                Text(
+                    label,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                if (!statusLabel.isNullOrBlank()) {
+                    Spacer(Modifier.width(7.dp))
+                    Text(
+                        statusLabel,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = BrandSaffron
+                    )
+                }
+            }
             Spacer(Modifier.height(3.dp))
             Surface(
                 shape = RoundedCornerShape(
@@ -399,17 +492,25 @@ private fun Bubble(
                     bottomStart = if (fromUser) 18.dp else 5.dp,
                     bottomEnd = if (fromUser) 5.dp else 18.dp
                 ),
-                color = bg,
-                border = if (!fromUser && !ghost) {
-                    androidx.compose.foundation.BorderStroke(
+                color = if (highlight) BrandSaffron.copy(alpha = 0.09f) else bg,
+                border = when {
+                    highlight -> androidx.compose.foundation.BorderStroke(
+                        1.5.dp,
+                        BrandSaffron.copy(alpha = 0.65f)
+                    )
+
+                    !fromUser && !ghost -> androidx.compose.foundation.BorderStroke(
                         1.dp,
                         MaterialTheme.colorScheme.outline
                     )
-                } else null
+
+                    else -> null
+                }
             ) {
                 Text(
                     text,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = if (highlight) MaterialTheme.typography.titleSmall
+                    else MaterialTheme.typography.bodyMedium,
                     color = fg,
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 11.dp)
                 )
@@ -423,6 +524,8 @@ private fun VoiceControlBar(
     appViewModel: AppViewModel,
     voiceViewModel: VoiceViewModel,
     listening: Boolean,
+    speaking: Boolean,
+    thinking: Boolean,
     busy: Boolean
 ) {
     Row(
@@ -445,7 +548,13 @@ private fun VoiceControlBar(
         }
 
         PrimaryButton(
-            text = if (listening) appViewModel.tr("listening") else appViewModel.tr("tap_to_speak"),
+            // Never invite a tap while the assistant is mid-sentence.
+            text = when {
+                speaking -> appViewModel.tr("speaking")
+                thinking -> appViewModel.tr("thinking")
+                listening -> appViewModel.tr("listening")
+                else -> appViewModel.tr("tap_to_speak")
+            },
             icon = Icons.Rounded.Mic,
             loading = busy,
             onClick = { voiceViewModel.listenNow() },
@@ -540,130 +649,6 @@ private fun TextAnswerBar(
                 tint = if (draft.isNotBlank()) Color.White
                 else MaterialTheme.colorScheme.onSurfaceVariant
             )
-        }
-    }
-}
-
-/**
- * The part of the screen the problem statement really cares about: the user
- * must always be able to *read* what the assistant just said, and see their own
- * words appear as they speak. Works as a full substitute for audio when the
- * phone has no TTS voice or the room is noisy.
- */
-@Composable
-private fun LiveCaption(
-    appViewModel: AppViewModel,
-    state: ConversationEngine.State,
-    speaking: Boolean,
-    listening: Boolean,
-    thinking: Boolean
-) {
-    val assistantLine = state.turns.lastOrNull { !it.fromUser }?.text.orEmpty()
-    val lastUserLine = state.turns.lastOrNull { it.fromUser }?.text.orEmpty()
-    val heardNow = state.partial.ifBlank { if (thinking) lastUserLine else "" }
-
-    Column(modifier = Modifier.padding(horizontal = 18.dp)) {
-
-        // What JanDwar is saying / just said.
-        if (assistantLine.isNotBlank()) {
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surface,
-                border = androidx.compose.foundation.BorderStroke(
-                    1.dp,
-                    if (speaking) BrandSaffron.copy(alpha = 0.55f)
-                    else MaterialTheme.colorScheme.outline
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Rounded.VolumeUp,
-                            null,
-                            tint = if (speaking) BrandSaffron else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(15.dp)
-                        )
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            appViewModel.tr("name"),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        if (speaking) {
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                appViewModel.tr("speaking"),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = BrandSaffron
-                            )
-                        }
-                    }
-                    Spacer(Modifier.height(7.dp))
-                    Text(
-                        assistantLine,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-        }
-
-        // What we are hearing from the user, live.
-        AnimatedVisibility(
-            visible = listening || heardNow.isNotBlank(),
-            enter = fadeIn(tween(180)),
-            exit = fadeOut(tween(140))
-        ) {
-            Column {
-                Spacer(Modifier.height(9.dp))
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = BrandTeal.copy(alpha = 0.10f),
-                    border = androidx.compose.foundation.BorderStroke(
-                        1.dp,
-                        BrandTeal.copy(alpha = 0.35f)
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                Icons.Rounded.GraphicEq,
-                                null,
-                                tint = BrandTeal,
-                                modifier = Modifier.size(15.dp)
-                            )
-                            Spacer(Modifier.width(6.dp))
-                            Text(
-                                appViewModel.tr("you"),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                when {
-                                    thinking -> appViewModel.tr("thinking")
-                                    listening -> appViewModel.tr("listening")
-                                    else -> ""
-                                },
-                                style = MaterialTheme.typography.labelSmall,
-                                color = BrandTeal
-                            )
-                        }
-                        Spacer(Modifier.height(7.dp))
-                        Text(
-                            heardNow.ifBlank { appViewModel.tr("tap_to_speak") },
-                            style = MaterialTheme.typography.titleSmall,
-                            color = if (heardNow.isBlank()) {
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                            } else {
-                                MaterialTheme.colorScheme.onSurface
-                            }
-                        )
-                    }
-                }
-            }
         }
     }
 }

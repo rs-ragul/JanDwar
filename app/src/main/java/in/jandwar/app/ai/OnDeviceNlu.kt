@@ -30,8 +30,12 @@ class OnDeviceNlu @Inject constructor(
 
         frag.district = detectDistrict(s, text)
         frag.edu = detectEducation(s)
-        frag.preference = detectPreference(s)
-        frag.mobility = detectMobility(s)
+        // Strict here: this utterance may be answering something else
+        // entirely, and a loose read of "I work in the district office"
+        // used to silently overwrite a travel answer the user had already
+        // given. The slot-directed path below applies the full detector.
+        frag.preference = detectPreferenceStrict(s)
+        frag.mobility = detectMobilityStrict(s)
         detectInterests(s).forEach { if (!frag.interests.contains(it)) frag.interests.add(it) }
         frag.physicalConstraints = detectConstraints(s, text)
 
@@ -58,7 +62,7 @@ class OnDeviceNlu @Inject constructor(
 
         when (slot) {
             ProfileFragment.Slot.EDUCATION ->
-                if (!frag.hasEdu()) frag.edu = detectEducationLoose(s)
+                detectEducationLoose(s)?.let { frag.edu = it }
 
             ProfileFragment.Slot.FAMILY_OCCUPATION ->
                 if (!frag.hasFamilyOccupation()) {
@@ -75,11 +79,13 @@ class OnDeviceNlu @Inject constructor(
                     freeText(text)?.let { frag.skills.add(it) }
                 }
 
+            // The user is answering this exact question, so whatever we read
+            // here outranks anything inferred from an earlier sentence.
             ProfileFragment.Slot.PREFERENCE ->
-                if (!frag.hasPref()) frag.preference = detectPreferenceLoose(s)
+                detectPreferenceLoose(s)?.let { frag.preference = it }
 
             ProfileFragment.Slot.MOBILITY ->
-                if (!frag.hasMobility()) frag.mobility = detectMobilityLoose(s)
+                detectMobilityLoose(s)?.let { frag.mobility = it }
 
             ProfileFragment.Slot.DISTRICT -> Unit // district needs an exact hit
         }
@@ -100,86 +106,70 @@ class OnDeviceNlu @Inject constructor(
     private fun String.hasAny(words: List<String>): Boolean =
         words.any { this.contains(it) }
 
+    // ── Vocabulary ──────────────────────────────────────────────────────────
+    //
+    // Every surface form now lives in assets/lexicon.json and is matched
+    // substring-first, then fuzzily per token. Regional slang is added by
+    // editing that file — no code change.
+
+    private val lex: Lexicon by lazy { Lexicon(assetDataSource.loadLexicon()) }
+
+    private fun has(s: String, key: String) = lex.has(s, key)
+    private fun hasExact(s: String, key: String) = lex.hasExact(s, key)
+
     // ── Education ───────────────────────────────────────────────────────────
 
-    private val GRAD_WORDS = listOf(
-        "graduate", "degree", "bachelor", "master", "b tech", "btech", "b e ", "be ",
-        "bsc", "b sc", "bcom", "b com", "bca", "mca", "mba", "bba", "ba ", "ma ",
-        "msc", "m sc", "engineering", "college", "university", "phd", "nursing",
-        "pharmacy", "பட்டம்", "பட்டப்படிப்பு", "கல்லூரி", "डिग्री", "स्नातक", "कॉलेज",
-        "డిగ్రీ", "కళాశాల", "ಪದವಿ", "ಕಾಲೇಜು", "ബിരുദം", "കോളേജ്"
-    )
-    private val ITI_WORDS = listOf(
-        "iti", "i t i", "diploma", "polytechnic", "டிப்ளோமா", "பாலிடெக்னிக்",
-        "डिप्लोमा", "पॉलिटेक्निक", "డిప్లొమా", "ಡಿಪ್ಲೊಮಾ", "ഡിപ്ലോമ"
-    )
-    private val C12_WORDS = listOf(
-        "12th", "12 th", "twelfth", "hsc", "plus two", "+2", "higher secondary", "class 12",
-        "பன்னிரண்டு", "12 ம்", "மேல்நிலை", "बारहवीं", "12वीं", "పన్నెండు", "ಹನ್ನೆರಡು", "പന്ത്രണ്ട്"
-    )
-    private val C10_WORDS = listOf(
-        "10th", "10 th", "tenth", "sslc", "matric", "class 10", "பத்தாம்", "பத்து",
-        "दसवीं", "10वीं", "పదవ", "ಹತ್ತನೇ", "പത്താം"
-    )
-    private val C8_WORDS = listOf(
-        "8th", "8 th", "eighth", "class 8", "எட்டாம்", "எட்டு", "आठवीं", "8वीं",
-        "ఎనిమిదవ", "ಎಂಟನೇ", "എട്ടാം"
-    )
-    private val BELOW8_WORDS = listOf(
-        "below 8", "5th", "fifth", "did not study", "didnt study", "no school",
-        "never went to school", "illiterate", "read and write", "just read",
-        "படிக்கவில்லை", "பள்ளி செல்லவில்லை", "ஐந்தாம்", "नहीं पढ़ा", "पांचवीं",
-        "చదవలేదు", "ಓದಿಲ್ಲ", "പഠിച്ചിട്ടില്ല"
+    /**
+     * Ordered most-specific first: "ITI diploma" must not be read as
+     * "class 10" just because the sentence also mentions school.
+     */
+    private val EDU_ORDER = listOf(
+        "edu.none" to "class5",
+        "edu.iti_diploma" to "iti_diploma",
+        "edu.graduate" to "graduate",
+        "edu.class12" to "class12",
+        "edu.class10" to "class10",
+        "edu.class8" to "class8",
+        "edu.class5" to "class5"
     )
 
-    private fun detectEducation(s: String): String? = when {
-        s.hasAny(BELOW8_WORDS) -> "class5"
-        s.hasAny(ITI_WORDS) -> "iti_diploma"
-        s.hasAny(C12_WORDS) -> "class12"
-        s.hasAny(C10_WORDS) -> "class10"
-        s.hasAny(C8_WORDS) -> "class8"
-        s.hasAny(GRAD_WORDS) -> "graduate"
-        else -> null
-    }
+    private fun detectEducation(s: String): String? =
+        EDU_ORDER.firstOrNull { (key, _) -> has(s, key) }?.second
 
-    /** Looser pass used only when we explicitly asked about education. */
     private fun detectEducationLoose(s: String): String? {
         detectEducation(s)?.let { return it }
-        // Bare numbers: "ten", "12", "8"
-        val num = Regex("\\b(\\d{1,2})\\b").find(s)?.groupValues?.get(1)?.toIntOrNull()
-        if (num != null) return when {
-            num >= 11 -> "class12"
-            num >= 9 -> "class10"
-            num >= 7 -> "class8"
-            num in 1..6 -> "class5"
-            else -> null
+        // Bare numbers in answer to "which class did you finish?".
+        Regex("\\b(\\d{1,2})\\b").find(s)?.groupValues?.get(1)?.toIntOrNull()?.let { n ->
+            return when {
+                n >= 13 -> "graduate"
+                n == 12 || n == 11 -> "class12"
+                n == 10 || n == 9 -> "class10"
+                n in 6..8 -> "class8"
+                n in 1..5 -> "class5"
+                else -> null
+            }
         }
-        val words = mapOf(
-            "five" to "class5", "eight" to "class8", "ten" to "class10", "twelve" to "class12",
-            "ஐந்து" to "class5", "எட்டு" to "class8", "பத்து" to "class10", "பன்னிரண்டு" to "class12",
-            "पाँच" to "class5", "आठ" to "class8", "दस" to "class10", "बारह" to "class12"
-        )
-        words.forEach { (k, v) -> if (s.contains(k)) return v }
+        if (has(s, "marker.no")) return "class5"
         return null
     }
 
     // ── Preference ──────────────────────────────────────────────────────────
 
-    private val SELF_WORDS = listOf(
-        "own business", "my own", "self employ", "self-employ", "entrepreneur", "start a shop",
-        "own shop", "own work", "business", "startup", "enterprise", "சொந்த", "தொழில்",
-        "சொந்தமா", "अपना काम", "खुद का", "व्यवसाय", "स्वरोजगार", "సొంత", "వ్యాపారం",
-        "ಸ್ವಂತ", "ಉದ್ಯಮ", "സ്വന്തം", "ബിസിനസ്"
-    )
-    private val WAGE_WORDS = listOf(
-        "job", "wage", "employer", "salary", "company", "placement", "work for",
-        "வேலை", "சம்பளம்", "நிறுவனம்", "नौकरी", "वेतन", "कंपनी", "ఉద్యోగం", "జీతం",
-        "ಕೆಲಸ", "ಸಂಬಳ", "ജോലി", "ശമ്പളം"
-    )
+    private fun detectPreference(s: String): String? {
+        // Strong phrases win, and self is tested first so a sentence carrying
+        // both ("I don't want a job, I want to work for myself") resolves the
+        // way the speaker meant it.
+        if (has(s, "pref.self_strong")) return "pref_self"
+        if (has(s, "pref.wage_strong")) return "pref_wage"
+        if (has(s, "pref.self_weak")) return "pref_self"
+        if (has(s, "pref.wage_weak")) return "pref_wage"
+        return null
+    }
 
-    private fun detectPreference(s: String): String? = when {
-        s.hasAny(SELF_WORDS) -> "pref_self"
-        s.hasAny(WAGE_WORDS) -> "pref_wage"
+    /** Only unmistakable evidence, for utterances answering a different question. */
+    private fun detectPreferenceStrict(s: String): String? = when {
+        hasExact(s, "pref.self_strong") -> "pref_self"
+        hasExact(s, "pref.wage_strong") -> "pref_wage"
         else -> null
     }
 
@@ -192,119 +182,88 @@ class OnDeviceNlu @Inject constructor(
 
     // ── Mobility ────────────────────────────────────────────────────────────
 
-    private val LOCAL_WORDS = listOf(
-        "village", "nearby", "near by", "close", "local", "cannot travel", "cant travel",
-        "can not travel", "only here", "ஊரில்", "அருகில்", "வெளியே போக முடியாது",
-        "गाँव", "पास", "नहीं जा", "ఊరు", "దగ్గర", "ಊರು", "ಹತ್ತಿರ", "ഗ്രാമം", "അടുത്ത്"
-    )
-    private val DISTRICT_WORDS = listOf(
-        "district", "மாவட்ட", "जिला", "जिले", "జిల్లా", "ಜಿಲ್ಲೆ", "ജില്ല"
-    )
-    private val STATE_WORDS = listOf(
-        "anywhere", "any place", "state", "tamil nadu", "tamilnadu", "far", "outside",
-        "எங்கும்", "எங்கு வேண்டுமானாலும்", "தமிழ்நாடு", "कहीं भी", "राज्य", "तमिलनाडु",
-        "ఎక్కడైనా", "రాష్ట్రం", "ಎಲ್ಲಿಯಾದರೂ", "ರಾಜ್ಯ", "എവിടെയും", "സംസ്ഥാനം"
-    )
-
+    /**
+     * Precedence matters more here than anywhere else. Both of the realistic
+     * answers contain the word "anywhere" — "anywhere in my district" and
+     * "anywhere in the state" — so an explicit district or state word must be
+     * consulted *before* the generic one. The bare "anywhere" then means the
+     * widest option, which is what a speaker who volunteers it intends.
+     */
     private fun detectMobility(s: String): String? = when {
-        s.hasAny(LOCAL_WORDS) -> "local"
-        s.hasAny(STATE_WORDS) -> "state"
-        s.hasAny(DISTRICT_WORDS) -> "district"
+        has(s, "mob.state") -> "state"
+        has(s, "mob.district") -> "district"
+        has(s, "mob.local") -> "local"
+        has(s, "mob.anywhere") -> "state"
+        else -> null
+    }
+
+    /** Only unmistakable evidence, for utterances answering a different question. */
+    private fun detectMobilityStrict(s: String): String? = when {
+        hasExact(s, "mob.state") -> "state"
+        hasExact(s, "mob.district") -> "district"
+        hasExact(s, "mob.local") -> "local"
         else -> null
     }
 
     private fun detectMobilityLoose(s: String): String? {
         detectMobility(s)?.let { return it }
-        if (s.hasAny("yes", "can", "ok", "சரி", "हाँ", "అవును", "ಹೌದು", "അതെ")) return "district"
-        if (s.hasAny("no", "illai", "இல்லை", "नहीं", "కాదు", "ಇಲ್ಲ", "ഇല്ല")) return "local"
+        if (has(s, "marker.yes")) return "district"
+        if (has(s, "marker.no")) return "local"
         return null
     }
 
     // ── Interests ───────────────────────────────────────────────────────────
 
-    private val INTEREST_WORDS: Map<String, List<String>> = mapOf(
-        "dairy" to listOf("dairy", "milk", "பால்", "பால் பண்ணை", "डेयरी", "दूध", "పాలు", "ಹಾಲು", "പാൽ"),
-        "cattle" to listOf("cattle", "cow", "livestock", "buffalo", "மாடு", "கால்நடை", "गाय", "पशु",
-            "ఆవు", "పశు", "ಹಸು", "ಜಾನುವಾರು", "പശു", "കന്നുകാലി"),
-        "goat" to listOf("goat", "sheep", "ஆடு", "செம்மறி", "बकरी", "भेड़", "మేక", "గొర్రె",
-            "ಮೇಕೆ", "ಕುರಿ", "ആട്"),
-        "poultry" to listOf("poultry", "chicken", "hen", "கோழி", "मुर्गी", "కోడి", "ಕೋಳಿ", "കോഴി"),
-        "farming" to listOf("farm", "agri", "crop", "cultivat", "விவசாய", "பயிர்", "खेती", "फसल",
-            "కృషి", "వ్యవసాయ", "పంట", "ಕೃಷಿ", "ಬೆಳೆ", "കൃഷി"),
-        "food" to listOf("food", "bakery", "baker", "cooking", "snack", "உணவு", "பேக்கரி",
-            "खाद्य", "बेकरी", "खाना", "ఆహార", "ಆಹಾರ", "ഭക്ഷ്യ"),
-        "machine" to listOf("machine", "mechanic", "repair", "electric", "electronic", "motor",
-            "technician", "welding", "இயந்திர", "மெக்கானிக்", "பழுது", "மின்", "मशीन", "मरम्मत",
-            "बिजली", "యంత్ర", "ಯಂತ್ರ", "യന്ത്ര"),
-        "textile" to listOf("textile", "weav", "loom", "handloom", "நெசவு", "தறி", "ஜவுளி",
-            "बुनाई", "करघा", "कपड़ा", "నేత", "ನೇಯ್ಗೆ", "നെയ്ത്ത്"),
-        "construction" to listOf("construction", "mason", "building", "plumb", "carpent", "paint",
-            "கட்டுமான", "கொத்தனார்", "निर्माण", "मिस्त्री", "నిర్మాణ", "ನಿರ್ಮಾಣ", "നിർമാണ"),
-        "tailor" to listOf("tailor", "stitch", "sewing", "garment", "தையல்", "சிலாய்", "सिलाई",
-            "दर्जी", "కుట్టు", "ಹೊಲಿಗೆ", "തയ്യൽ")
+    private val INTEREST_KEYS = listOf(
+        "dairy", "cattle", "goat", "poultry", "farming",
+        "food", "machine", "textile", "construction", "tailor"
     )
 
     private fun detectInterests(s: String): List<String> =
-        INTEREST_WORDS.filter { (_, words) -> s.hasAny(words) }.keys.toList()
+        INTEREST_KEYS.filter { has(s, "interest.$it") }
 
     // ── Occupation ──────────────────────────────────────────────────────────
 
-    private val FAMILY_MARKERS = listOf(
-        "family", "father", "mother", "parents", "traditional", "appa", "amma",
-        "குடும்ப", "அப்பா", "அம்மா", "பெற்றோர்", "பாரம்பரிய",
-        "परिवार", "पिता", "माता", "माँ", "पारंपरिक",
-        "కుటుంబ", "నాన్న", "అమ్మ", "ಕುಟುಂಬ", "ಅಪ್ಪ", "ಅಮ್ಮ", "കുടുംബ", "അച്ഛൻ", "അമ്മ"
-    )
+    private fun mentionsFamily(s: String): Boolean = has(s, "marker.family")
 
-    private fun mentionsFamily(s: String): Boolean = s.hasAny(FAMILY_MARKERS)
-
-    private val OCCUPATION_MAP: List<Pair<List<String>, String>> = listOf(
-        listOf("dairy", "milk", "பால்", "डेयरी", "పాలు", "ಹಾಲು", "പാൽ") to "Dairy farming",
-        listOf("cattle", "cow", "மாடு", "கால்நடை", "गाय", "ఆవు", "ಹಸು", "പശു") to "Cattle rearing",
-        listOf("goat", "sheep", "ஆடு", "बकरी", "మేక", "ಮೇಕೆ", "ആട്") to "Goat rearing",
-        listOf("poultry", "chicken", "கோழி", "मुर्गी", "కోడి", "ಕೋಳಿ", "കോഴി") to "Poultry",
-        listOf("farm", "agri", "விவசாய", "खेती", "కృషి", "వ్యవసాయ", "ಕೃಷಿ", "കൃഷി") to "Farming",
-        listOf("tailor", "stitch", "தையல்", "सिलाई", "కుట్టు", "ಹೊಲಿಗೆ", "തയ്യൽ") to "Tailoring",
-        listOf("weav", "loom", "நெசவு", "बुनाई", "నేత", "ನೇಯ್ಗೆ", "നെയ്ത്ത്") to "Weaving",
-        listOf("construction", "mason", "கட்டுமான", "निर्माण", "నిర్మాణ", "ನಿರ್ಮಾಣ", "നിർമാണ") to "Construction work",
-        listOf("coolie", "daily wage", "கூலி", "दिहाड़ी", "మజూరి", "ಕೂಲಿ", "കൂലി") to "Daily wage labour",
-        listOf("driver", "auto", "ஓட்டுநர்", "ड्राइवर", "డ్రైవర్", "ಚಾಲಕ", "ഡ്രൈവർ") to "Driving",
-        listOf("shop", "petty", "கடை", "दुकान", "దుకాణం", "ಅಂಗಡಿ", "കട") to "Small shop",
-        listOf("cook", "hotel", "catering", "சமையல்", "खाना", "వంట", "ಅಡುಗೆ", "പാചകം") to "Cooking / catering",
-        listOf("fish", "மீன்", "मछली", "చేప", "ಮೀನು", "മീൻ") to "Fishing",
-        listOf("government", "govt", "அரசு", "सरकारी", "ప్రభుత్వ", "ಸರ್ಕಾರಿ", "സർക്കാർ") to "Government service"
+    /**
+     * Canonical livelihood label. Occupation-only trades are checked before
+     * the interest vocabulary so "government office" is not swallowed by a
+     * broader category.
+     */
+    private val OCCUPATION_ORDER: List<Pair<String, String>> = listOf(
+        "occ.government" to "Government service",
+        "occ.driver" to "Driving",
+        "occ.fishing" to "Fishing",
+        "occ.coolie" to "Daily wage labour",
+        "occ.shop" to "Small shop",
+        "interest.dairy" to "Dairy farming",
+        "interest.cattle" to "Cattle rearing",
+        "interest.goat" to "Goat rearing",
+        "interest.poultry" to "Poultry",
+        "interest.tailor" to "Tailoring",
+        "interest.textile" to "Weaving",
+        "interest.construction" to "Construction work",
+        "interest.food" to "Cooking / catering",
+        "interest.machine" to "Machine work / repair",
+        "interest.farming" to "Farming"
     )
 
     private fun detectOccupation(s: String): String? =
-        OCCUPATION_MAP.firstOrNull { (keys, _) -> s.hasAny(keys) }?.second
-
-    private val STUDENT_WORDS = listOf(
-        "student", "studying", "pursuing", "college", "school", "படிக்கிறேன்", "மாணவ",
-        "पढ़ रहा", "पढ़ाई", "छात्र", "చదువుతున్న", "విద్యార్థి", "ಓದುತ್ತಿದ್ದೇನೆ", "ವಿದ್ಯಾರ್ಥಿ",
-        "പഠിക്കുന്നു", "വിദ്യാർത്ഥി"
-    )
-    private val UNEMPLOYED_WORDS = listOf(
-        "no work", "unemployed", "looking for", "jobless", "nothing", "idle",
-        "வேலை இல்லை", "வேலை தேடு", "काम नहीं", "बेरोजगार", "పని లేదు", "ಕೆಲಸ ಇಲ್ಲ", "ജോലി ഇല്ല"
-    )
+        OCCUPATION_ORDER.firstOrNull { (key, _) -> has(s, key) }?.second
 
     private fun detectStudentStatus(s: String, original: String): String? = when {
-        s.hasAny(STUDENT_WORDS) -> "Student"
-        s.hasAny(UNEMPLOYED_WORDS) -> "Looking for work"
+        has(s, "marker.student") -> "Student"
+        has(s, "marker.unemployed") -> "Looking for work"
         else -> null
     }
 
+
     // ── Physical constraints ────────────────────────────────────────────────
 
-    private val CONSTRAINT_WORDS = listOf(
-        "cannot lift", "cant lift", "back pain", "disabil", "disabled", "handicap",
-        "injury", "injured", "weak", "surgery", "cannot stand", "cannot walk",
-        "தூக்க முடியாது", "வலி", "ஊனம்", "नहीं उठा", "दर्द", "विकलांग",
-        "ఎత్తలేను", "నొప్పి", "ಎತ್ತಲಾಗದು", "ನೋವು", "ഉയർത്താൻ കഴിയില്ല", "വേദന"
-    )
-
     private fun detectConstraints(s: String, original: String): String? =
-        if (s.hasAny(CONSTRAINT_WORDS)) original.trim().take(120) else null
+        if (has(s, "marker.constraint")) original.trim().take(120) else null
+
 
     // ── District ────────────────────────────────────────────────────────────
 

@@ -113,13 +113,37 @@ fun SettingsScreen(
                         )
                     }
                     if (!cloud) {
+                        // Production build: state the capability, never the
+                        // developer set-up steps.
                         Spacer(Modifier.height(12.dp))
                         InfoBanner(
-                            text = "Add a Groq API key in assets/config.json to unlock the " +
-                                    "free-flowing cloud conversation. The app already works " +
-                                    "fully offline without it.",
+                            text = viewModel.tr("ai_enhanced_off"),
                             tone = Success
                         )
+                    }
+                }
+            }
+
+            // ── Microphone cue ──────────────────────────────────────────────
+            item {
+                PremiumCard {
+                    SectionTitle(viewModel.tr("mic_cue"))
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        viewModel.tr("mic_cue_sub"),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.height(11.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                        listOf(true to viewModel.tr("on"), false to viewModel.tr("off"))
+                            .forEach { (value, label) ->
+                                OptionTile(
+                                    title = label,
+                                    selected = viewModel.micCue == value,
+                                    onClick = { viewModel.updateMicCue(value) }
+                                )
+                            }
                     }
                 }
             }
@@ -243,7 +267,7 @@ fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { confirmReset = false },
             title = { Text(viewModel.tr("reset_profile")) },
-            text = { Text(viewModel.tr("privacy_text")) },
+            text = { Text(viewModel.tr("reset_profile_what")) },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.clearProfile()

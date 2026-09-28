@@ -10,7 +10,6 @@ import `in`.jandwar.app.ai.ConversationEngine
 import `in`.jandwar.app.ai.GroqClient
 import `in`.jandwar.app.ai.InterviewFlow
 import `in`.jandwar.app.ai.ProfileFragment
-import `in`.jandwar.app.ai.TtsSpeaker
 import `in`.jandwar.app.data.model.MatchedRole
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -26,8 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VoiceViewModel @Inject constructor(
     private val engine: ConversationEngine,
-    private val groq: GroqClient,
-    private val tts: TtsSpeaker
+    private val groq: GroqClient
 ) : ViewModel() {
 
     val state: StateFlow<ConversationEngine.State> = engine.state
@@ -121,6 +119,12 @@ class VoiceViewModel @Inject constructor(
         }
     }
 
+    /** User does not want to wait for the summary to be read out. */
+    fun skipNarration() {
+        engine.stopNarration()
+        navigateToResults = true
+    }
+
     private fun buildTemplateNarration(intro: String, results: List<MatchedRole>): String =
         buildString {
             append(intro).append(' ')
@@ -132,8 +136,13 @@ class VoiceViewModel @Inject constructor(
             append(InterviewFlow.resultOutro(lang))
         }
 
+    /**
+     * Hands the summary to the engine so it lands in the transcript as a
+     * normal assistant turn — the user reads it on screen while it is spoken,
+     * and only then does the app move to the results page.
+     */
     private fun speakAndFinish(text: String, onFinished: () -> Unit) {
-        tts.speak(text) {
+        engine.narrate(text) {
             viewModelScope.launch {
                 navigateToResults = true
                 onFinished()

@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.jandwar.app.ai.AiConfig
+import `in`.jandwar.app.ai.MicEarcon
+import `in`.jandwar.app.ai.TtsSpeaker
 import `in`.jandwar.app.ai.ProfileFragment
 import `in`.jandwar.app.data.model.Centre
 import `in`.jandwar.app.data.model.EducationLevel
@@ -30,7 +32,9 @@ import javax.inject.Inject
 class AppViewModel @Inject constructor(
     private val repository: AppRepository,
     private val prefs: SharedPreferences,
-    private val aiConfig: AiConfig
+    private val aiConfig: AiConfig,
+    private val tts: TtsSpeaker,
+    private val earcon: MicEarcon
 ) : ViewModel() {
 
     // ── Language ────────────────────────────────────────────────────────────
@@ -80,12 +84,17 @@ class AppViewModel @Inject constructor(
     private var _ttsEngine by mutableStateOf(prefs.getString(KEY_TTS_ENGINE, "auto") ?: "auto")
     val ttsEngine: String get() = _ttsEngine
 
+    private var _micCue by mutableStateOf(prefs.getBoolean(KEY_MIC_CUE, true))
+    val micCue: Boolean get() = _micCue
+
     val aiReady: Boolean get() = aiConfig.groqEnabled()
 
     // ── Init ────────────────────────────────────────────────────────────────
 
     init {
         aiConfig.load()
+        applyTtsEngine()
+        earcon.enabled = _micCue
         viewModelScope.launch {
             val loaded = withContext(Dispatchers.IO) { repository.getJobRoles() }
             _allRoles.value = loaded
@@ -97,6 +106,8 @@ class AppViewModel @Inject constructor(
     fun tr(key: String): String = repository.tr(currentLang, key)
 
     fun interestLabel(key: String): String = repository.interestLabel(currentLang, key)
+
+    fun occupationLabel(raw: String): String = repository.occupationLabel(currentLang, raw)
 
     fun sectorLabel(sector: String): String = repository.sectorLabel(sector)
 
@@ -261,6 +272,18 @@ class AppViewModel @Inject constructor(
     fun updateTtsEngine(engine: String) {
         _ttsEngine = engine
         prefs.edit().putString(KEY_TTS_ENGINE, engine).apply()
+        applyTtsEngine()
+    }
+
+    /** "device" restricts playback to voices that need no network. */
+    private fun applyTtsEngine() {
+        tts.setDeviceVoicesOnly(_ttsEngine == "device")
+    }
+
+    fun updateMicCue(on: Boolean) {
+        _micCue = on
+        prefs.edit().putBoolean(KEY_MIC_CUE, on).apply()
+        earcon.enabled = on
     }
 
     fun resetOnboarding() {
@@ -289,5 +312,6 @@ class AppViewModel @Inject constructor(
         private const val KEY_LANG_CHOSEN = "lang_chosen"
         private const val KEY_ONBOARDING_SEEN = "onboarding_seen"
         private const val KEY_TTS_ENGINE = "tts_engine"
+        private const val KEY_MIC_CUE = "mic_cue"
     }
 }

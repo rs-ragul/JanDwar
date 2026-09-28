@@ -173,7 +173,14 @@ data class DistrictsData(
 data class I18nData(
     val langs: List<Pair<String, String>> = emptyList(),
     val strings: Map<String, Map<String, String>> = emptyMap(),
-    val interests: Map<String, Map<String, String>> = emptyMap()
+    val interests: Map<String, Map<String, String>> = emptyMap(),
+    /**
+     * Canonical English occupation label (lowercased) -> display label, per
+     * language. The profile always stores the canonical English string because
+     * role matching and the cloud prompt both key off it; this map exists so the
+     * UI can show it in the user's own language.
+     */
+    val occupations: Map<String, Map<String, String>> = emptyMap()
 )
 
 // ─────────────────────────────────────────────────────────────────────────────

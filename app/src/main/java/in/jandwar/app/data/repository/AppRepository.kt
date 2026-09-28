@@ -70,6 +70,18 @@ class AppRepository @Inject constructor(
         return key.replaceFirstChar { it.uppercase() }
     }
 
+    /**
+     * Display form of a canonical occupation label. Free text the user typed is
+     * returned unchanged, so this is safe to call on any occupation string.
+     */
+    fun occupationLabel(lang: String, raw: String): String {
+        val key = raw.trim().lowercase()
+        if (key.isEmpty()) return raw
+        i18nData.occupations[lang]?.get(key)?.takeIf { it.isNotBlank() }?.let { return it }
+        i18nData.occupations["en"]?.get(key)?.takeIf { it.isNotBlank() }?.let { return it }
+        return raw
+    }
+
     fun getInterestChips(lang: String): List<InterestChip> =
         INTEREST_KEYS.map { InterestChip(it, interestLabel(lang, it)) }
 
@@ -144,7 +156,7 @@ class AppRepository @Inject constructor(
                     role.matchesOccupationText(profile.familyOccupation)
             if (familyFit) {
                 score += 55
-                familyNote = "${tr(lang, "reason_family")} ${profile.familyOccupation}"
+                familyNote = "${tr(lang, "reason_family")} ${occupationLabel(lang, profile.familyOccupation)}"
                 factors += MatchFactor(familyNote, true)
             }
 
@@ -154,7 +166,7 @@ class AppRepository @Inject constructor(
             ) {
                 score += 32
                 if (familyNote.isBlank()) {
-                    familyNote = "${tr(lang, "reason_family")} ${profile.currentLivelihood}"
+                    familyNote = "${tr(lang, "reason_family")} ${occupationLabel(lang, profile.currentLivelihood)}"
                     factors += MatchFactor(familyNote, true)
                 }
             }

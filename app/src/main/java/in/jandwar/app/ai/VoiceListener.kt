@@ -2,6 +2,8 @@ package `in`.jandwar.app.ai
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,15 +16,27 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Wrapper around Android's on-device/offline-capable [SpeechRecognizer].
+ * Wrapper around Android's [SpeechRecognizer].
  *
  * Reports failures as typed [Problem]s rather than raw error codes so the
  * conversation layer can decide whether to re-prompt, switch to typing, or
  * tell the user the mic is blocked.
+ *
+ * Two hard-won rules are encoded here:
+ *
+ *  1. **Never force `EXTRA_PREFER_OFFLINE`.** Most phones ship the offline
+ *     pack for English only. Forcing offline made Tamil / Hindi / Telugu /
+ *     Kannada / Malayalam fail instantly — the mic appeared to switch on and
+ *     then straight back off. Offline is now requested only when there is no
+ *     network to fall back on.
+ *  2. **A dropped `start()` must be rescheduled, not swallowed.** The old
+ *     de-bounce silently returned, which left the UI showing "Listening"
+ *     while nothing was actually recording.
  */
 @Singleton
 class VoiceListener @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val earcon: MicEarcon
 ) {
     enum class Problem {
         /** Nothing was heard — just ask again. */
@@ -40,6 +54,9 @@ class VoiceListener @Inject constructor(
         /** Recogniser needs the network and there is none. */
         OFFLINE,
 
+        /** No speech model for the selected language on this device. */
+        LANGUAGE,
+
         /** Anything else. */
         OTHER
     }
@@ -49,15 +66,23 @@ class VoiceListener @Inject constructor(
         fun onAmplitude(level: Float)
         fun onPartial(text: String)
         fun onFinal(text: String)
+
+        /** Mic is definitively closed — the UI must stop saying "Listening". */
+        fun onMicClosed()
         fun onProblem(problem: Problem)
     }
 
     private var recognizer: SpeechRecognizer? = null
     private var listener: Listener? = null
     private var bcp47 = "en-IN"
-    private var listening = false
     private var lastStart = 0L
+    private var pendingStart: Runnable? = null
     private val main = Handler(Looper.getMainLooper())
+
+    /** True between onReadyForSpeech and the close of that recognition turn. */
+    @Volatile
+    var micLive = false
+        private set
 
     fun isAvailable(): Boolean = try {
         SpeechRecognizer.isRecognitionAvailable(context)
@@ -69,30 +94,70 @@ class VoiceListener @Inject constructor(
         bcp47 = tag
     }
 
+    private fun hasNetwork(): Boolean = try {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        val caps = cm?.getNetworkCapabilities(cm.activeNetwork)
+        caps?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+    } catch (e: Exception) {
+        false
+    }
+
     fun setListener(l: Listener?) {
         listener = l
     }
 
     fun start() {
-        val now = System.currentTimeMillis()
-        if (now - lastStart < 600) return
-        lastStart = now
+        // Cancel any start we had already queued so we never stack two.
+        pendingStart?.let { main.removeCallbacks(it) }
+        pendingStart = null
+
+        val since = System.currentTimeMillis() - lastStart
+        if (since < MIN_GAP_MS) {
+            // Too soon after the previous session — the recogniser would throw
+            // ERROR_RECOGNIZER_BUSY. Re-schedule instead of dropping it.
+            val r = Runnable {
+                pendingStart = null
+                startNow()
+            }
+            pendingStart = r
+            main.postDelayed(r, MIN_GAP_MS - since)
+            return
+        }
+        startNow()
+    }
+
+    private fun startNow() {
+        lastStart = System.currentTimeMillis()
 
         if (!isAvailable()) {
+            micLive = false
             listener?.onProblem(Problem.UNAVAILABLE)
             return
         }
         stopInternal()
 
+        // Our own soft cue plays first, in the clear; the platform's harsh
+        // start/stop beeps are muted for the duration of the session.
+        if (earcon.enabled) {
+            earcon.playOpen()
+            main.postDelayed({ openRecogniser() }, CUE_MS)
+        } else {
+            openRecogniser()
+        }
+    }
+
+    private fun openRecogniser() {
         try {
+            earcon.muteSystem()
             recognizer = SpeechRecognizer.createSpeechRecognizer(context).apply {
                 setRecognitionListener(recognitionListener)
                 startListening(buildIntent())
             }
-            listening = true
         } catch (e: Exception) {
             Log.e(TAG, "start failed: ${e.message}")
-            listening = false
+            earcon.unmuteSystem()
+            micLive = false
+            listener?.onMicClosed()
             listener?.onProblem(Problem.OTHER)
         }
     }
@@ -105,7 +170,6 @@ class VoiceListener @Inject constructor(
             )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, bcp47)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, bcp47)
-            putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, bcp47)
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
             putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
@@ -116,19 +180,31 @@ class VoiceListener @Inject constructor(
                 2200L
             )
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 1500L)
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            // Only ask for offline when there is no connection anyway. Forcing
+            // it is what broke every non-English language.
+            if (!hasNetwork()) {
                 putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
             }
         }
 
+    private fun closeMic() {
+        val wasLive = micLive
+        micLive = false
+        earcon.unmuteSystem()
+        if (wasLive) {
+            earcon.playClose()
+            listener?.onMicClosed()
+        }
+    }
+
     private val recognitionListener = object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {
-            listening = true
+            micLive = true
             listener?.onReady()
         }
 
         override fun onBeginningOfSpeech() {
-            listening = true
+            micLive = true
         }
 
         override fun onRmsChanged(rmsdB: Float) {
@@ -140,19 +216,24 @@ class VoiceListener @Inject constructor(
         override fun onBufferReceived(buffer: ByteArray?) = Unit
 
         override fun onEndOfSpeech() {
-            listening = false
             listener?.onAmplitude(0f)
+            closeMic()
         }
 
         override fun onError(error: Int) {
-            listening = false
             listener?.onAmplitude(0f)
+            closeMic()
             val problem = when (error) {
                 SpeechRecognizer.ERROR_NO_MATCH -> Problem.UNCLEAR
                 SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> Problem.SILENCE
                 SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Problem.PERMISSION
                 SpeechRecognizer.ERROR_NETWORK,
                 SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> Problem.OFFLINE
+
+                // API 33+ language codes, referenced numerically so the app
+                // still compiles and runs on older platforms.
+                ERROR_LANGUAGE_NOT_SUPPORTED,
+                ERROR_LANGUAGE_UNAVAILABLE -> Problem.LANGUAGE
 
                 SpeechRecognizer.ERROR_RECOGNIZER_BUSY,
                 SpeechRecognizer.ERROR_CLIENT -> Problem.OTHER
@@ -162,13 +243,13 @@ class VoiceListener @Inject constructor(
 
                 else -> Problem.OTHER
             }
-            Log.d(TAG, "error $error -> $problem")
+            Log.d(TAG, "error $error -> $problem (lang=$bcp47)")
             main.post { listener?.onProblem(problem) }
         }
 
         override fun onResults(results: Bundle?) {
-            listening = false
             listener?.onAmplitude(0f)
+            closeMic()
             val text = results
                 ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 ?.firstOrNull { it.isNotBlank() }
@@ -197,12 +278,15 @@ class VoiceListener @Inject constructor(
             recognizer?.stopListening()
         } catch (_: Exception) {
         }
-        listening = false
+        closeMic()
     }
 
     fun cancel() = stopInternal()
 
     private fun stopInternal() {
+        pendingStart?.let { main.removeCallbacks(it) }
+        pendingStart = null
+        earcon.unmuteSystem()
         try {
             recognizer?.let {
                 runCatching { it.cancel() }
@@ -211,7 +295,7 @@ class VoiceListener @Inject constructor(
         } catch (_: Exception) {
         }
         recognizer = null
-        listening = false
+        closeMic()
     }
 
     fun release() {
@@ -221,5 +305,17 @@ class VoiceListener @Inject constructor(
 
     companion object {
         private const val TAG = "VoiceListener"
+
+        /** Minimum gap between two recognition sessions. */
+        private const val MIN_GAP_MS = 600L
+
+        /** Time for the soft "your turn" cue to finish before the mic opens. */
+        private const val CUE_MS = 130L
+
+        // SpeechRecognizer.ERROR_LANGUAGE_NOT_SUPPORTED / _UNAVAILABLE are
+        // API 33; the constants are stable, so use the literals to keep
+        // minSdk 24 working.
+        private const val ERROR_LANGUAGE_NOT_SUPPORTED = 12
+        private const val ERROR_LANGUAGE_UNAVAILABLE = 13
     }
 }

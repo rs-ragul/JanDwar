@@ -1,21 +1,16 @@
 {
   "_readme": [
     "JanDwar AI configuration.",
-    "The app works fully OFFLINE with no keys: it falls back to the built-in",
-    "on-device conversation engine. Adding a Groq key only makes the interview",
-    "feel more free-flowing.",
+    "The app works fully OFFLINE with no keys: speech recognition and speech",
+    "playback use the Android platform engines, and the interview itself runs",
+    "on the built-in on-device conversation engine.",
     "",
-    "TO ENABLE THE CLOUD LLM:",
-    "  1. Get a free key at https://console.groq.com/keys",
+    "OPTIONAL — richer, more free-flowing wording when a network is present:",
+    "  1. Get a key at https://console.groq.com/keys",
     "  2. Replace the groq_api_key value below with it.",
     "  3. Rebuild. Nothing else to change.",
     "Leave the placeholder text as-is to stay fully offline."
   ],
-
-  "groq_api_key": "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",
-  "groq_model": "openai/gpt-oss-20b",
-
-  "sarvam_api_key": "sk_d7m566yw_yRb87khpBn3IEfzFStrZH91r",
-  "bhashini_udyat_key": "07e29b1c8a-4cce-4fdb-a6bb-4deadba42d5a",
-  "bhashini_inference_key": "n44PHT-uUwqHNAvlBbOZLbxQCI_rq2U8PH3yVqTxJdO_NHLbaWzUu6vumuR9A6mY"
+  "groq_api_key": "PASTE_YOUR_GROQ_API_KEY_HERE",
+  "groq_model": "llama-3.3-70b-versatile"
 }
