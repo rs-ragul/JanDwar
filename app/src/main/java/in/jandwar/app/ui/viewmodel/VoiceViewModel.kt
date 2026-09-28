@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.jandwar.app.ai.ConversationController
+import `in`.jandwar.app.ai.GroqExtractor
 import `in`.jandwar.app.ai.ProfileFragment
 import `in`.jandwar.app.data.model.ConversationMessage
 import `in`.jandwar.app.data.model.MatchedRole
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VoiceViewModel @Inject constructor(
     private val conversationController: ConversationController,
+    private val groqExtractor: GroqExtractor,
     private val repository: AppRepository
 ) : ViewModel() {
 
@@ -108,6 +110,8 @@ class VoiceViewModel @Inject constructor(
         conversationController.start()
     }
 
+    // STEP 3 from user spec: ordinary programming filtering (Excel-like, no AI) for top 3
+    // STEP 4: Then ask Groq to explain results warmly in user's language, TTS speaks it
     private fun explainResultsThenDone(finalProfile: ProfileFragment) {
         try {
             val education = finalProfile.edu?.let { eduStr -> try { `in`.jandwar.app.data.model.EducationLevel.fromAiString(eduStr) } catch (_: Exception) { null } }
@@ -125,14 +129,53 @@ class VoiceViewModel @Inject constructor(
                 localOpportunity = finalProfile.localOpportunity ?: "",
                 skills = finalProfile.skills.toSet()
             )
+            // Ordinary code filtering - no AI, Excel-like
             val results = repository.matchRoles(profileForMatching)
             matchedResults = results
             onFieldExtractedCallback?.invoke(finalProfile)
 
-            val summary = buildNaturalResultsSummary(results, profileForMatching, finalProfile, currentLangCode)
-            conversationController.speakResultsSummary(summary) {
-                isDone = true
-                onDoneCallback?.invoke(finalProfile)
+            val top = results.take(3)
+            if (top.isEmpty()) {
+                val fallback = buildNaturalResultsSummary(results, profileForMatching, finalProfile, currentLangCode)
+                conversationController.speakResultsSummary(fallback) {
+                    isDone = true
+                    onDoneCallback?.invoke(finalProfile)
+                }
+                return
+            }
+
+            // Prepare top 3 as strings for Groq (Step 3 -> Step 4)
+            val topResultsForGroq = top.mapIndexed { idx, matched ->
+                "${idx+1}. ${matched.role.job_role} (${matched.role.qp_code}) - SSC: ${matched.role.ssc}, Sector: ${matched.role.sector}, NSQF: ${matched.role.nsqf_level}, Duration: ${matched.role.duration_hours}h, " +
+                "Centre: ${matched.centre?.name ?: "N/A"} in ${matched.centre?.district ?: finalProfile.district ?: "N/A"}, " +
+                "Why fits: ${matched.familyFitNote.ifBlank { "interest in ${finalProfile.interests.joinToString()}" }}, Skill gap: ${matched.skillGapNote}"
+            }
+
+            // PURE GROQ explains results - real AI conversation, not deterministic
+            if (groqExtractor.isConfigured()) {
+                isExplainingResults = true
+                status = when(currentLangCode) {
+                    "ta" -> "Groq AI உங்கள் வாய்ப்புகளை விளக்குகிறது..."
+                    "hi" -> "Groq AI आपके विकल्प समझा रहा है..."
+                    else -> "Groq AI explaining your best matches..."
+                }
+                groqExtractor.explainResultsWithGroq(finalProfile, topResultsForGroq, currentLangCode) { explanation ->
+                    // This callback is on main thread, spoken by TTS
+                    resultExplanation = explanation
+                    conversationHistory = conversationHistory + ConversationMessage(role = "assistant", text = explanation)
+                    // Speak with TTS (natural native voice)
+                    conversationController.speakResultsSummary(explanation) {
+                        isDone = true
+                        onDoneCallback?.invoke(finalProfile)
+                    }
+                }
+            } else {
+                // Fallback if no Groq key (should not happen in production, but keep for offline)
+                val fallback = buildNaturalResultsSummary(results, profileForMatching, finalProfile, currentLangCode)
+                conversationController.speakResultsSummary(fallback) {
+                    isDone = true
+                    onDoneCallback?.invoke(finalProfile)
+                }
             }
         } catch (e: Exception) {
             Log.e("VoiceViewModel", "Error explaining results: ${e.message}", e)
@@ -183,24 +226,6 @@ class VoiceViewModel @Inject constructor(
                 }
                 append("सभी विवरण अगले पेज पर हैं। किस प्रशिक्षण के बारे में और जानना चाहते हैं.")
             }
-            "te" -> buildString {
-                append("అద్భుతం. మిమ్మల్ని బాగా అర్థం చేసుకున్నాను. ")
-                append("మీరు ${frag.edu ?: ""}, కుటుంబం $family, ప్రస్తుతం $current, ఆసక్తి $interestsStr. ")
-                append("దీని ఆధారంగా మీకు ${top.size} మంచి అవకాశాలు దొరికాయి. ")
-                top.forEachIndexed { idx, matched -> append("${idx+1}. ${matched.role.job_role}. ") }
-                append("వివరాలు తదుపరి పేజీలో ఉన్నాయి.")
-            }
-            "kn" -> buildString {
-                append("ಅದ್ಭುತ. ನಿಮ್ಮನ್ನು ಚೆನ್ನಾಗಿ ಅರ್ಥಮಾಡಿಕೊಂಡಿದ್ದೇನೆ. ")
-                append("ನೀವು ${frag.edu ?: ""}, ಕುಟುಂಬ $family, ಪ್ರಸ್ತುತ $current, ಆಸಕ್ತಿ $interestsStr. ")
-                top.forEachIndexed { idx, matched -> append("${idx+1}. ${matched.role.job_role}. ") }
-                append("ವಿವರಗಳು ಮುಂದಿನ ಪುಟದಲ್ಲಿವೆ.")
-            }
-            "ml" -> buildString {
-                append("അടിപൊളി. നിങ്ങളെ നന്നായി മനസ്സിലാക്കി. ")
-                top.forEachIndexed { idx, matched -> append("${idx+1}. ${matched.role.job_role}. ") }
-                append("വിശദാംശങ്ങൾ അടുത്ത പേജിലുണ്ട്.")
-            }
             else -> buildString {
                 append("Wonderful, I've really understood you now. ")
                 append("You're ${frag.edu ?: ""}, family background is $family, currently $current, interested in $interestsStr, from $district. ")
@@ -226,6 +251,7 @@ class VoiceViewModel @Inject constructor(
         transcript = text
         conversationHistory = conversationHistory + ConversationMessage(role = "user", text = text)
         if (isExplainingResults) {
+            // After Groq explained top 3, user can ask questions - allow follow-up via Groq explanation or navigate
             val followUp = when (currentLangCode) {
                 "ta" -> "நல்ல கேள்வி. விவரங்கள் அடுத்த பக்கத்தில் உள்ளன. எந்த பயிற்சி பிடித்திருக்கிறது."
                 "hi" -> "अच्छा सवाल. विवरण अगले पेज पर है। कौन सा प्रशिक्षण अच्छा लगा."
