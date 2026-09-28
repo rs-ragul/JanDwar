@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -140,7 +141,8 @@ fun SplashScreen(
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 40.dp, start = 32.dp, end = 32.dp)
+                .navigationBarsPadding()
+                .padding(bottom = 32.dp, start = 32.dp, end = 32.dp)
                 .alpha(alpha),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

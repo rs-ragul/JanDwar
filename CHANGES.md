@@ -3,6 +3,8 @@
 Every file below was touched while fixing the project for SIH 2026 PS 26097.
 **40 added · 37 modified · 44 deleted · 1 renamed.**
 
+APK in this bundle: **versionCode 3 / versionName 2.1** — includes the post-install UI fixes 26 to 29 below.
+
 ---
 
 ## A. Bugs found and fixed
@@ -41,6 +43,16 @@ Every file below was touched while fixing the project for SIH 2026 PS 26097.
 | 23 | Missing mipmaps and night theme; `AppTheme` cast the context straight to `Activity` and crashed in previews. | Full adaptive-icon set at 5 densities, `values-night/themes.xml`, and a safe context lookup. |
 | 24 | `CALL_PHONE` permission was requested for what is only a dial-out. | Uses `ACTION_DIAL`; the permission was dropped. |
 | 25 | A **live Groq API key** was hard-coded in `get_groq_models.js`, `list_models.js` and `test_groq.js`. | Files deleted. **The key remains in git history, so revoke it.** |
+
+### Post-install UI fixes (v2.1) — found on a real device
+
+| # | Problem | Fix |
+|---|---|---|
+| 26 | **`PrimaryButton` swallowed the whole screen.** Its inner `Box` used `Modifier.fillMaxSize()`. Inside a `Column`, an unweighted child is measured against *all* remaining height, so the button grew to the full viewport and starved its `weight(1f)` sibling. Language, Onboarding, Intake and Voice all rendered as one giant button with their real content collapsed to 0 dp. | Inner `Box` is now `.fillMaxWidth().heightIn(min = 58.dp)`. One line, four screens fixed. |
+| 27 | **The app drew under the status bar.** `enableEdgeToEdge()` is mandatory on targetSdk 35 / Android 15, but no window insets were consumed, so headers sat on top of the clock and battery. | `statusBarsPadding()` applied *inside* `BrandHeader`'s gradient `Box` (the gradient still runs edge to edge behind the bar, only the content moves down), plus `statusBarsPadding()` on `OnboardingScreen`, which has no header, and `navigationBarsPadding()` on the Splash footer and the Language / Intake / Onboarding bottom bars. |
+| 28 | `HeroActionCard`'s decorative circle was a `Box(Modifier.size(180.dp))`, which forced every home card to at least 180 dp tall regardless of its content. | Replaced with `Modifier.matchParentSize()` and a radial gradient, so the decoration follows the card instead of dictating it. |
+| 29 | **The voice screen was audio-only.** Nothing on screen showed what the assistant had just said or what the microphone was hearing, which is unusable in a noisy room, on a phone with no TTS voice, or for a hard-of-hearing user. | New `LiveCaption` block under the orb: one card always shows the assistant's current line with a live "speaking" marker, and a second teal card streams the user's partial speech as it is recognised. The scrollable transcript is kept below both. |
+
 
 ---
 

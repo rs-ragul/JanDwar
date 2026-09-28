@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -102,6 +103,9 @@ fun BrandHeader(
             .fillMaxWidth()
             .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
             .background(brandBrush())
+            // Gradient runs edge-to-edge behind the status bar; the content
+            // itself is pushed clear of it.
+            .statusBarsPadding()
             .padding(horizontal = 18.dp, vertical = 18.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
@@ -290,7 +294,11 @@ fun PrimaryButton(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                // NEVER fillMaxSize() here: inside a Column this child is
+                // measured against all remaining height, so the button would
+                // swallow the screen and starve its weight(1f) sibling.
+                .fillMaxWidth()
+                .heightIn(min = 58.dp)
                 .background(
                     if (enabled && !loading) brandBrushSoft()
                     else Brush.linearGradient(

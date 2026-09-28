@@ -238,13 +238,20 @@ private fun HeroActionCard(
                 Brush.linearGradient(listOf(BrandIndigo, BrandTeal))
             )
         ) {
-            // Decorative bloom
+            // Decorative bloom — matchParentSize() so it never forces the
+            // card taller than its content.
             Box(
                 modifier = Modifier
-                    .size(180.dp)
-                    .align(Alignment.CenterEnd)
-                    .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.07f))
+                    .matchParentSize()
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = 0.10f),
+                                Color.Transparent
+                            ),
+                            radius = 520f
+                        )
+                    )
             )
             Row(
                 modifier = Modifier.padding(20.dp),

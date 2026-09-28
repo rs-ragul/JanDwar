@@ -36,10 +36,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Replay
 import androidx.compose.material.icons.rounded.Send
+import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -181,36 +183,27 @@ fun VoiceScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
+                .padding(vertical = 2.dp),
             contentAlignment = Alignment.Center
         ) {
             VoiceOrb(
                 isSpeaking = speaking,
                 isListening = listening,
-                size = 116.dp,
+                size = 96.dp,
                 modifier = Modifier.scale(orbScale)
             )
         }
 
-        Text(
-            text = when {
-                speaking -> appViewModel.tr("speaking")
-                listening -> appViewModel.tr("listening")
-                thinking -> appViewModel.tr("thinking")
-                state.phase == ConversationEngine.Phase.DONE -> appViewModel.tr("done")
-                else -> appViewModel.tr("tap_to_speak")
-            },
-            style = MaterialTheme.typography.labelLarge,
-            color = when {
-                listening -> BrandTeal
-                speaking -> BrandSaffron
-                else -> MaterialTheme.colorScheme.onSurfaceVariant
-            },
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+        // ── Live captions: what the assistant just said, and what we hear ───
+        LiveCaption(
+            appViewModel = appViewModel,
+            state = state,
+            speaking = speaking,
+            listening = listening,
+            thinking = thinking
         )
 
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(8.dp))
 
         // ── Notice banner ───────────────────────────────────────────────────
         AnimatedVisibility(
@@ -547,6 +540,130 @@ private fun TextAnswerBar(
                 tint = if (draft.isNotBlank()) Color.White
                 else MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+/**
+ * The part of the screen the problem statement really cares about: the user
+ * must always be able to *read* what the assistant just said, and see their own
+ * words appear as they speak. Works as a full substitute for audio when the
+ * phone has no TTS voice or the room is noisy.
+ */
+@Composable
+private fun LiveCaption(
+    appViewModel: AppViewModel,
+    state: ConversationEngine.State,
+    speaking: Boolean,
+    listening: Boolean,
+    thinking: Boolean
+) {
+    val assistantLine = state.turns.lastOrNull { !it.fromUser }?.text.orEmpty()
+    val lastUserLine = state.turns.lastOrNull { it.fromUser }?.text.orEmpty()
+    val heardNow = state.partial.ifBlank { if (thinking) lastUserLine else "" }
+
+    Column(modifier = Modifier.padding(horizontal = 18.dp)) {
+
+        // What JanDwar is saying / just said.
+        if (assistantLine.isNotBlank()) {
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.surface,
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    if (speaking) BrandSaffron.copy(alpha = 0.55f)
+                    else MaterialTheme.colorScheme.outline
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Rounded.VolumeUp,
+                            null,
+                            tint = if (speaking) BrandSaffron else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            appViewModel.tr("name"),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        if (speaking) {
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                appViewModel.tr("speaking"),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = BrandSaffron
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(7.dp))
+                    Text(
+                        assistantLine,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        }
+
+        // What we are hearing from the user, live.
+        AnimatedVisibility(
+            visible = listening || heardNow.isNotBlank(),
+            enter = fadeIn(tween(180)),
+            exit = fadeOut(tween(140))
+        ) {
+            Column {
+                Spacer(Modifier.height(9.dp))
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = BrandTeal.copy(alpha = 0.10f),
+                    border = androidx.compose.foundation.BorderStroke(
+                        1.dp,
+                        BrandTeal.copy(alpha = 0.35f)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Rounded.GraphicEq,
+                                null,
+                                tint = BrandTeal,
+                                modifier = Modifier.size(15.dp)
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text(
+                                appViewModel.tr("you"),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                when {
+                                    thinking -> appViewModel.tr("thinking")
+                                    listening -> appViewModel.tr("listening")
+                                    else -> ""
+                                },
+                                style = MaterialTheme.typography.labelSmall,
+                                color = BrandTeal
+                            )
+                        }
+                        Spacer(Modifier.height(7.dp))
+                        Text(
+                            heardNow.ifBlank { appViewModel.tr("tap_to_speak") },
+                            style = MaterialTheme.typography.titleSmall,
+                            color = if (heardNow.isBlank()) {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
