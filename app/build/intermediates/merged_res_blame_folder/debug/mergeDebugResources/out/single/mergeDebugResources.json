@@ -1,26 +1,114 @@
 [
     {
-        "merged": "in.jandwar.app-debug-56:/drawable_card_bg.xml.flat",
-        "source": "in.jandwar.app-main-58:/drawable/card_bg.xml"
+        "merged": "in.jandwar.app-debug-61:/drawable_logo_premium.png.flat",
+        "source": "in.jandwar.app-main-63:/drawable/logo_premium.png"
     },
     {
-        "merged": "in.jandwar.app-debug-56:/drawable_button_primary.xml.flat",
-        "source": "in.jandwar.app-main-58:/drawable/button_primary.xml"
+        "merged": "in.jandwar.app-debug-61:/mipmap-xhdpi_ic_launcher_monochrome.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xhdpi/ic_launcher_monochrome.png"
     },
     {
-        "merged": "in.jandwar.app-debug-56:/drawable_chip_plain.xml.flat",
-        "source": "in.jandwar.app-main-58:/drawable/chip_plain.xml"
+        "merged": "in.jandwar.app-debug-61:/xml_data_extraction_rules.xml.flat",
+        "source": "in.jandwar.app-main-63:/xml/data_extraction_rules.xml"
     },
     {
-        "merged": "in.jandwar.app-debug-56:/drawable_chip_selected.xml.flat",
-        "source": "in.jandwar.app-main-58:/drawable/chip_selected.xml"
+        "merged": "in.jandwar.app-debug-61:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-hdpi/ic_launcher_round.png"
     },
     {
-        "merged": "in.jandwar.app-debug-56:/drawable_splash_bg.xml.flat",
-        "source": "in.jandwar.app-main-58:/drawable/splash_bg.xml"
+        "merged": "in.jandwar.app-debug-61:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "in.jandwar.app-debug-56:/drawable_logo_premium.png.flat",
-        "source": "in.jandwar.app-main-58:/drawable/logo_premium.png"
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/drawable-xxhdpi_ic_brand_emblem.png.flat",
+        "source": "in.jandwar.app-main-63:/drawable-xxhdpi/ic_brand_emblem.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxhdpi_ic_launcher_monochrome.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxhdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/drawable_ic_launcher_background.xml.flat",
+        "source": "in.jandwar.app-main-63:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/drawable-xhdpi_ic_brand_emblem.png.flat",
+        "source": "in.jandwar.app-main-63:/drawable-xhdpi/ic_brand_emblem.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxxhdpi_ic_launcher_monochrome.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxxhdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/xml_backup_rules.xml.flat",
+        "source": "in.jandwar.app-main-63:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-mdpi_ic_launcher_monochrome.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-mdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-hdpi_ic_launcher_monochrome.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-hdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "in.jandwar.app-debug-61:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "in.jandwar.app-main-63:/mipmap-mdpi/ic_launcher_foreground.png"
     }
 ]

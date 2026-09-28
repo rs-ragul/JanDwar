@@ -1,154 +1,213 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="in.jandwar.app"
-4    android:versionCode="1"
-5    android:versionName="1.0" >
+4    android:versionCode="2"
+5    android:versionName="2.0" >
 6
 7    <uses-sdk
-8        android:minSdkVersion="23"
+8        android:minSdkVersion="24"
 9        android:targetSdkVersion="35" />
 10
 11    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-11-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:2:5-71
-11-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:2:22-68
-12    <uses-permission android:name="android.permission.CALL_PHONE" />
-12-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:3:5-69
-12-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:3:22-66
-13    <uses-permission android:name="android.permission.INTERNET" />
-13-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:4:5-67
-13-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:4:22-64
-14    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-14-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:5:5-79
-14-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:5:22-76
+11-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:5:5-71
+11-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:5:22-68
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:6:5-67
+12-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:6:22-64
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:7:5-79
+13-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:7:22-76
+14    <!-- CALL_PHONE is NOT required: we use ACTION_DIAL which needs no permission. -->
 15
-16    <permission
-16-->[androidx.core:core:1.12.0] G:\Android\.gradle\caches\8.10.2\transforms\20c7ee7cf4b458a535be4b0bb09fb812\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
-17        android:name="in.jandwar.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-17-->[androidx.core:core:1.12.0] G:\Android\.gradle\caches\8.10.2\transforms\20c7ee7cf4b458a535be4b0bb09fb812\transformed\core-1.12.0\AndroidManifest.xml:23:9-81
-18        android:protectionLevel="signature" />
-18-->[androidx.core:core:1.12.0] G:\Android\.gradle\caches\8.10.2\transforms\20c7ee7cf4b458a535be4b0bb09fb812\transformed\core-1.12.0\AndroidManifest.xml:24:9-44
+16    <uses-feature
+16-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:10:5-12:36
+17        android:name="android.hardware.microphone"
+17-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:11:9-51
+18        android:required="false" />
+18-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:12:9-33
 19
-20    <uses-permission android:name="in.jandwar.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-20-->[androidx.core:core:1.12.0] G:\Android\.gradle\caches\8.10.2\transforms\20c7ee7cf4b458a535be4b0bb09fb812\transformed\core-1.12.0\AndroidManifest.xml:26:5-97
-20-->[androidx.core:core:1.12.0] G:\Android\.gradle\caches\8.10.2\transforms\20c7ee7cf4b458a535be4b0bb09fb812\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
-21
-22    <application
-22-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:7:5-24:19
-23        android:name="in.jandwar.app.ThozhilThunaiApp"
-23-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:8:9-41
-24        android:allowBackup="true"
-24-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:9:9-35
-25        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-25-->[androidx.core:core:1.12.0] G:\Android\.gradle\caches\8.10.2\transforms\20c7ee7cf4b458a535be4b0bb09fb812\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
-26        android:debuggable="true"
-27        android:extractNativeLibs="false"
-28        android:icon="@drawable/logo_premium"
-28-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:10:9-46
-29        android:label="@string/app_name"
-29-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:11:9-41
-30        android:roundIcon="@drawable/logo_premium"
-30-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:12:9-51
-31        android:supportsRtl="true"
-31-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:13:9-35
-32        android:theme="@style/AppTheme" >
-32-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:14:9-40
-33        <activity
-33-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:15:9-23:20
-34            android:name="in.jandwar.app.MainActivity"
-34-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:16:13-41
-35            android:exported="true"
-35-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:17:13-36
-36            android:screenOrientation="portrait" >
-36-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:18:13-49
-37            <intent-filter>
-37-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:19:13-22:29
-38                <action android:name="android.intent.action.MAIN" />
-38-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:20:17-69
-38-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:20:25-66
-39
-40                <category android:name="android.intent.category.LAUNCHER" />
-40-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:21:17-77
-40-->G:\Project\JanDwarNew\app\src\main\AndroidManifest.xml:21:27-74
-41            </intent-filter>
-42        </activity>
-43        <activity
-43-->[androidx.compose.ui:ui-tooling-android:1.6.1] G:\Android\.gradle\caches\8.10.2\transforms\db77673d5ee543aae81efd9ce25ecabb\transformed\jetified-ui-tooling-release\AndroidManifest.xml:23:9-25:39
-44            android:name="androidx.compose.ui.tooling.PreviewActivity"
-44-->[androidx.compose.ui:ui-tooling-android:1.6.1] G:\Android\.gradle\caches\8.10.2\transforms\db77673d5ee543aae81efd9ce25ecabb\transformed\jetified-ui-tooling-release\AndroidManifest.xml:24:13-71
-45            android:exported="true" />
-45-->[androidx.compose.ui:ui-tooling-android:1.6.1] G:\Android\.gradle\caches\8.10.2\transforms\db77673d5ee543aae81efd9ce25ecabb\transformed\jetified-ui-tooling-release\AndroidManifest.xml:25:13-36
-46        <activity
-46-->[androidx.compose.ui:ui-test-manifest:1.6.1] G:\Android\.gradle\caches\8.10.2\transforms\8cd3519e04ae5b18185828200a3c5210\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:23:9-25:39
-47            android:name="androidx.activity.ComponentActivity"
-47-->[androidx.compose.ui:ui-test-manifest:1.6.1] G:\Android\.gradle\caches\8.10.2\transforms\8cd3519e04ae5b18185828200a3c5210\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:24:13-63
-48            android:exported="true" />
-48-->[androidx.compose.ui:ui-test-manifest:1.6.1] G:\Android\.gradle\caches\8.10.2\transforms\8cd3519e04ae5b18185828200a3c5210\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:25:13-36
-49
-50        <provider
-50-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\74963fd1a8e51c0325e8f5705707e153\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-51            android:name="androidx.startup.InitializationProvider"
-51-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\74963fd1a8e51c0325e8f5705707e153\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
-52            android:authorities="in.jandwar.app.androidx-startup"
-52-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\74963fd1a8e51c0325e8f5705707e153\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
-53            android:exported="false" >
-53-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\74963fd1a8e51c0325e8f5705707e153\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
-54            <meta-data
-54-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\74963fd1a8e51c0325e8f5705707e153\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-55                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-55-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\74963fd1a8e51c0325e8f5705707e153\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
-56                android:value="androidx.startup" />
-56-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\74963fd1a8e51c0325e8f5705707e153\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
-57            <meta-data
-57-->[androidx.lifecycle:lifecycle-process:2.7.0] G:\Android\.gradle\caches\8.10.2\transforms\7ab159232339051227d5acd7b0f3bcbd\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
-58                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-58-->[androidx.lifecycle:lifecycle-process:2.7.0] G:\Android\.gradle\caches\8.10.2\transforms\7ab159232339051227d5acd7b0f3bcbd\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
-59                android:value="androidx.startup" />
-59-->[androidx.lifecycle:lifecycle-process:2.7.0] G:\Android\.gradle\caches\8.10.2\transforms\7ab159232339051227d5acd7b0f3bcbd\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
-60            <meta-data
-60-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
-61                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-61-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
-62                android:value="androidx.startup" />
-62-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
-63        </provider>
-64
-65        <receiver
-65-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
-66            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-66-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
-67            android:directBootAware="false"
-67-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
-68            android:enabled="true"
-68-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
-69            android:exported="true"
-69-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
-70            android:permission="android.permission.DUMP" >
-70-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
-71            <intent-filter>
-71-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
-72                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-72-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
-72-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
-73            </intent-filter>
-74            <intent-filter>
-74-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
-75                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-75-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
-75-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+20    <!--
+21      Android 11+ (API 30) package visibility. Without this block the app cannot
+22      see the system speech-recognition or text-to-speech services, so both the
+23      mic and the voice output silently fail on modern devices.
+24      This was missing in the original manifest.
+25    -->
+26    <queries>
+26-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:20:5-35:15
+27        <intent>
+27-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:21:9-23:18
+28            <action android:name="android.speech.RecognitionService" />
+28-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:22:13-72
+28-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:22:21-69
+29        </intent>
+30        <intent>
+30-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:24:9-26:18
+31            <action android:name="android.intent.action.TTS_SERVICE" />
+31-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:25:13-72
+31-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:25:21-69
+32        </intent>
+33        <intent>
+33-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:27:9-30:18
+34            <action android:name="android.intent.action.DIAL" />
+34-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:28:13-65
+34-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:28:21-62
+35
+36            <data android:scheme="tel" />
+36-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:29:13-42
+36-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:29:19-39
+37        </intent>
+38        <intent>
+38-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:31:9-34:18
+39            <action android:name="android.intent.action.VIEW" />
+39-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:32:13-65
+39-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:32:21-62
+40
+41            <data android:scheme="https" />
+41-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:29:13-42
+41-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:29:19-39
+42        </intent>
+43    </queries>
+44
+45    <permission
+45-->[androidx.core:core:1.13.1] G:\Android\.gradle\caches\8.14.3\transforms\4b70647f1e4954c9bcd9f893bfd22d6c\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+46        android:name="in.jandwar.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+46-->[androidx.core:core:1.13.1] G:\Android\.gradle\caches\8.14.3\transforms\4b70647f1e4954c9bcd9f893bfd22d6c\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+47        android:protectionLevel="signature" />
+47-->[androidx.core:core:1.13.1] G:\Android\.gradle\caches\8.14.3\transforms\4b70647f1e4954c9bcd9f893bfd22d6c\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+48
+49    <uses-permission android:name="in.jandwar.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+49-->[androidx.core:core:1.13.1] G:\Android\.gradle\caches\8.14.3\transforms\4b70647f1e4954c9bcd9f893bfd22d6c\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+49-->[androidx.core:core:1.13.1] G:\Android\.gradle\caches\8.14.3\transforms\4b70647f1e4954c9bcd9f893bfd22d6c\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+50
+51    <application
+51-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:37:5-63:19
+52        android:name="in.jandwar.app.JanDwarApp"
+52-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:38:9-35
+53        android:allowBackup="true"
+53-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:39:9-35
+54        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+54-->[androidx.core:core:1.13.1] G:\Android\.gradle\caches\8.14.3\transforms\4b70647f1e4954c9bcd9f893bfd22d6c\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+55        android:dataExtractionRules="@xml/data_extraction_rules"
+55-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:40:9-65
+56        android:debuggable="true"
+57        android:enableOnBackInvokedCallback="true"
+57-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:46:9-51
+58        android:extractNativeLibs="false"
+59        android:fullBackupContent="@xml/backup_rules"
+59-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:41:9-54
+60        android:icon="@mipmap/ic_launcher"
+60-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:42:9-43
+61        android:label="@string/app_name"
+61-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:43:9-41
+62        android:roundIcon="@mipmap/ic_launcher_round"
+62-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:44:9-54
+63        android:supportsRtl="true"
+63-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:45:9-35
+64        android:theme="@style/Theme.JanDwar" >
+64-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:47:9-45
+65        <activity
+65-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:50:9-62:20
+66            android:name="in.jandwar.app.MainActivity"
+66-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:51:13-41
+67            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+67-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:53:13-94
+68            android:exported="true"
+68-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:52:13-36
+69            android:screenOrientation="portrait"
+69-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:54:13-49
+70            android:theme="@style/Theme.JanDwar"
+70-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:56:13-49
+71            android:windowSoftInputMode="adjustResize" >
+71-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:55:13-55
+72            <intent-filter>
+72-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:58:13-61:29
+73                <action android:name="android.intent.action.MAIN" />
+73-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:59:17-69
+73-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:59:25-66
+74
+75                <category android:name="android.intent.category.LAUNCHER" />
+75-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:60:17-77
+75-->G:\Downloads\JanDwar-SIH26097\JanDwar-SIH26097\source\app\src\main\AndroidManifest.xml:60:27-74
 76            </intent-filter>
-77            <intent-filter>
-77-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
-78                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-78-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
-78-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
-79            </intent-filter>
-80            <intent-filter>
-80-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
-81                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-81-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
-81-->[androidx.profileinstaller:profileinstaller:1.3.0] G:\Android\.gradle\caches\8.10.2\transforms\c43b9612f763b9f9f5baa02ac3b05ffd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
-82            </intent-filter>
-83        </receiver>
-84    </application>
-85
-86</manifest>
+77        </activity>
+78        <activity
+78-->[androidx.compose.ui:ui-tooling-android:1.7.5] G:\Android\.gradle\caches\8.14.3\transforms\d46638c1e50fe4a8917990c057f24637\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+79            android:name="androidx.compose.ui.tooling.PreviewActivity"
+79-->[androidx.compose.ui:ui-tooling-android:1.7.5] G:\Android\.gradle\caches\8.14.3\transforms\d46638c1e50fe4a8917990c057f24637\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+80            android:exported="true" />
+80-->[androidx.compose.ui:ui-tooling-android:1.7.5] G:\Android\.gradle\caches\8.14.3\transforms\d46638c1e50fe4a8917990c057f24637\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+81        <activity
+81-->[androidx.compose.ui:ui-test-manifest:1.7.5] G:\Android\.gradle\caches\8.14.3\transforms\6377a9fe91b86e98daae01a9d4e87a2d\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:23:9-25:39
+82            android:name="androidx.activity.ComponentActivity"
+82-->[androidx.compose.ui:ui-test-manifest:1.7.5] G:\Android\.gradle\caches\8.14.3\transforms\6377a9fe91b86e98daae01a9d4e87a2d\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:24:13-63
+83            android:exported="true" />
+83-->[androidx.compose.ui:ui-test-manifest:1.7.5] G:\Android\.gradle\caches\8.14.3\transforms\6377a9fe91b86e98daae01a9d4e87a2d\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:25:13-36
+84
+85        <provider
+85-->[androidx.lifecycle:lifecycle-process:2.8.7] G:\Android\.gradle\caches\8.14.3\transforms\4b1150317b439e753f5328f952253ec8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:24:9-32:20
+86            android:name="androidx.startup.InitializationProvider"
+86-->[androidx.lifecycle:lifecycle-process:2.8.7] G:\Android\.gradle\caches\8.14.3\transforms\4b1150317b439e753f5328f952253ec8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:25:13-67
+87            android:authorities="in.jandwar.app.androidx-startup"
+87-->[androidx.lifecycle:lifecycle-process:2.8.7] G:\Android\.gradle\caches\8.14.3\transforms\4b1150317b439e753f5328f952253ec8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:26:13-68
+88            android:exported="false" >
+88-->[androidx.lifecycle:lifecycle-process:2.8.7] G:\Android\.gradle\caches\8.14.3\transforms\4b1150317b439e753f5328f952253ec8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:27:13-37
+89            <meta-data
+89-->[androidx.lifecycle:lifecycle-process:2.8.7] G:\Android\.gradle\caches\8.14.3\transforms\4b1150317b439e753f5328f952253ec8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+90                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+90-->[androidx.lifecycle:lifecycle-process:2.8.7] G:\Android\.gradle\caches\8.14.3\transforms\4b1150317b439e753f5328f952253ec8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+91                android:value="androidx.startup" />
+91-->[androidx.lifecycle:lifecycle-process:2.8.7] G:\Android\.gradle\caches\8.14.3\transforms\4b1150317b439e753f5328f952253ec8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+92            <meta-data
+92-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.14.3\transforms\d7d29e58c6163e5d87b98ba6788a9bae\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+93                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+93-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.14.3\transforms\d7d29e58c6163e5d87b98ba6788a9bae\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+94                android:value="androidx.startup" />
+94-->[androidx.emoji2:emoji2:1.3.0] G:\Android\.gradle\caches\8.14.3\transforms\d7d29e58c6163e5d87b98ba6788a9bae\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+95            <meta-data
+95-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+96                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+96-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+97                android:value="androidx.startup" />
+97-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+98        </provider>
+99
+100        <receiver
+100-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+101            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+101-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+102            android:directBootAware="false"
+102-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+103            android:enabled="true"
+103-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+104            android:exported="true"
+104-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+105            android:permission="android.permission.DUMP" >
+105-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+106            <intent-filter>
+106-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+107                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+107-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+107-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+108            </intent-filter>
+109            <intent-filter>
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+110                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+111            </intent-filter>
+112            <intent-filter>
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+113                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+114            </intent-filter>
+115            <intent-filter>
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+116                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] G:\Android\.gradle\caches\8.14.3\transforms\55652729520116eae37ed6f16d8b5824\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+117            </intent-filter>
+118        </receiver>
+119    </application>
+120
+121</manifest>

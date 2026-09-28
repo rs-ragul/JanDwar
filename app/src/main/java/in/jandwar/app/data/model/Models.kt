@@ -2,6 +2,10 @@ package `in`.jandwar.app.data.model
 
 import kotlinx.serialization.Serializable
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  Catalogue entities (NSQF qualification packs + TAHDCO/TANUVAS centres)
+// ─────────────────────────────────────────────────────────────────────────────
+
 @Serializable
 data class JobRole(
     val qp_code: String = "",
@@ -11,20 +15,40 @@ data class JobRole(
     val ssc: String = "",
     val sector: String = ""
 ) {
-    fun levelInt(): Int = nsqf_level.filter { it.isDigit() }.toIntOrNull() ?: 3
+    /** NSQF level as an int. Blank levels default to 3 (typical entry pack). */
+    fun levelInt(): Int = nsqf_level.filter { it.isDigit() }.toIntOrNull()?.coerceIn(1, 10) ?: 3
+
+    /** Notional training hours. Blank defaults to 300 (typical short-term pack). */
     fun hoursInt(): Int = notional_hours.filter { it.isDigit() }.toIntOrNull() ?: 300
+
     fun isLongTerm(): Boolean = hoursInt() >= 600
-    fun isValidName(): Boolean {
-        val lower = job_role.lowercase()
-        return job_role.length > 3 && lower != "english hindi" && !job_role.startsWith("QG-")
+
+    fun durationLabel(): String {
+        val h = hoursInt()
+        val months = Math.round(h / 130f).coerceAtLeast(1)
+        return "$h hrs · ~$months ${if (months == 1) "month" else "months"}"
     }
-    fun levelLabel(trLevel: String): String =
-        if (nsqf_level.isBlank()) "$trLevel ${levelInt()} (inferred)" else nsqf_level
 
-    fun isFundable(): Boolean =
-        sector == "agriculture" || sector == "food_processing" ||
-                sector == "construction" || sector == "handloom_textile"
+    /** Filters out malformed rows that exist in the source catalogue. */
+    fun isValidName(): Boolean {
+        val lower = job_role.trim().lowercase()
+        return job_role.trim().length > 3 &&
+                lower != "english hindi" &&
+                !job_role.startsWith("QG-") &&
+                !lower.startsWith("qp code")
+    }
 
+    /**
+     * PM-AJAY GIA priority domains. These four sectors carry asset/enterprise
+     * support under the Grant-in-Aid component.
+     */
+    fun isFundable(): Boolean = sector in FUNDABLE_SECTORS
+
+    /**
+     * Minimum education rank the pack realistically expects, derived from its
+     * NSQF level (NSQF 1-2 ≈ literacy, 3 ≈ Class 8, 4 ≈ Class 10, 5 ≈ Class 12,
+     * 6-7 ≈ ITI/Diploma, 8+ ≈ Graduate).
+     */
     fun requiredEduRank(): Int = when (levelInt()) {
         1, 2 -> 0
         3 -> 1
@@ -38,46 +62,90 @@ data class JobRole(
         val n = job_role.lowercase()
         val s = sector.lowercase()
         return when (key) {
-            "dairy" -> s == "agriculture" || n.contains("dairy") || n.contains("milk")
-            "cattle" -> n.contains("cattle") || n.contains("livestock") || n.contains("dairy") || s == "agriculture"
-            "goat" -> n.contains("goat") || n.contains("sheep") || s == "agriculture"
-            "poultry" -> n.contains("poultry") || n.contains("chicken") || s == "agriculture"
-            "farming" -> s == "agriculture" || n.contains("farm") || n.contains("crop") || n.contains("agri")
-            "food" -> s == "food_processing" || n.contains("food") || n.contains("baker") || n.contains("miller")
-            "machine" -> n.contains("machine") || n.contains("technician") || n.contains("operator") || s == "electronics_automation"
-            "textile" -> s == "handloom_textile" || s == "apparel" || n.contains("textile") || n.contains("loom")
-            "construction" -> s == "construction" || n.contains("construction") || n.contains("mason") || n.contains("bar bender")
-            "tailor" -> s == "apparel" || n.contains("sewing") || n.contains("tailor") || n.contains("stitch")
+            "dairy" -> n.contains("dairy") || n.contains("milk") || n.contains("cattle")
+            "cattle" -> n.contains("cattle") || n.contains("livestock") || n.contains("dairy") ||
+                    n.contains("animal") || n.contains("bovine")
+            "goat" -> n.contains("goat") || n.contains("sheep") || n.contains("small ruminant")
+            "poultry" -> n.contains("poultry") || n.contains("chicken") || n.contains("hatchery") ||
+                    n.contains("broiler") || n.contains("quail")
+            "farming" -> s == "agriculture" || n.contains("farm") || n.contains("crop") ||
+                    n.contains("agri") || n.contains("horticulture") || n.contains("nursery")
+            "food" -> s == "food_processing" || n.contains("food") || n.contains("baker") ||
+                    n.contains("miller") || n.contains("dairy processing")
+            "machine" -> s == "electronics_automation" || n.contains("machine") ||
+                    n.contains("technician") || n.contains("operator") || n.contains("mechanic") ||
+                    n.contains("electric")
+            "textile" -> s == "handloom_textile" || n.contains("textile") || n.contains("loom") ||
+                    n.contains("weav") || n.contains("dyeing")
+            "construction" -> s == "construction" || n.contains("construction") ||
+                    n.contains("mason") || n.contains("bar bender") || n.contains("plumb") ||
+                    n.contains("carpent") || n.contains("painter")
+            "tailor" -> s == "apparel" || n.contains("sewing") || n.contains("tailor") ||
+                    n.contains("stitch") || n.contains("garment")
             else -> false
         }
     }
 
-    fun matchesFamilyOccupation(familyOcc: String): Boolean {
-        if (familyOcc.isBlank()) return false
-        val f = familyOcc.lowercase()
+    /**
+     * Whether this pack builds on a family / traditional occupation.
+     * Used to honour the problem statement's "traditional family occupations" input.
+     */
+    fun matchesOccupationText(occupation: String): Boolean {
+        if (occupation.isBlank()) return false
+        val f = occupation.lowercase()
         val n = job_role.lowercase()
         val s = sector.lowercase()
         return when {
-            f.contains("farm") || f.contains("agri") || f.contains("cattle") || f.contains("dairy") || f.contains("milk") || f.contains("goat") || f.contains("sheep") || f.contains("poultry") -> s == "agriculture" || n.contains("farm") || n.contains("agri") || n.contains("livestock")
-            f.contains("tailor") || f.contains("weav") || f.contains("loom") || f.contains("textile") || f.contains("stitch") -> s in listOf("handloom_textile", "apparel")
-            f.contains("construct") || f.contains("mason") || f.contains("labour") || f.contains("labor") -> s == "construction"
-            f.contains("food") || f.contains("cook") || f.contains("baker") -> s == "food_processing"
+            listOf("farm", "agri", "cattle", "dairy", "milk", "goat", "sheep", "poultry", "cow")
+                .any { f.contains(it) } ->
+                s == "agriculture" || n.contains("farm") || n.contains("agri") || n.contains("livestock")
+
+            listOf("tailor", "weav", "loom", "textile", "stitch", "garment", "sew")
+                .any { f.contains(it) } ->
+                s == "handloom_textile" || s == "apparel"
+
+            listOf("construct", "mason", "labour", "labor", "coolie", "building")
+                .any { f.contains(it) } -> s == "construction"
+
+            listOf("food", "cook", "baker", "hotel", "catering", "mess")
+                .any { f.contains(it) } -> s == "food_processing"
+
+            listOf("electric", "mechanic", "repair", "machine", "welder", "fitter", "driver")
+                .any { f.contains(it) } ->
+                s == "electronics_automation" || n.contains("technician") || n.contains("operator")
+
+            listOf("photo", "video", "media", "design", "print", "computer", "studio")
+                .any { f.contains(it) } -> s == "media_entertainment"
+
             else -> false
         }
     }
 
     fun selfEmploymentFit(): Boolean {
         val n = job_role.lowercase()
-        return sector == "agriculture" || sector == "food_processing" ||
-                sector == "handloom_textile" || sector == "apparel" ||
-                n.contains("entrepreneur") || n.contains("artisan") || n.contains("farm")
+        return sector in setOf("agriculture", "food_processing", "handloom_textile", "apparel") ||
+                n.contains("entrepreneur") || n.contains("artisan") || n.contains("farm") ||
+                n.contains("self")
     }
 
     fun wageFit(): Boolean {
         val n = job_role.lowercase()
         return n.contains("assistant") || n.contains("operator") || n.contains("technician") ||
-                n.contains("worker") || n.contains("supervisor") || sector == "construction" ||
-                sector == "media_entertainment" || sector == "electronics_automation"
+                n.contains("worker") || n.contains("supervisor") || n.contains("helper") ||
+                sector in setOf("construction", "media_entertainment", "electronics_automation")
+    }
+
+    /** Roles that involve sustained heavy physical work. */
+    fun isPhysicallyDemanding(): Boolean {
+        val n = job_role.lowercase()
+        return sector == "construction" || n.contains("mason") || n.contains("bar bender") ||
+                n.contains("lifting") || n.contains("loader") || n.contains("helper")
+    }
+
+    companion object {
+        val FUNDABLE_SECTORS = setOf(
+            "agriculture", "food_processing", "construction", "handloom_textile"
+        )
     }
 }
 
@@ -90,7 +158,10 @@ data class Centre(
     val trades: String = "",
     val dairy_course: Boolean? = null,
     val confidence: String = ""
-)
+) {
+    fun isConfirmed(): Boolean = confidence.startsWith("CONFIRMED", ignoreCase = true)
+    fun hasPhone(): Boolean = !phone.isNullOrBlank()
+}
 
 @Serializable
 data class DistrictsData(
@@ -105,6 +176,10 @@ data class I18nData(
     val interests: Map<String, Map<String, String>> = emptyMap()
 )
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  Beneficiary profile
+// ─────────────────────────────────────────────────────────────────────────────
+
 enum class EducationLevel(val key: String, val rank: Int) {
     BELOW_8("edu_below8", 0),
     CLASS_8("edu_8", 1),
@@ -114,15 +189,24 @@ enum class EducationLevel(val key: String, val rank: Int) {
     GRADUATE("edu_grad", 5);
 
     companion object {
-        fun fromKey(key: String): EducationLevel? = values().find { it.key == key }
-        fun fromAiString(ai: String?): EducationLevel? = when (ai?.lowercase()) {
-            "none", "class5", "below_8th", "read_write", "below8" -> BELOW_8
-            "class8", "8th", "edu_8" -> CLASS_8
-            "class10", "10th", "edu_10", "sslc" -> CLASS_10
-            "class12", "12th", "edu_12", "hsc" -> CLASS_12
-            "iti_diploma", "iti", "diploma", "edu_iti" -> ITI_DIPLOMA
-            "graduate", "grad", "edu_grad", "degree", "college" -> GRADUATE
-            else -> null
+        fun fromKey(key: String): EducationLevel? = entries.find { it.key == key }
+
+        /** Tolerant mapping from whatever the LLM or the on-device parser produced. */
+        fun fromAiString(ai: String?): EducationLevel? {
+            val v = ai?.trim()?.lowercase() ?: return null
+            return when {
+                v.isEmpty() || v == "null" -> null
+                v in setOf("none", "class5", "below_8th", "below8", "read_write", "illiterate",
+                    "edu_below8", "primary", "5th") -> BELOW_8
+                v in setOf("class8", "8th", "edu_8", "eighth", "middle") -> CLASS_8
+                v in setOf("class10", "10th", "edu_10", "sslc", "tenth", "matric") -> CLASS_10
+                v in setOf("class12", "12th", "edu_12", "hsc", "twelfth", "higher_secondary",
+                    "plus two", "+2") -> CLASS_12
+                v in setOf("iti_diploma", "iti", "diploma", "edu_iti", "polytechnic") -> ITI_DIPLOMA
+                v in setOf("graduate", "grad", "edu_grad", "degree", "college", "bachelor",
+                    "postgraduate", "masters", "pg") -> GRADUATE
+                else -> null
+            }
         }
     }
 }
@@ -132,9 +216,11 @@ enum class Preference(val key: String) {
     WAGE("pref_wage");
 
     companion object {
-        fun fromAiString(ai: String?): Preference? = when (ai?.lowercase()) {
-            "pref_self", "self_employment", "self", "business", "own", "entrepreneur" -> SELF
-            "pref_wage", "wage_employment", "wage", "job", "employer", "salary" -> WAGE
+        fun fromAiString(ai: String?): Preference? = when (ai?.trim()?.lowercase()) {
+            "pref_self", "self_employment", "self", "business", "own", "entrepreneur",
+            "own_business" -> SELF
+            "pref_wage", "wage_employment", "wage", "job", "employer", "salary",
+            "employment" -> WAGE
             else -> null
         }
     }
@@ -146,96 +232,80 @@ enum class Mobility(val key: String, val aiValue: String) {
     STATE("travel_any", "state");
 
     companion object {
-        fun fromAiString(ai: String?): Mobility? = when (ai?.lowercase()) {
+        fun fromAiString(ai: String?): Mobility? = when (ai?.trim()?.lowercase()) {
             "local", "within_village", "within_block", "travel_local", "village", "nearby" -> LOCAL
             "district", "within_district", "travel_district" -> DISTRICT
-            "state", "anywhere", "travel_any", "far", "tamil nadu" -> STATE
+            "state", "anywhere", "travel_any", "far", "tamil nadu", "any" -> STATE
             else -> null
         }
     }
 }
 
-// Extended profile per SIH26097 problem statement
+/**
+ * The full beneficiary picture the problem statement asks us to collect.
+ */
 data class UserProfile(
-    var education: EducationLevel? = null,
-    var preference: Preference? = null,
-    var mobility: Mobility? = null,
-    var district: String = "",
-    var interests: Set<String> = emptySet(),
-    // New fields from problem statement
-    var familyOccupation: String = "",
-    var currentLivelihood: String = "",
-    var physicalConstraints: String = "",
-    var localOpportunity: String = "",
-    var skills: Set<String> = emptySet()
+    val education: EducationLevel? = null,
+    val preference: Preference? = null,
+    val mobility: Mobility? = null,
+    val district: String = "",
+    val interests: Set<String> = emptySet(),
+    val familyOccupation: String = "",
+    val currentLivelihood: String = "",
+    val physicalConstraints: String = "",
+    val localOpportunity: String = "",
+    val skills: Set<String> = emptySet()
 ) {
-    fun isComplete(): Boolean {
-        // Core fields required for matching, others optional but collected for empathy
-        return education != null && preference != null && mobility != null &&
-                district.isNotBlank() && interests.isNotEmpty()
-    }
+    /** Minimum needed to produce a trustworthy recommendation. */
+    fun isComplete(): Boolean =
+        education != null && district.isNotBlank() && (interests.isNotEmpty() || familyOccupation.isNotBlank())
 
-    fun isPartiallyComplete(): Boolean {
-        return education != null || preference != null || mobility != null ||
+    fun hasAnyData(): Boolean =
+        education != null || preference != null || mobility != null ||
                 district.isNotBlank() || interests.isNotEmpty() ||
                 familyOccupation.isNotBlank() || currentLivelihood.isNotBlank()
+
+    fun completedFieldCount(): Int {
+        var n = 0
+        if (education != null) n++
+        if (familyOccupation.isNotBlank()) n++
+        if (currentLivelihood.isNotBlank()) n++
+        if (interests.isNotEmpty()) n++
+        if (preference != null) n++
+        if (mobility != null) n++
+        if (district.isNotBlank()) n++
+        return n
     }
 
-    fun isFullyComplete(): Boolean {
-        return isComplete() && familyOccupation.isNotBlank() && currentLivelihood.isNotBlank()
-    }
-
-    fun missingFields(): List<String> {
-        val missing = mutableListOf<String>()
-        if (education == null) missing.add("education")
-        if (familyOccupation.isBlank()) missing.add("familyOccupation")
-        if (currentLivelihood.isBlank()) missing.add("currentLivelihood")
-        if (preference == null) missing.add("preference")
-        if (mobility == null) missing.add("mobility")
-        if (district.isBlank()) missing.add("district")
-        if (interests.isEmpty()) missing.add("interests")
-        if (physicalConstraints.isBlank()) missing.add("physicalConstraints")
-        return missing
-    }
-
-    fun toReadableSummary(lang: String = "en"): String {
-        return buildString {
-            append("Education: ${education?.name ?: "not set"}, ")
-            append("Family: $familyOccupation, ")
-            append("Current: $currentLivelihood, ")
-            append("Interests: ${interests.joinToString()}, ")
-            append("Preference: ${preference?.name ?: "not set"}, ")
-            append("Mobility: ${mobility?.name ?: "not set"}, ")
-            append("District: $district, ")
-            if (physicalConstraints.isNotBlank()) append("Constraints: $physicalConstraints, ")
-            if (localOpportunity.isNotBlank()) append("Local: $localOpportunity")
-        }
-    }
+    fun totalFieldCount(): Int = 7
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Recommendation output
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** One human-readable line explaining part of the score. */
+data class MatchFactor(val label: String, val positive: Boolean)
 
 data class MatchedRole(
     val role: JobRole,
     val score: Int,
+    /** 0..100, normalised for display. */
+    val confidence: Int,
     val reason: String,
     val skillGapNote: String,
     val centre: Centre?,
-    // Enhanced per problem statement
     val familyFitNote: String = "",
-    val regionOpportunity: String = ""
+    val regionOpportunity: String = "",
+    val factors: List<MatchFactor> = emptyList(),
+    val eligible: Boolean = true
 )
 
 data class InterestChip(val key: String, val label: String)
 
-// Conversation history for natural chat UI
+/** A single turn in the assistant conversation. */
 data class ConversationMessage(
-    val role: String = "assistant", // "user" or "assistant"
-    val text: String = "",
-    val timestamp: Long = System.currentTimeMillis(),
-    val isUser: Boolean = role == "user"
-) {
-    constructor(isUser: Boolean, text: String) : this(
-        role = if (isUser) "user" else "assistant",
-        text = text,
-        isUser = isUser
-    )
-}
+    val isUser: Boolean,
+    val text: String,
+    val timestamp: Long = System.currentTimeMillis()
+)

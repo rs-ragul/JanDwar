@@ -1,21 +1,59 @@
 package `in`.jandwar.app.ui.screens
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.CloudDone
+import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material.icons.rounded.DeleteSweep
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Storage
+import androidx.compose.material.icons.rounded.Translate
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import `in`.jandwar.app.ui.components.GradientHeader
+import `in`.jandwar.app.BuildConfig
+import `in`.jandwar.app.ui.components.BrandHeader
+import `in`.jandwar.app.ui.components.InfoBanner
+import `in`.jandwar.app.ui.components.KeyValueRow
+import `in`.jandwar.app.ui.components.OptionTile
 import `in`.jandwar.app.ui.components.PremiumCard
-import `in`.jandwar.app.ui.theme.*
+import `in`.jandwar.app.ui.components.SectionTitle
+import `in`.jandwar.app.ui.theme.BrandIndigo
+import `in`.jandwar.app.ui.theme.BrandTeal
+import `in`.jandwar.app.ui.theme.Error
+import `in`.jandwar.app.ui.theme.Success
 import `in`.jandwar.app.ui.viewmodel.AppViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -23,156 +61,254 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onLanguageChange: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    var downloading by remember { mutableStateOf(false) }
-    var progress by remember { mutableStateOf(0) }
-    var showTtsDialog by remember { mutableStateOf(false) }
+    val roles by viewModel.allRoles.collectAsState()
+    var confirmReset by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(18.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        GradientHeader(
+        BrandHeader(
             title = viewModel.tr("settings"),
-            subtitle = viewModel.tr("tagline"),
-            actionText = viewModel.tr("back"),
-            onAction = onBack
+            subtitle = viewModel.tr("settings_sub"),
+            onBack = onBack
         )
-        Spacer(Modifier.height(16.dp))
 
-        Text(viewModel.tr("settings_sub"), fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-
-        Spacer(Modifier.height(12.dp))
-
-        PremiumCard {
-            Column {
-                Text(viewModel.tr("change_lang"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                Spacer(Modifier.height(8.dp))
-                Button(
-                    onClick = onLanguageChange,
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Change Language")
-                }
-            }
-        }
-
-        PremiumCard {
-            Column {
-                Text(viewModel.tr("offline_data"), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                Text(viewModel.tr("offline_data_text"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
-            }
-        }
-
-        PremiumCard {
-            Column {
-                Text(
-                    if (viewModel.isOfflineAiInstalled) viewModel.tr("offline_ai_installed") else viewModel.tr("offline_ai"),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+        LazyColumn(
+            contentPadding = PaddingValues(18.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            // ── Language ────────────────────────────────────────────────────
+            item {
+                SettingRow(
+                    icon = Icons.Rounded.Translate,
+                    tint = BrandTeal,
+                    title = viewModel.tr("change_lang"),
+                    subtitle = viewModel.availableLanguages()
+                        .firstOrNull { it.first == viewModel.currentLang }?.second
+                        ?: viewModel.currentLang,
+                    onClick = onLanguageChange
                 )
-                Text(viewModel.tr("offline_ai_text"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
+            }
 
-                if (downloading) {
-                    LinearProgressIndicator(progress = { progress / 100f }, modifier = Modifier.fillMaxWidth())
-                    Spacer(Modifier.height(8.dp))
-                    Text("$progress%", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            // ── AI status ───────────────────────────────────────────────────
+            item {
+                val cloud = viewModel.aiReady
+                PremiumCard(accent = if (cloud) BrandTeal else Success) {
+                    SectionTitle(viewModel.tr("ai_status"))
+                    Spacer(Modifier.height(10.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            if (cloud) Icons.Rounded.CloudDone else Icons.Rounded.CloudOff,
+                            null,
+                            tint = if (cloud) BrandTeal else Success,
+                            modifier = Modifier.size(21.dp)
+                        )
+                        Spacer(Modifier.width(11.dp))
+                        Text(
+                            viewModel.tr(if (cloud) "ai_cloud_on" else "ai_device_on"),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    if (!cloud) {
+                        Spacer(Modifier.height(12.dp))
+                        InfoBanner(
+                            text = "Add a Groq API key in assets/config.json to unlock the " +
+                                    "free-flowing cloud conversation. The app already works " +
+                                    "fully offline without it.",
+                            tone = Success
+                        )
+                    }
                 }
+            }
 
-                Button(
-                    onClick = {
-                        if (viewModel.isOfflineAiInstalled) return@Button
-                        downloading = true
-                        progress = 0
-                        scope.launch {
-                            for (i in 0..100 step 2) {
-                                delay(50)
-                                progress = i
-                            }
-                            downloading = false
-                            viewModel.updateOfflineAiInstalled(true)
+            // ── Voice engine ────────────────────────────────────────────────
+            item {
+                PremiumCard {
+                    SectionTitle(viewModel.tr("voice_engine"))
+                    Spacer(Modifier.height(11.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                        listOf(
+                            "auto" to viewModel.tr("engine_auto"),
+                            "device" to viewModel.tr("engine_device")
+                        ).forEach { (key, label) ->
+                            OptionTile(
+                                title = label,
+                                selected = viewModel.ttsEngine == key,
+                                onClick = { viewModel.updateTtsEngine(key) }
+                            )
                         }
-                    },
-                    enabled = !viewModel.isOfflineAiInstalled && !downloading,
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(if (viewModel.isOfflineAiInstalled) "Installed" else "Download")
+                    }
                 }
             }
-        }
 
-        PremiumCard {
-            Column {
-                Text("TTS Engine (Important for Tamil/Hindi)", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                Text("Current: ${viewModel.ttsEngine} - Tap to change if Tamil TTS is worst", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
-                Text("Recommended: sarvam for Tamil/Hindi (natural), android for offline", fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 8.dp))
-                Button(
-                    onClick = { showTtsDialog = true },
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Select TTS Engine")
+            // ── Offline catalogue ───────────────────────────────────────────
+            item {
+                PremiumCard(accent = BrandIndigo) {
+                    SectionTitle(viewModel.tr("offline_data"))
+                    Spacer(Modifier.height(9.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Rounded.Storage,
+                            null,
+                            tint = BrandIndigo,
+                            modifier = Modifier.size(19.dp)
+                        )
+                        Spacer(Modifier.width(9.dp))
+                        Text(
+                            viewModel.tr("offline_data_text"),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Spacer(Modifier.height(12.dp))
+                    KeyValueRow(viewModel.tr("stat_roles"), roles.size.toString())
+                    KeyValueRow(viewModel.tr("stat_fundable"), viewModel.fundableCount().toString())
+                    KeyValueRow(
+                        viewModel.tr("stat_districts"),
+                        viewModel.getDistricts().size.toString()
+                    )
+                    KeyValueRow(
+                        viewModel.tr("stat_centres"),
+                        viewModel.districtsWithCentre().size.toString()
+                    )
                 }
             }
-        }
 
-        PremiumCard {
-            Column {
-                Text(viewModel.tr("privacy"), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                Text(viewModel.tr("privacy_text"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
+            // ── Privacy ─────────────────────────────────────────────────────
+            item {
+                PremiumCard(accent = Success) {
+                    SectionTitle(viewModel.tr("privacy"))
+                    Spacer(Modifier.height(9.dp))
+                    Row(verticalAlignment = Alignment.Top) {
+                        Icon(
+                            Icons.Rounded.Lock,
+                            null,
+                            tint = Success,
+                            modifier = Modifier.size(19.dp)
+                        )
+                        Spacer(Modifier.width(9.dp))
+                        Text(
+                            viewModel.tr("privacy_text"),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
-        }
 
-        PremiumCard {
-            Column {
-                Text(viewModel.tr("app_name_label"), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                Text("JanDwar · ${viewModel.tr("tagline")} · v2.0-premium", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
-                Spacer(Modifier.height(8.dp))
-                Text(viewModel.tr("honesty_note"), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Spacer(Modifier.height(8.dp))
-                Text(viewModel.tr("not_claim_text"), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            // ── Reset ───────────────────────────────────────────────────────
+            item {
+                SettingRow(
+                    icon = Icons.Rounded.DeleteSweep,
+                    tint = Error,
+                    title = viewModel.tr("reset_profile"),
+                    subtitle = viewModel.tr("privacy_text"),
+                    onClick = { confirmReset = true }
+                )
+            }
+
+            // ── About ───────────────────────────────────────────────────────
+            item {
+                PremiumCard {
+                    SectionTitle(viewModel.tr("about"))
+                    Spacer(Modifier.height(9.dp))
+                    KeyValueRow(viewModel.tr("version"), BuildConfig.VERSION_NAME)
+                    KeyValueRow(viewModel.tr("scheme"), "PM-AJAY · GIA component")
+                    KeyValueRow("SIH 2026", "Problem statement 26097")
+                    Spacer(Modifier.height(11.dp))
+                    Text(
+                        viewModel.tr("not_claim"),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            item {
+                Text(
+                    "${viewModel.tr("name")} · ${viewModel.tr("tagline")}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
 
-    if (showTtsDialog) {
-        val options = listOf(
-            "auto" to "auto (Recommended: Sarvam for Tamil/Hindi, Android fallback)",
-            "sarvam" to "sarvam ⭐ Best for Tamil/Hindi/Te (Natural)",
-            "android" to "android (Google TTS - Good offline)",
-            "bhashini" to "bhashini (AI4Bharat - Translation focused)",
-            "android_offline" to "android_offline (Fully offline)"
-        )
+    if (confirmReset) {
         AlertDialog(
-            onDismissRequest = { showTtsDialog = false },
-            title = { Text("Select TTS Engine") },
-            text = {
-                Column {
-                    Text("For Tamil/Hindi, use sarvam for most natural voice.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 8.dp))
-                    options.forEach { (value, label) ->
-                        TextButton(
-                            onClick = {
-                                viewModel.updateTtsEngine(value)
-                                showTtsDialog = false
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(label, modifier = Modifier.fillMaxWidth(), fontSize = 13.sp)
-                        }
-                    }
+            onDismissRequest = { confirmReset = false },
+            title = { Text(viewModel.tr("reset_profile")) },
+            text = { Text(viewModel.tr("privacy_text")) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.clearProfile()
+                    confirmReset = false
+                }) { Text(viewModel.tr("done"), color = Error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmReset = false }) {
+                    Text(viewModel.tr("close"))
                 }
             },
-            confirmButton = {
-                TextButton(onClick = { showTtsDialog = false }) { Text("Close") }
-            }
+            shape = RoundedCornerShape(24.dp)
         )
+    }
+}
+
+@Composable
+private fun SettingRow(
+    icon: ImageVector,
+    tint: Color,
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(tint.copy(alpha = 0.13f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, null, tint = tint, modifier = Modifier.size(21.dp))
+            }
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2
+                )
+            }
+            Icon(
+                Icons.AutoMirrored.Rounded.ArrowForward,
+                null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(18.dp)
+            )
+        }
     }
 }

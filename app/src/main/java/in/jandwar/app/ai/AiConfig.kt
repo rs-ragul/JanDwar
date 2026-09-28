@@ -1,93 +1,100 @@
 package `in`.jandwar.app.ai
 
 import android.content.Context
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Reads optional cloud credentials from `assets/config.json`.
+ *
+ * The app is fully functional with an **empty** config: the on-device NLU,
+ * Android SpeechRecognizer and Android TextToSpeech cover the whole journey
+ * offline. Supplying keys upgrades the experience:
+ *
+ *  - `groq_api_key`      → free-flowing LLM conversation (most natural)
+ *  - `sarvam_api_key`    → high quality Indic neural TTS
+ *  - `bhashini_*`        → Govt. of India ASR / TTS / translation
+ *
+ * See `assets/config.json` for the template.
+ */
 @Singleton
 class AiConfig @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    // Bhashini - 3 possible credentials from portal
-    var bhashiniUserId: String = "" // UDYAT KEY / ULCA User ID (07e29... from screenshot)
-    var bhashiniInferenceKey: String = "" // INFERENCE key (n44PH... from screenshot)
-    var bhashiniAppId: String = "" // App ID (d0bed4a... from screenshot)
-    var bhashiniUlcaApiKey: String = "" // Sometimes same as UDYAT, kept for compatibility
-    
     var groqApiKey: String = ""
+        private set
+    var groqModel: String = DEFAULT_GROQ_MODEL
+        private set
     var sarvamApiKey: String = ""
+        private set
+    var bhashiniInferenceKey: String = ""
+        private set
+    var bhashiniUserId: String = ""
+        private set
+    var bhashiniAppId: String = ""
         private set
 
     @Volatile
     private var loaded = false
 
+    init {
+        // Load eagerly so any collaborator can ask groqEnabled() safely.
+        load()
+    }
+
+    @Synchronized
     fun load() {
         if (loaded) return
-        synchronized(this) {
-            if (loaded) return
-            try {
-                val input = context.assets.open("config.json")
-                val output = ByteArrayOutputStream()
-                val buffer = ByteArray(4096)
-                var read: Int
-                while (input.read(buffer).also { read = it } != -1) {
-                    output.write(buffer, 0, read)
-                }
-                input.close()
-                val obj = JSONObject(output.toString("UTF-8"))
-                
-                // Support multiple key names for Bhashini (user might use different naming)
-                bhashiniUserId = obj.optString("bhashini_user_id", "")
-                    .ifBlank { obj.optString("bhashini_udyat_key", "") }
-                    .ifBlank { obj.optString("bhashini_ulca_user_id", "") }
-                    .ifBlank { obj.optString("bhashini_ulca_api_key", "") }
-                
-                bhashiniInferenceKey = obj.optString("bhashini_inference_key", "")
-                    .ifBlank { obj.optString("bhashini_inference_api_key", "") }
-                    .ifBlank { obj.optString("inference_key", "") }
-                
-                bhashiniAppId = obj.optString("bhashini_app_id", "")
-                    .ifBlank { obj.optString("bhashini_app", "") }
-                    .ifBlank { obj.optString("app_id", "") }
-                
-                bhashiniUlcaApiKey = obj.optString("bhashini_ulca_api_key", "")
-                    .ifBlank { obj.optString("bhashini_api_key", "") }
-                    .ifBlank { bhashiniUserId } // Fallback: many portals show UDYAT as the main key
+        loaded = true
+        try {
+            val text = context.assets.open(CONFIG_FILE).bufferedReader().use { it.readText() }
+            val obj = JSONObject(text)
 
-                groqApiKey = obj.optString("groq_api_key", "")
-                sarvamApiKey = obj.optString("sarvam_api_key", "")
-                loaded = true
-            } catch (e: Exception) {
-                // Keys stay empty; app degrades gracefully offline
-                loaded = true
-            }
+            groqApiKey = obj.readKey("groq_api_key")
+            groqModel = obj.optString("groq_model", "").ifBlank { DEFAULT_GROQ_MODEL }
+            sarvamApiKey = obj.readKey("sarvam_api_key")
+            bhashiniInferenceKey = obj.readKey("bhashini_inference_key", "bhashini_inference_api_key")
+            bhashiniUserId = obj.readKey("bhashini_user_id", "bhashini_udyat_key", "bhashini_ulca_user_id")
+            bhashiniAppId = obj.readKey("bhashini_app_id", "app_id")
+
+            Log.i(TAG, "Config loaded · groq=${groqEnabled()} sarvam=${sarvamEnabled()} bhashini=${bhashiniEnabled()}")
+        } catch (e: Exception) {
+            // No config.json (or malformed) — this is a supported, normal state.
+            Log.i(TAG, "No usable config.json; running fully on-device (${e.javaClass.simpleName})")
         }
     }
 
-    fun bhashiniEnabled(): Boolean {
-        // For Dhruva direct compute, only inference key is needed
-        // User ID is optional for our implementation
-        return bhashiniInferenceKey.isNotBlank()
+    /**
+     * Reads the first non-blank value among [names], ignoring the placeholder
+     * text shipped in the template so an unedited config behaves as "absent".
+     */
+    private fun JSONObject.readKey(vararg names: String): String {
+        for (n in names) {
+            val v = optString(n, "").trim()
+            if (v.isNotBlank() && !isPlaceholder(v)) return v
+        }
+        return ""
     }
 
-    fun bhashiniFullyConfigured(): Boolean {
-        return bhashiniInferenceKey.isNotBlank() && bhashiniUserId.isNotBlank()
+    private fun isPlaceholder(v: String): Boolean {
+        val l = v.lowercase()
+        return l.startsWith("paste_") || l.startsWith("your_") || l.startsWith("<") ||
+                l == "null" || l == "none" || l.contains("here")
     }
 
     fun groqEnabled(): Boolean = groqApiKey.isNotBlank()
     fun sarvamEnabled(): Boolean = sarvamApiKey.isNotBlank()
-    
-    fun getConfigStatus(): String {
-        return buildString {
-            appendLine("Bhashini:")
-            appendLine("  UDYAT/ULCA User ID (07e29...): ${if (bhashiniUserId.isNotBlank()) "✓ Present (${bhashiniUserId.take(6)}...)" else "✗ Missing"}")
-            appendLine("  Inference Key (n44PH...): ${if (bhashiniInferenceKey.isNotBlank()) "✓ Present (${bhashiniInferenceKey.take(6)}...)" else "✗ Missing"}")
-            appendLine("  App ID (d0bed4...): ${if (bhashiniAppId.isNotBlank()) "✓ Present (${bhashiniAppId.take(6)}...)" else "○ Optional"}")
-            appendLine("Groq: ${if (groqEnabled()) "✓ Present" else "✗ Missing (will use offline)"}")
-            appendLine("Sarvam: ${if (sarvamEnabled()) "✓ Present (best for Tamil TTS)" else "✗ Missing (will use Android TTS)"}")
-        }
+    fun bhashiniEnabled(): Boolean = bhashiniInferenceKey.isNotBlank()
+
+    /** True when any cloud voice engine can be used. */
+    fun cloudVoiceAvailable(): Boolean = sarvamEnabled() || bhashiniEnabled()
+
+    companion object {
+        private const val TAG = "AiConfig"
+        const val CONFIG_FILE = "config.json"
+        const val DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
     }
 }

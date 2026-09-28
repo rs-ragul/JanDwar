@@ -1,14 +1,22 @@
 R_DEF: Internal format may change without notice
 local
 color brand_indigo
+color brand_indigo_deep
 color brand_saffron
 color brand_teal
+color ic_launcher_background
+color ink
 color paper
-drawable button_primary
-drawable card_bg
-drawable chip_plain
-drawable chip_selected
+color surface_dark
+drawable ic_brand_emblem
+drawable ic_launcher_background
 drawable logo_premium
-drawable splash_bg
+mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_monochrome
+mipmap ic_launcher_round
 string app_name
-style AppTheme
+string app_tagline
+style Theme.JanDwar
+xml backup_rules
+xml data_extraction_rules

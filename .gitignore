@@ -1,13 +1,24 @@
-# Never commit API keys
-app/src/main/assets/config.json
+# ── Secrets ────────────────────────────────────────────────────────────────
+# assets/config.json IS committed, but only with placeholder values so a fresh
+# clone builds out of the box. Never commit a real API key into it.
+local.properties
+*.keystore
+*.jks
 
-# Gradle
+# ── Gradle / build output ──────────────────────────────────────────────────
 .gradle/
+.kotlin/
 build/
 app/build/
 **/build/
-local.properties
+captures/
+.cxx/
+
+# ── IDE ────────────────────────────────────────────────────────────────────
 *.iml
 .idea/
-# but keep runConfigurations
 !/.idea/runConfigurations/
+
+# ── OS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

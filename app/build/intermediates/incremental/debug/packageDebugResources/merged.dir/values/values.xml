@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="brand_indigo">#1B3A8C</color>
-    <color name="brand_saffron">#FF8A1F</color>
-    <color name="brand_teal">#0FA3A3</color>
-    <color name="paper">#F7FAFC</color>
+<resources xmlns:ns1="http://schemas.android.com/tools">
+    <color name="brand_indigo">#FF1B3A8C</color>
+    <color name="brand_indigo_deep">#FF102354</color>
+    <color name="brand_saffron">#FFFF8A1F</color>
+    <color name="brand_teal">#FF0FA3A3</color>
+    <color name="ic_launcher_background">#FF102354</color>
+    <color name="ink">#FF141B2B</color>
+    <color name="paper">#FFF6F8FC</color>
+    <color name="surface_dark">#FF0C111C</color>
     <string name="app_name">JanDwar</string>
-    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:fontFamily">sans</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:statusBarColor">@color/brand_indigo</item>
-        <item name="android:navigationBarColor">@color/paper</item>
-        <item name="android:windowActionModeOverlay">true</item>
+    <string name="app_tagline">Gateway for Citizens</string>
+    <style name="Theme.JanDwar" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/paper</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" ns1:targetApi="m">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" ns1:targetApi="o_mr1">shortEdges</item>
     </style>
 </resources>

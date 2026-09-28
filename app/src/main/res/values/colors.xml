@@ -1,6 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand_indigo">#1B3A8C</color>
-    <color name="brand_teal">#0FA3A3</color>
-    <color name="brand_saffron">#FF8A1F</color>
-    <color name="paper">#F7FAFC</color>
+    <color name="brand_indigo">#FF1B3A8C</color>
+    <color name="brand_indigo_deep">#FF102354</color>
+    <color name="brand_teal">#FF0FA3A3</color>
+    <color name="brand_saffron">#FFFF8A1F</color>
+    <color name="paper">#FFF6F8FC</color>
+    <color name="ink">#FF141B2B</color>
+    <color name="surface_dark">#FF0C111C</color>
+    <color name="ic_launcher_background">#FF102354</color>
 </resources>

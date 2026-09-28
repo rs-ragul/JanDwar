@@ -1,62 +1,99 @@
 package `in`.jandwar.app.ai
 
+/**
+ * Everything an extractor (cloud LLM or on-device parser) managed to pull out
+ * of one utterance. Merged cumulatively across the interview.
+ */
 data class ProfileFragment(
     var edu: String? = null,
     var preference: String? = null,
-    var interests: MutableList<String> = mutableListOf(),
-    var district: String? = null,
     var mobility: String? = null,
-    var nextQuestion: String? = null,
-    // Extended per SIH26097 problem statement
+    var district: String? = null,
     var familyOccupation: String? = null,
     var currentLivelihood: String? = null,
     var physicalConstraints: String? = null,
     var localOpportunity: String? = null,
-    var skills: MutableList<String> = mutableListOf()
+    var interests: MutableList<String> = mutableListOf(),
+    var skills: MutableList<String> = mutableListOf(),
+    /** Assistant's next utterance, already phrased in the user's language. */
+    var nextQuestion: String? = null,
+    /** Set by the LLM when it believes the interview is finished. */
+    var isComplete: Boolean = false
 ) {
     fun hasEdu() = !edu.isNullOrBlank()
     fun hasPref() = !preference.isNullOrBlank()
-    fun hasInterests() = interests.isNotEmpty()
-    fun hasDistrict() = !district.isNullOrBlank()
     fun hasMobility() = !mobility.isNullOrBlank()
+    fun hasDistrict() = !district.isNullOrBlank()
     fun hasFamilyOccupation() = !familyOccupation.isNullOrBlank()
     fun hasCurrentLivelihood() = !currentLivelihood.isNullOrBlank()
     fun hasPhysicalConstraints() = !physicalConstraints.isNullOrBlank()
-    fun hasLocalOpportunity() = !localOpportunity.isNullOrBlank()
+    fun hasInterests() = interests.isNotEmpty()
     fun hasSkills() = skills.isNotEmpty()
 
+    /** Folds newly extracted values into this fragment. Non-destructive. */
     fun merge(other: ProfileFragment?) {
         if (other == null) return
         if (other.hasEdu()) edu = other.edu
         if (other.hasPref()) preference = other.preference
-        if (other.hasDistrict()) district = other.district
         if (other.hasMobility()) mobility = other.mobility
+        if (other.hasDistrict()) district = other.district
         if (other.hasFamilyOccupation()) familyOccupation = other.familyOccupation
         if (other.hasCurrentLivelihood()) currentLivelihood = other.currentLivelihood
         if (other.hasPhysicalConstraints()) physicalConstraints = other.physicalConstraints
-        if (other.hasLocalOpportunity()) localOpportunity = other.localOpportunity
-        if (other.hasInterests()) {
-            for (i in other.interests) if (!interests.contains(i)) interests.add(i)
-        }
-        if (other.hasSkills()) {
-            for (s in other.skills) if (!skills.contains(s)) skills.add(s)
-        }
+        if (!other.localOpportunity.isNullOrBlank()) localOpportunity = other.localOpportunity
+        other.interests.forEach { if (!interests.contains(it)) interests.add(it) }
+        other.skills.forEach { if (!skills.contains(it)) skills.add(it) }
         if (!other.nextQuestion.isNullOrBlank()) nextQuestion = other.nextQuestion
+        if (other.isComplete) isComplete = true
     }
 
-    fun isComplete(): Boolean = hasEdu() && hasPref() && hasDistrict() && hasMobility() && hasInterests()
-    
-    fun isFullyComplete(): Boolean = isComplete() && hasFamilyOccupation() && hasCurrentLivelihood()
+    fun copyOf(): ProfileFragment = copy(
+        interests = interests.toMutableList(),
+        skills = skills.toMutableList()
+    )
 
-    fun missingFields(): List<String> {
-        val missing = mutableListOf<String>()
-        if (!hasEdu()) missing.add("education")
-        if (!hasFamilyOccupation()) missing.add("familyOccupation")
-        if (!hasCurrentLivelihood()) missing.add("currentLivelihood")
-        if (!hasPref()) missing.add("preference")
-        if (!hasMobility()) missing.add("mobility")
-        if (!hasDistrict()) missing.add("district")
-        if (!hasInterests()) missing.add("interests")
-        return missing
+    /** The slots still unknown, in the order we want to ask about them. */
+    fun missingSlots(): List<Slot> = Slot.entries.filter { !it.isFilled(this) }
+
+    fun filledSlotCount(): Int = Slot.entries.count { it.isFilled(this) }
+
+    /** Enough collected to produce a trustworthy recommendation. */
+    fun isUsable(): Boolean =
+        hasEdu() && hasDistrict() && (hasInterests() || hasFamilyOccupation())
+
+    /** Every slot answered. */
+    fun isFullyComplete(): Boolean = missingSlots().isEmpty()
+
+    fun summaryLine(): String = buildList {
+        edu?.let { add(it) }
+        familyOccupation?.let { add(it) }
+        currentLivelihood?.let { add(it) }
+        if (interests.isNotEmpty()) add(interests.joinToString("/"))
+        district?.let { add(it) }
+    }.joinToString(" · ")
+
+    /** Interview slots in priority order. */
+    enum class Slot {
+        EDUCATION,
+        FAMILY_OCCUPATION,
+        CURRENT_LIVELIHOOD,
+        INTERESTS,
+        PREFERENCE,
+        MOBILITY,
+        DISTRICT;
+
+        fun isFilled(f: ProfileFragment): Boolean = when (this) {
+            EDUCATION -> f.hasEdu()
+            FAMILY_OCCUPATION -> f.hasFamilyOccupation()
+            CURRENT_LIVELIHOOD -> f.hasCurrentLivelihood()
+            INTERESTS -> f.hasInterests()
+            PREFERENCE -> f.hasPref()
+            MOBILITY -> f.hasMobility()
+            DISTRICT -> f.hasDistrict()
+        }
+    }
+
+    companion object {
+        val TOTAL_SLOTS = Slot.entries.size
     }
 }

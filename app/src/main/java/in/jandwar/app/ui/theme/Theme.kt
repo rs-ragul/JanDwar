@@ -1,85 +1,93 @@
 package `in`.jandwar.app.ui.theme
 
 import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val LightColorScheme = lightColorScheme(
+private val LightColors = lightColorScheme(
     primary = BrandIndigo,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFD6E0FF),
-    onPrimaryContainer = BrandIndigo,
+    primaryContainer = Color(0xFFDCE4FA),
+    onPrimaryContainer = BrandIndigoDeep,
     secondary = BrandTeal,
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFB0EDED),
-    onSecondaryContainer = Color(0xFF0D4F4F),
+    secondaryContainer = Color(0xFFCBF0F0),
+    onSecondaryContainer = Color(0xFF075959),
     tertiary = BrandSaffron,
     onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFFFDDB3),
-    onTertiaryContainer = Color(0xFF4A2C0A),
+    tertiaryContainer = Color(0xFFFFE6CC),
+    onTertiaryContainer = Color(0xFF6B3908),
     background = Paper,
     onBackground = Ink,
     surface = SurfaceLight,
     onSurface = Ink,
-    surfaceVariant = Color(0xFFE8ECF4),
+    surfaceVariant = SurfaceLightAlt,
     onSurfaceVariant = Muted,
+    surfaceContainerHighest = SurfaceLightAlt,
     outline = BorderLight,
-    error = Error
+    outlineVariant = Color(0xFFE8EDF6),
+    error = Error,
+    onError = Color.White,
+    errorContainer = ErrorSoft,
+    onErrorContainer = Color(0xFF7A1414),
+    scrim = Color(0x99000000)
 )
 
-private val DarkColorScheme = darkColorScheme(
-    primary = BrandTeal,
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFF0D4F4F), // dark teal container - premium
-    onPrimaryContainer = Color(0xFFB0EDED),
+private val DarkColors = darkColorScheme(
+    primary = BrandTealLight,
+    onPrimary = Color(0xFF00302F),
+    primaryContainer = Color(0xFF0B4F4F),
+    onPrimaryContainer = Color(0xFFB6F0F0),
     secondary = BrandIndigoLight,
     onSecondary = Color.White,
     secondaryContainer = Color(0xFF1E2F5C),
-    onSecondaryContainer = Color(0xFFC2D0F0),
-    tertiary = BrandSaffron,
-    onTertiary = Color.White,
-    tertiaryContainer = Color(0xFF4A2C0A),
-    onTertiaryContainer = Color(0xFFFFDDB3),
-    background = Color(0xFF0F131E),
-    onBackground = Color(0xFFE6E8EC),
-    surface = Color(0xFF1A2030),
-    onSurface = Color(0xFFE6E8EC),
-    surfaceVariant = Color(0xFF2A344A),
-    onSurfaceVariant = Color(0xFFBAC2D0),
-    outline = Color(0xFF3E4A62),
-    error = Color(0xFFFF6B6B),
-    errorContainer = Color(0xFF5A1A1A)
+    onSecondaryContainer = Color(0xFFC9D6F5),
+    tertiary = BrandSaffronSoft,
+    onTertiary = Color(0xFF452200),
+    tertiaryContainer = Color(0xFF5A3410),
+    onTertiaryContainer = Color(0xFFFFE0BE),
+    background = InkDark,
+    onBackground = OnDark,
+    surface = SurfaceDark,
+    onSurface = OnDark,
+    surfaceVariant = SurfaceDarkAlt,
+    onSurfaceVariant = MutedDark,
+    surfaceContainerHighest = SurfaceDarkAlt,
+    outline = BorderDark,
+    outlineVariant = Color(0xFF232E3E),
+    error = Color(0xFFFF8A80),
+    onError = Color(0xFF4A0A0A),
+    errorContainer = Color(0xFF5A1A1A),
+    onErrorContainer = Color(0xFFFFDAD6),
+    scrim = Color(0xCC000000)
 )
 
+/**
+ * Exposes whether the app is currently in dark mode to composables that need
+ * to pick a hand-tuned colour (e.g. soft success/warning fills).
+ */
 @Composable
 fun JanDwarTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
+    val colorScheme = if (darkTheme) DarkColors else LightColors
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            val controller = WindowCompat.getInsetsController(window, view)
+            controller.isAppearanceLightStatusBars = !darkTheme
+            controller.isAppearanceLightNavigationBars = !darkTheme
         }
     }
 

@@ -1,16 +1,29 @@
 package `in`.jandwar.app.ui.viewmodel
 
 import android.content.SharedPreferences
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.jandwar.app.ai.AiConfig
-import `in`.jandwar.app.data.model.*
+import `in`.jandwar.app.ai.ProfileFragment
+import `in`.jandwar.app.data.model.Centre
+import `in`.jandwar.app.data.model.EducationLevel
+import `in`.jandwar.app.data.model.InterestChip
+import `in`.jandwar.app.data.model.JobRole
+import `in`.jandwar.app.data.model.MatchedRole
+import `in`.jandwar.app.data.model.Mobility
+import `in`.jandwar.app.data.model.Preference
+import `in`.jandwar.app.data.model.UserProfile
 import `in`.jandwar.app.data.repository.AppRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,62 +33,92 @@ class AppViewModel @Inject constructor(
     private val aiConfig: AiConfig
 ) : ViewModel() {
 
-    var currentLang by mutableStateOf(prefs.getString("lang", "") ?: "")
+    // ── Language ────────────────────────────────────────────────────────────
+
+    /**
+     * Whether the user has ever picked a language. Kept separate from
+     * [currentLang] so the language screen is still reachable on first launch
+     * while the rest of the app can always read a usable language code.
+     */
+    var hasChosenLanguage by mutableStateOf(prefs.getBoolean(KEY_LANG_CHOSEN, false))
+        private set
+
+    var currentLang by mutableStateOf(prefs.getString(KEY_LANG, "en") ?: "en")
+        private set
+
+    var onboardingSeen by mutableStateOf(prefs.getBoolean(KEY_ONBOARDING_SEEN, false))
         private set
 
     var onboardingPage by mutableStateOf(0)
+
+    // ── Profile & results ───────────────────────────────────────────────────
 
     var profile by mutableStateOf(UserProfile())
         private set
 
     private val _results = MutableStateFlow<List<MatchedRole>>(emptyList())
-    val results: StateFlow<List<MatchedRole>> = _results
+    val results: StateFlow<List<MatchedRole>> = _results.asStateFlow()
 
     private val _allRoles = MutableStateFlow<List<JobRole>>(emptyList())
-    val allRoles: StateFlow<List<JobRole>> = _allRoles
+    val allRoles: StateFlow<List<JobRole>> = _allRoles.asStateFlow()
+
+    var isMatching by mutableStateOf(false)
+        private set
 
     var selectedRole by mutableStateOf<MatchedRole?>(null)
         private set
 
     var searchQuery by mutableStateOf("")
+    var sectorFilter by mutableStateOf<String?>(null)
 
-    // Use backing properties to avoid JVM setter clash with setXxx functions
-    private var _offlineAiInstalled by mutableStateOf(prefs.getBoolean("offline_ai_installed", false))
-    val offlineAiInstalled: Boolean get() = _offlineAiInstalled
-    val isOfflineAiInstalled: Boolean get() = _offlineAiInstalled
+    /** Spoken/AI narration of the results, produced by the voice flow. */
+    var resultNarration by mutableStateOf("")
+        private set
 
-    private var _ttsEngine by mutableStateOf(prefs.getString("tts_engine", "auto") ?: "auto")
+    // ── Settings ────────────────────────────────────────────────────────────
+
+    private var _ttsEngine by mutableStateOf(prefs.getString(KEY_TTS_ENGINE, "auto") ?: "auto")
     val ttsEngine: String get() = _ttsEngine
+
+    val aiReady: Boolean get() = aiConfig.groqEnabled()
+
+    // ── Init ────────────────────────────────────────────────────────────────
 
     init {
         aiConfig.load()
         viewModelScope.launch {
-            _allRoles.value = repository.getJobRoles()
-        }
-        if (currentLang.isBlank()) {
-            currentLang = "en"
+            val loaded = withContext(Dispatchers.IO) { repository.getJobRoles() }
+            _allRoles.value = loaded
         }
     }
 
-    fun tr(key: String): String {
-        val lang = if (currentLang.isBlank()) "en" else currentLang
-        return repository.tr(lang, key)
-    }
+    // ── Strings ─────────────────────────────────────────────────────────────
 
-    fun interestLabel(key: String): String {
-        val lang = if (currentLang.isBlank()) "en" else currentLang
-        return repository.interestLabel(lang, key)
-    }
+    fun tr(key: String): String = repository.tr(currentLang, key)
 
-    fun getInterestChips(): List<InterestChip> {
-        val lang = if (currentLang.isBlank()) "en" else currentLang
-        return repository.getInterestChips(lang)
-    }
+    fun interestLabel(key: String): String = repository.interestLabel(currentLang, key)
+
+    fun sectorLabel(sector: String): String = repository.sectorLabel(sector)
+
+    fun getInterestChips(): List<InterestChip> = repository.getInterestChips(currentLang)
+
+    fun availableLanguages(): List<Pair<String, String>> = repository.availableLanguages()
 
     fun setLanguage(code: String) {
         currentLang = code
-        prefs.edit().putString("lang", code).apply()
+        hasChosenLanguage = true
+        prefs.edit()
+            .putString(KEY_LANG, code)
+            .putBoolean(KEY_LANG_CHOSEN, true)
+            .apply()
     }
+
+    fun markOnboardingSeen() {
+        onboardingSeen = true
+        prefs.edit().putBoolean(KEY_ONBOARDING_SEEN, true).apply()
+    }
+
+    // ── Profile edits ───────────────────────────────────────────────────────
 
     fun updateEducation(edu: EducationLevel) {
         profile = profile.copy(education = edu)
@@ -95,59 +138,12 @@ class AppViewModel @Inject constructor(
 
     fun toggleInterest(key: String) {
         val current = profile.interests.toMutableSet()
-        if (current.contains(key)) current.remove(key) else current.add(key)
+        if (!current.remove(key)) current.add(key)
         profile = profile.copy(interests = current)
     }
 
     fun setInterests(interests: Set<String>) {
         profile = profile.copy(interests = interests)
-    }
-
-    fun applyProfileFragment(frag: `in`.jandwar.app.ai.ProfileFragment) {
-        var newProfile = profile
-
-        frag.edu?.let { aiEdu ->
-            EducationLevel.fromAiString(aiEdu)?.let { edu ->
-                newProfile = newProfile.copy(education = edu)
-            }
-        }
-        frag.preference?.let { aiPref ->
-            Preference.fromAiString(aiPref)?.let { pref ->
-                newProfile = newProfile.copy(preference = pref)
-            }
-        }
-        frag.mobility?.let { aiMob ->
-            Mobility.fromAiString(aiMob)?.let { mob ->
-                newProfile = newProfile.copy(mobility = mob)
-            }
-        }
-        frag.district?.let { d ->
-            if (d.isNotBlank()) newProfile = newProfile.copy(district = d)
-        }
-        frag.familyOccupation?.let { fo ->
-            if (fo.isNotBlank()) newProfile = newProfile.copy(familyOccupation = fo)
-        }
-        frag.currentLivelihood?.let { cl ->
-            if (cl.isNotBlank()) newProfile = newProfile.copy(currentLivelihood = cl)
-        }
-        frag.physicalConstraints?.let { pc ->
-            if (pc.isNotBlank()) newProfile = newProfile.copy(physicalConstraints = pc)
-        }
-        frag.localOpportunity?.let { lo ->
-            if (lo.isNotBlank()) newProfile = newProfile.copy(localOpportunity = lo)
-        }
-        if (frag.hasInterests()) {
-            val merged = newProfile.interests.toMutableSet()
-            merged.addAll(frag.interests)
-            newProfile = newProfile.copy(interests = merged)
-        }
-        if (frag.hasSkills()) {
-            val merged = newProfile.skills.toMutableSet()
-            merged.addAll(frag.skills)
-            newProfile = newProfile.copy(skills = merged)
-        }
-
-        profile = newProfile
     }
 
     fun updateFamilyOccupation(occ: String) {
@@ -166,10 +162,60 @@ class AppViewModel @Inject constructor(
         profile = profile.copy(localOpportunity = opp)
     }
 
-    fun runMatching() {
-        viewModelScope.launch {
-            _results.value = repository.matchRoles(profile)
+    /** Folds everything the voice interview understood into the form profile. */
+    fun applyProfileFragment(frag: ProfileFragment) {
+        var p = profile
+
+        EducationLevel.fromAiString(frag.edu)?.let { p = p.copy(education = it) }
+        Preference.fromAiString(frag.preference)?.let { p = p.copy(preference = it) }
+        Mobility.fromAiString(frag.mobility)?.let { p = p.copy(mobility = it) }
+
+        frag.district?.takeIf { it.isNotBlank() }?.let { p = p.copy(district = it) }
+        frag.familyOccupation?.takeIf { it.isNotBlank() }?.let { p = p.copy(familyOccupation = it) }
+        frag.currentLivelihood?.takeIf { it.isNotBlank() }
+            ?.let { p = p.copy(currentLivelihood = it) }
+        frag.physicalConstraints?.takeIf { it.isNotBlank() }
+            ?.let { p = p.copy(physicalConstraints = it) }
+        frag.localOpportunity?.takeIf { it.isNotBlank() }
+            ?.let { p = p.copy(localOpportunity = it) }
+
+        if (frag.interests.isNotEmpty()) {
+            p = p.copy(interests = p.interests + frag.interests)
         }
+        if (frag.skills.isNotEmpty()) {
+            p = p.copy(skills = p.skills + frag.skills)
+        }
+        profile = p
+    }
+
+    // ── Matching ────────────────────────────────────────────────────────────
+
+    fun runMatching(onReady: ((List<MatchedRole>) -> Unit)? = null) {
+        viewModelScope.launch {
+            isMatching = true
+            resultNarration = ""
+            val snapshot = profile
+            val lang = currentLang
+            val matched = withContext(Dispatchers.Default) {
+                repository.matchRoles(snapshot, lang)
+            }
+            _results.value = matched
+            isMatching = false
+            onReady?.invoke(matched)
+        }
+    }
+
+    /**
+     * Applies the interview result and matches in one step, so the voice screen
+     * and the form screen both end up feeding the same result list.
+     */
+    fun completeInterview(frag: ProfileFragment, onReady: ((List<MatchedRole>) -> Unit)? = null) {
+        applyProfileFragment(frag)
+        runMatching(onReady)
+    }
+
+    fun updateResultNarration(text: String) {
+        resultNarration = text
     }
 
     fun selectRole(role: MatchedRole) {
@@ -177,40 +223,44 @@ class AppViewModel @Inject constructor(
     }
 
     fun selectRoleByCode(qpCode: String) {
-        val all = _allRoles.value
-        val job = all.find { it.qp_code == qpCode } ?: return
-        val centre = repository.getCentreForDistrict(profile.district)
-        val matched = MatchedRole(
+        val existing = _results.value.firstOrNull { it.role.qp_code == qpCode }
+        if (existing != null) {
+            selectedRole = existing
+            return
+        }
+        val job = repository.roleByCode(qpCode) ?: return
+        selectedRole = MatchedRole(
             role = job,
-            score = 100,
-            reason = tr("reason_base"),
-            skillGapNote = "Check eligibility with centre",
-            centre = centre
+            score = 0,
+            confidence = 0,
+            reason = repository.tr(currentLang, "reason_browse"),
+            skillGapNote = repository.tr(currentLang, "gap_generic"),
+            centre = repository.getCentreForDistrict(profile.district)
         )
-        selectedRole = matched
     }
 
-    fun getDistricts(): List<String> {
-        return repository.getDistricts().all
-    }
+    // ── Browse ──────────────────────────────────────────────────────────────
 
-    fun getCentreForDistrict(district: String): Centre? {
-        return repository.getCentreForDistrict(district)
-    }
+    fun getDistricts(): List<String> = repository.getDistricts().all
 
-    fun filteredRoles(): List<JobRole> {
-        val q = searchQuery
-        return if (q.isBlank()) _allRoles.value else repository.searchRoles(q, currentLang)
-    }
+    fun districtsWithCentre(): List<String> = repository.getDistricts().with_centre
+
+    fun getCentreForDistrict(district: String): Centre? =
+        repository.getCentreForDistrict(district)
+
+    fun sectors(): List<String> = repository.sectors()
+
+    fun fundableCount(): Int = repository.fundableCount()
+
+    fun totalRoleCount(): Int = _allRoles.value.size
+
+    fun filteredRoles(): List<JobRole> = repository.searchRoles(searchQuery, sectorFilter)
+
+    // ── Settings ────────────────────────────────────────────────────────────
 
     fun updateTtsEngine(engine: String) {
         _ttsEngine = engine
-        prefs.edit().putString("tts_engine", engine).apply()
-    }
-
-    fun updateOfflineAiInstalled(installed: Boolean) {
-        _offlineAiInstalled = installed
-        prefs.edit().putBoolean("offline_ai_installed", installed).apply()
+        prefs.edit().putString(KEY_TTS_ENGINE, engine).apply()
     }
 
     fun resetOnboarding() {
@@ -221,15 +271,23 @@ class AppViewModel @Inject constructor(
         if (onboardingPage < 2) onboardingPage++
     }
 
-    fun prevOnboarding(): Boolean {
-        return if (onboardingPage > 0) {
+    fun prevOnboarding(): Boolean =
+        if (onboardingPage > 0) {
             onboardingPage--
             true
         } else false
-    }
 
     fun clearProfile() {
         profile = UserProfile()
         _results.value = emptyList()
+        selectedRole = null
+        resultNarration = ""
+    }
+
+    companion object {
+        private const val KEY_LANG = "lang"
+        private const val KEY_LANG_CHOSEN = "lang_chosen"
+        private const val KEY_ONBOARDING_SEEN = "onboarding_seen"
+        private const val KEY_TTS_ENGINE = "tts_engine"
     }
 }

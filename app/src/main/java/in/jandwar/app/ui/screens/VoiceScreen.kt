@@ -1,27 +1,86 @@
 package `in`.jandwar.app.ui.screens
 
-import androidx.compose.animation.core.*
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Keyboard
+import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.Replay
+import androidx.compose.material.icons.rounded.Send
+import androidx.compose.material.icons.rounded.WarningAmber
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import `in`.jandwar.app.data.model.ConversationMessage
-import `in`.jandwar.app.ui.components.GradientHeader
-import `in`.jandwar.app.ui.theme.*
+import androidx.core.content.ContextCompat
+import `in`.jandwar.app.ai.ConversationEngine
+import `in`.jandwar.app.data.model.EducationLevel
+import `in`.jandwar.app.ui.components.Badge
+import `in`.jandwar.app.ui.components.BrandHeader
+import `in`.jandwar.app.ui.components.CircleIconButton
+import `in`.jandwar.app.ui.components.GhostButton
+import `in`.jandwar.app.ui.components.PrimaryButton
+import `in`.jandwar.app.ui.components.StepProgress
+import `in`.jandwar.app.ui.components.VoiceOrb
+import `in`.jandwar.app.ui.theme.BrandIndigo
+import `in`.jandwar.app.ui.theme.BrandSaffron
+import `in`.jandwar.app.ui.theme.BrandTeal
+import `in`.jandwar.app.ui.theme.Success
+import `in`.jandwar.app.ui.theme.Warning
 import `in`.jandwar.app.ui.viewmodel.AppViewModel
 import `in`.jandwar.app.ui.viewmodel.VoiceViewModel
 
@@ -32,23 +91,44 @@ fun VoiceScreen(
     onClose: () -> Unit,
     onDone: () -> Unit
 ) {
-    var typedText by remember { mutableStateOf("") }
-    val listState = rememberLazyListState()
+    val context = LocalContext.current
+    val state by voiceViewModel.state.collectAsState()
+    val lang = appViewModel.currentLang
 
-    LaunchedEffect(Unit) {
-        voiceViewModel.start(
-            lang = appViewModel.currentLang.ifBlank { "en" },
-            onFieldExtracted = { frag -> appViewModel.applyProfileFragment(frag) },
-            onDone = { final ->
-                appViewModel.applyProfileFragment(final)
-                onDone()
-            }
-        )
+    val initiallyGranted = remember {
+        ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
+                PackageManager.PERMISSION_GRANTED
+    }
+    var micGranted by remember { mutableStateOf(initiallyGranted) }
+
+    // The interview only opens once we know whether the mic is usable, so the
+    // user never sees a "permission denied" banner flash before answering.
+    var permissionResolved by remember { mutableStateOf(initiallyGranted) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        micGranted = granted
+        permissionResolved = true
+        voiceViewModel.onMicPermissionResult(granted)
     }
 
-    LaunchedEffect(voiceViewModel.conversationHistory.size) {
-        if (voiceViewModel.conversationHistory.isNotEmpty()) {
-            listState.animateScrollToItem(voiceViewModel.conversationHistory.size - 1)
+    LaunchedEffect(Unit) {
+        if (!initiallyGranted) permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+    }
+
+    LaunchedEffect(permissionResolved) {
+        if (!permissionResolved) return@LaunchedEffect
+        voiceViewModel.start(lang, micGranted) { profile ->
+            appViewModel.completeInterview(profile) { results ->
+                voiceViewModel.narrateResults(
+                    results = results,
+                    profileSummary = profile.summaryLine()
+                ) {
+                    appViewModel.updateResultNarration(voiceViewModel.narration)
+                    onDone()
+                }
+            }
         }
     }
 
@@ -56,200 +136,417 @@ fun VoiceScreen(
         onDispose { voiceViewModel.stop() }
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "orb")
-    val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = if (voiceViewModel.isSpeaking) 1.18f else if (voiceViewModel.isListening) 1.12f else 1f,
-        animationSpec = infiniteRepeatable(animation = tween(900, easing = FastOutSlowInEasing), repeatMode = RepeatMode.Reverse),
-        label = "scale"
-    )
-
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        GradientHeader(
-            title = appViewModel.tr("voice_intro"),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .imePadding()
+    ) {
+        BrandHeader(
+            title = appViewModel.tr("voice_title"),
             subtitle = appViewModel.tr("voice_sub"),
-            actionText = appViewModel.tr("close"),
-            onAction = {
-                voiceViewModel.stop()
-                onClose()
+            trailing = {
+                CircleIconButton(
+                    icon = Icons.Rounded.Close,
+                    contentDescription = appViewModel.tr("close"),
+                    onClick = {
+                        voiceViewModel.stop()
+                        onClose()
+                    }
+                )
             }
         )
 
-        Spacer(Modifier.height(12.dp))
+        // ── Progress + understood-so-far ────────────────────────────────────
+        Column(modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp)) {
+            StepProgress(
+                current = (state.progress * 7).toInt(),
+                total = 7
+            )
+            Spacer(Modifier.height(10.dp))
+            UnderstoodRow(appViewModel, state)
+        }
+
+        // ── Orb + status ────────────────────────────────────────────────────
+        val speaking = state.phase == ConversationEngine.Phase.SPEAKING
+        val listening = state.phase == ConversationEngine.Phase.LISTENING
+        val thinking = state.phase == ConversationEngine.Phase.THINKING
+
+        val orbScale by animateFloatAsState(
+            targetValue = 1f + (state.amplitude * 0.10f),
+            animationSpec = tween(110),
+            label = "orbScale"
+        )
 
         Box(
-            modifier = Modifier.size((110 * scale).dp).clip(CircleShape).background(
-                when {
-                    voiceViewModel.isSpeaking -> Brush.radialGradient(listOf(BrandSaffron, BrandIndigo))
-                    voiceViewModel.isListening -> Brush.radialGradient(listOf(BrandTeal, BrandIndigo))
-                    else -> Brush.radialGradient(listOf(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.surfaceVariant))
-                }
-            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                when {
-                    voiceViewModel.isSpeaking -> "🔊"
-                    voiceViewModel.isListening -> "🎙️"
-                    else -> "●"
-                },
-                color = if (voiceViewModel.isListening || voiceViewModel.isSpeaking) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = if (voiceViewModel.isListening || voiceViewModel.isSpeaking) 24.sp else 28.sp
+            VoiceOrb(
+                isSpeaking = speaking,
+                isListening = listening,
+                size = 116.dp,
+                modifier = Modifier.scale(orbScale)
             )
         }
 
+        Text(
+            text = when {
+                speaking -> appViewModel.tr("speaking")
+                listening -> appViewModel.tr("listening")
+                thinking -> appViewModel.tr("thinking")
+                state.phase == ConversationEngine.Phase.DONE -> appViewModel.tr("done")
+                else -> appViewModel.tr("tap_to_speak")
+            },
+            style = MaterialTheme.typography.labelLarge,
+            color = when {
+                listening -> BrandTeal
+                speaking -> BrandSaffron
+                else -> MaterialTheme.colorScheme.onSurfaceVariant
+            },
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Spacer(Modifier.height(10.dp))
 
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = when {
-                    voiceViewModel.isListening -> BrandTeal.copy(alpha = 0.15f)
-                    voiceViewModel.isSpeaking -> BrandSaffron.copy(alpha = 0.15f)
-                    else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
-                }
-            ),
-            modifier = Modifier.fillMaxWidth()
+        // ── Notice banner ───────────────────────────────────────────────────
+        AnimatedVisibility(
+            visible = !state.notice.isNullOrBlank(),
+            enter = fadeIn(tween(200)),
+            exit = fadeOut(tween(160))
         ) {
-            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                if (voiceViewModel.isListening) {
-                    CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp, color = BrandTeal)
-                    Spacer(Modifier.width(8.dp))
-                }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 18.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(Warning.copy(alpha = 0.11f))
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Rounded.WarningAmber,
+                    null,
+                    tint = Warning,
+                    modifier = Modifier.size(17.dp)
+                )
+                Spacer(Modifier.width(9.dp))
                 Text(
-                    voiceViewModel.status,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = when {
-                        voiceViewModel.isListening -> BrandTeal
-                        voiceViewModel.isSpeaking -> BrandSaffron
-                        else -> MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                    textAlign = TextAlign.Center
+                    state.notice.orEmpty(),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f)
+                )
+                if (state.micPermissionNeeded) {
+                    Spacer(Modifier.width(8.dp))
+                    GhostButton(
+                        text = appViewModel.tr("grant_mic"),
+                        onClick = {
+                            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                        }
+                    )
+                }
+            }
+        }
+
+        // ── Transcript ──────────────────────────────────────────────────────
+        val listState = rememberLazyListState()
+        LaunchedEffect(state.turns.size, state.partial) {
+            val target = state.turns.size
+            if (target > 0) listState.animateScrollToItem(target - 1)
+        }
+
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 18.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(9.dp)
+        ) {
+            items(state.turns.size) { index ->
+                val turn = state.turns[index]
+                Bubble(
+                    text = turn.text,
+                    fromUser = turn.fromUser,
+                    label = if (turn.fromUser) appViewModel.tr("you")
+                    else appViewModel.tr("name")
                 )
             }
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        LazyColumn(state = listState, modifier = Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(voiceViewModel.conversationHistory) { msg ->
-                if (msg.text.isNotBlank() && msg.text.length > 2) {
-                    ConversationBubble(msg, appViewModel)
-                }
-            }
-            item {
-                val q = voiceViewModel.currentQuestion
-                val lowerQ = q.lowercase()
-                val isTechnicalError = lowerQ.contains("error: groq") || (lowerQ.contains("model") && lowerQ.contains("does not exist")) || lowerQ.contains("groq api") || q.length > 600
-                if (q.isNotBlank() && !isTechnicalError) {
-                    val isAlreadyInHistory = voiceViewModel.conversationHistory.lastOrNull()?.text == q
-                    if (!isAlreadyInHistory) {
-                        Card(
-                            shape = RoundedCornerShape(18.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                            elevation = CardDefaults.cardElevation(3.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(q, fontSize = 15.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, lineHeight = 20.sp, modifier = Modifier.padding(16.dp))
-                        }
-                    }
-                }
-            }
-            if (voiceViewModel.isExplainingResults && voiceViewModel.matchedResults.isNotEmpty()) {
-                item {
-                    Spacer(Modifier.height(8.dp))
-                    Card(
-                        shape = RoundedCornerShape(18.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text("🎯 Top Recommendations", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                            Spacer(Modifier.height(8.dp))
-                            voiceViewModel.matchedResults.forEachIndexed { idx, role ->
-                                Text("${idx + 1}. ${role.role.job_role} (${role.role.qp_code})", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                                Text(role.skillGapNote, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp, bottom = 8.dp))
-                            }
-                        }
-                    }
+            if (state.partial.isNotBlank()) {
+                items(1) {
+                    Bubble(
+                        text = state.partial,
+                        fromUser = true,
+                        label = appViewModel.tr("you"),
+                        ghost = true
+                    )
                 }
             }
         }
 
-        Spacer(Modifier.height(8.dp))
-
-        // Removed debug chips - they made UI look technical, not like real AI companion
-        // Profile summary is shown via conversation history, not raw chips
-
-        OutlinedTextField(
-            value = typedText,
-            onValueChange = { typedText = it },
-            placeholder = { Text(if (appViewModel.currentLang == "ta") "உங்கள் பதிலை தட்டச்சு செய்யுங்கள்..." else "Type your answer... (or just speak)", fontSize = 14.sp) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            trailingIcon = {
-                TextButton(onClick = { if (typedText.isNotBlank()) { voiceViewModel.processTypedAnswer(typedText); typedText = "" } }, enabled = typedText.isNotBlank()) {
-                    Text(appViewModel.tr("send").ifBlank { "Send" }, color = if (typedText.isNotBlank()) BrandTeal else MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
-                }
-            }
-        )
-
-        Spacer(Modifier.height(6.dp))
-
-        Text(
-            voiceViewModel.transcript.ifBlank {
-                if (voiceViewModel.isListening) {
-                    when (appViewModel.currentLang) {
-                        "ta" -> "கேட்கிறேன்... இப்போது பேசுங்கள்"
-                        "hi" -> "सुन रहा हूँ... अभी बोलें"
-                        "te" -> "వింటున్నాను... ఇప్పుడు మాట్లాడండి"
-                        "kn" -> "ಆಲಿಸುತ್ತಿದ್ದೇನೆ... ಈಗ ಮಾತನಾಡಿ"
-                        "ml" -> "കേൾക്കുന്നു... ഇപ്പോൾ സംസാരിക്കൂ"
-                        else -> "Listening... speak now"
-                    }
+        // ── Controls ────────────────────────────────────────────────────────
+        Surface(
+            color = MaterialTheme.colorScheme.surface,
+            shadowElevation = 14.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 18.dp, vertical = 14.dp)
+                    .navigationBarsPadding()
+            ) {
+                if (state.inputMode == ConversationEngine.InputMode.TEXT) {
+                    TextAnswerBar(appViewModel, voiceViewModel, micAvailable = micGranted)
                 } else {
-                    when (appViewModel.currentLang) {
-                        "ta" -> "தமிழ், ஆங்கிலம், இந்தி - இயல்பாக பேசுங்கள்"
-                        "hi" -> "हिंदी, अंग्रेजी, तमिल - स्वाभाविक रूप से बोलें"
-                        else -> "Tamil, Hindi, English - speak naturally like talking to a friend"
-                    }
+                    VoiceControlBar(
+                        appViewModel = appViewModel,
+                        voiceViewModel = voiceViewModel,
+                        listening = listening,
+                        busy = speaking || thinking
+                    )
                 }
-            },
-            fontSize = 12.sp,
-            color = if (voiceViewModel.isListening) BrandTeal else MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
-        )
 
-        Spacer(Modifier.height(8.dp))
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = { voiceViewModel.stop(); onClose() }, modifier = Modifier.weight(1f).height(50.dp), shape = RoundedCornerShape(16.dp)) {
-                Text(appViewModel.tr("stop_listening"), fontSize = 14.sp)
+                if (state.canFinishEarly &&
+                    state.phase != ConversationEngine.Phase.DONE
+                ) {
+                    Spacer(Modifier.height(10.dp))
+                    GhostButton(
+                        text = appViewModel.tr("submit"),
+                        icon = Icons.Rounded.Check,
+                        onClick = { voiceViewModel.finishEarly() },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
-            Button(onClick = { voiceViewModel.repeatQuestion() }, modifier = Modifier.weight(1f).height(50.dp), shape = RoundedCornerShape(16.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                Text(if (appViewModel.currentLang == "ta") "மீண்டும்" else "Repeat 🔁", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+// ── Pieces ──────────────────────────────────────────────────────────────────
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun UnderstoodRow(
+    appViewModel: AppViewModel,
+    state: ConversationEngine.State
+) {
+    val p = state.profile
+    val chips = buildList {
+        p.edu?.let { raw ->
+            val level = EducationLevel.fromAiString(raw)
+            add(if (level != null) appViewModel.tr(level.key) else raw)
+        }
+        p.district?.let { add(it) }
+        p.familyOccupation?.let { add(it) }
+        p.currentLivelihood?.let { add(it) }
+        p.interests.forEach { add(appViewModel.interestLabel(it)) }
+        p.preference?.let { add(appViewModel.tr(it)) }
+        p.mobility?.let { add(appViewModel.tr("travel_" + it.removePrefix("travel_"))) }
+    }.filter { it.isNotBlank() }.distinct()
+
+    if (chips.isEmpty()) return
+
+    Column {
+        Text(
+            appViewModel.tr("profile_so_far"),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(7.dp))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            chips.take(8).forEach { chip ->
+                Badge(text = chip, color = Success, icon = Icons.Rounded.Check)
             }
         }
     }
 }
 
 @Composable
-private fun ConversationBubble(msg: ConversationMessage, appViewModel: AppViewModel) {
-    val isUser = msg.isUser
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = if (isUser) Arrangement.End else Arrangement.Start) {
-        Card(
-            shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp, bottomStart = if (isUser) 18.dp else 4.dp, bottomEnd = if (isUser) 4.dp else 18.dp),
-            colors = CardDefaults.cardColors(containerColor = if (isUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(2.dp),
-            modifier = Modifier.widthIn(max = 300.dp)
+private fun Bubble(
+    text: String,
+    fromUser: Boolean,
+    label: String,
+    ghost: Boolean = false
+) {
+    val bg = when {
+        ghost -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+        fromUser -> BrandIndigo
+        else -> MaterialTheme.colorScheme.surface
+    }
+    val fg = when {
+        ghost -> MaterialTheme.colorScheme.onSurfaceVariant
+        fromUser -> Color.White
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = if (fromUser) Arrangement.End else Arrangement.Start
+    ) {
+        Column(
+            horizontalAlignment = if (fromUser) Alignment.End else Alignment.Start,
+            modifier = Modifier.fillMaxWidth(0.88f)
         ) {
-            Column(modifier = Modifier.padding(12.dp)) {
-                Text(if (isUser) appViewModel.tr("you").ifBlank { "You" } else "JanDwar", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = if (isUser) MaterialTheme.colorScheme.onPrimaryContainer else BrandTeal)
-                Spacer(Modifier.height(3.dp))
-                Text(msg.text, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface, lineHeight = 19.sp)
+            Text(
+                label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(Modifier.height(3.dp))
+            Surface(
+                shape = RoundedCornerShape(
+                    topStart = 18.dp,
+                    topEnd = 18.dp,
+                    bottomStart = if (fromUser) 18.dp else 5.dp,
+                    bottomEnd = if (fromUser) 5.dp else 18.dp
+                ),
+                color = bg,
+                border = if (!fromUser && !ghost) {
+                    androidx.compose.foundation.BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.outline
+                    )
+                } else null
+            ) {
+                Text(
+                    text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = fg,
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 11.dp)
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun VoiceControlBar(
+    appViewModel: AppViewModel,
+    voiceViewModel: VoiceViewModel,
+    listening: Boolean,
+    busy: Boolean
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        IconButton(
+            onClick = { voiceViewModel.useTextInput() },
+            modifier = Modifier
+                .size(52.dp)
+                .clip(RoundedCornerShape(17.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Icon(
+                Icons.Rounded.Keyboard,
+                contentDescription = appViewModel.tr("type_hint"),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        PrimaryButton(
+            text = if (listening) appViewModel.tr("listening") else appViewModel.tr("tap_to_speak"),
+            icon = Icons.Rounded.Mic,
+            loading = busy,
+            onClick = { voiceViewModel.listenNow() },
+            modifier = Modifier.weight(1f)
+        )
+
+        IconButton(
+            onClick = { voiceViewModel.repeatLast() },
+            modifier = Modifier
+                .size(52.dp)
+                .clip(RoundedCornerShape(17.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Icon(
+                Icons.Rounded.Replay,
+                contentDescription = appViewModel.tr("repeat"),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun TextAnswerBar(
+    appViewModel: AppViewModel,
+    voiceViewModel: VoiceViewModel,
+    micAvailable: Boolean
+) {
+    var draft by remember { mutableStateOf("") }
+    val keyboard = LocalSoftwareKeyboardController.current
+
+    val send = {
+        if (draft.isNotBlank()) {
+            voiceViewModel.submitText(draft)
+            draft = ""
+            keyboard?.hide()
+        }
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        if (micAvailable) {
+            IconButton(
+                onClick = { voiceViewModel.useVoiceInput() },
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(RoundedCornerShape(17.dp))
+                    .background(BrandTeal.copy(alpha = 0.14f))
+            ) {
+                Icon(
+                    Icons.Rounded.Mic,
+                    contentDescription = appViewModel.tr("tap_to_speak"),
+                    tint = BrandTeal
+                )
+            }
+        }
+
+        OutlinedTextField(
+            value = draft,
+            onValueChange = { draft = it },
+            modifier = Modifier
+                .weight(1f)
+                .heightIn(min = 54.dp),
+            placeholder = { Text(appViewModel.tr("type_hint")) },
+            singleLine = true,
+            shape = RoundedCornerShape(16.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+            keyboardActions = KeyboardActions(onSend = { send() }),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+            )
+        )
+
+        IconButton(
+            onClick = send,
+            enabled = draft.isNotBlank(),
+            modifier = Modifier
+                .size(52.dp)
+                .clip(RoundedCornerShape(17.dp))
+                .background(
+                    if (draft.isNotBlank()) BrandIndigo
+                    else MaterialTheme.colorScheme.surfaceVariant
+                )
+        ) {
+            Icon(
+                Icons.Rounded.Send,
+                contentDescription = appViewModel.tr("send"),
+                tint = if (draft.isNotBlank()) Color.White
+                else MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

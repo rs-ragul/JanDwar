@@ -1,74 +1,150 @@
 package `in`.jandwar.app.ui.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.PriorityHigh
+import androidx.compose.material.icons.rounded.School
+import androidx.compose.material.icons.rounded.SearchOff
+import androidx.compose.material.icons.rounded.Verified
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import `in`.jandwar.app.data.model.MatchedRole
-import `in`.jandwar.app.ui.components.GradientHeader
+import `in`.jandwar.app.ui.components.Badge
+import `in`.jandwar.app.ui.components.BrandHeader
+import `in`.jandwar.app.ui.components.EmptyState
+import `in`.jandwar.app.ui.components.GhostButton
 import `in`.jandwar.app.ui.components.PremiumCard
-import `in`.jandwar.app.ui.theme.*
+import `in`.jandwar.app.ui.theme.BrandIndigo
+import `in`.jandwar.app.ui.theme.BrandSaffron
+import `in`.jandwar.app.ui.theme.BrandTeal
+import `in`.jandwar.app.ui.theme.Success
+import `in`.jandwar.app.ui.theme.Warning
+import `in`.jandwar.app.ui.theme.sectorColor
 import `in`.jandwar.app.ui.viewmodel.AppViewModel
 
 @Composable
 fun ResultsScreen(
     viewModel: AppViewModel,
     onBack: () -> Unit,
-    onDetail: (String) -> Unit
+    onDetail: (MatchedRole) -> Unit,
+    onBrowseAll: () -> Unit
 ) {
     val results by viewModel.results.collectAsState()
+    val narration = viewModel.resultNarration
 
-    Column(modifier = Modifier.fillMaxSize().padding(18.dp)) {
-        GradientHeader(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        BrandHeader(
             title = viewModel.tr("options"),
-            subtitle = "${viewModel.profile.district} • ${viewModel.profile.toReadableSummary().take(60)}",
-            actionText = viewModel.tr("back"),
-            onAction = onBack
+            subtitle = if (results.isEmpty()) null
+            else "${results.size} ${viewModel.tr("found")}",
+            onBack = onBack
         )
-        Spacer(Modifier.height(14.dp))
 
-        Card(
-            shape = RoundedCornerShape(22.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(3.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(modifier = Modifier.padding(14.dp)) {
-                Text(
-                    "${results.size} ${viewModel.tr("found")}",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                if (viewModel.profile.familyOccupation.isNotBlank()) {
+        when {
+            viewModel.isMatching -> Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                    Spacer(Modifier.height(14.dp))
                     Text(
-                        "Family: ${viewModel.profile.familyOccupation} • Current: ${viewModel.profile.currentLivelihood}",
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 4.dp)
+                        viewModel.tr("thinking"),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
-        }
 
-        Spacer(Modifier.height(12.dp))
-
-        if (results.isEmpty()) {
-            PremiumCard {
-                Text(viewModel.tr("no_results"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            results.isEmpty() -> Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyState(
+                    title = viewModel.tr("no_results"),
+                    message = viewModel.tr("no_results_sub"),
+                    icon = Icons.Rounded.SearchOff,
+                    action = {
+                        GhostButton(
+                            text = viewModel.tr("all_courses"),
+                            onClick = onBrowseAll
+                        )
+                    }
+                )
             }
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.weight(1f)) {
-                items(results) { rec ->
-                    CourseCard(rec = rec, viewModel = viewModel, onDetail = { onDetail(rec.role.qp_code) })
+
+            else -> LazyColumn(
+                contentPadding = PaddingValues(18.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                if (narration.isNotBlank()) {
+                    item { NarrationCard(narration) }
+                }
+
+                items(results, key = { it.role.qp_code + it.score }) { matched ->
+                    ResultCard(
+                        viewModel = viewModel,
+                        matched = matched,
+                        isTop = matched == results.first(),
+                        onClick = { onDetail(matched) }
+                    )
+                }
+
+                item {
+                    Spacer(Modifier.height(2.dp))
+                    GhostButton(
+                        text = viewModel.tr("all_courses"),
+                        onClick = onBrowseAll,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        viewModel.tr("not_claim"),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
@@ -76,127 +152,199 @@ fun ResultsScreen(
 }
 
 @Composable
-fun CourseCard(rec: MatchedRole, viewModel: AppViewModel, onDetail: () -> Unit) {
-    Card(
-        onClick = onDetail,
+private fun NarrationCard(text: String) {
+    Surface(
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(4.dp),
+        color = BrandTeal.copy(alpha = 0.09f),
+        border = androidx.compose.foundation.BorderStroke(1.dp, BrandTeal.copy(alpha = 0.25f)),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Row(verticalAlignment = Alignment.Top) {
-                Surface(
-                    shape = androidx.compose.foundation.shape.CircleShape,
-                    color = when (rec.role.sector) {
-                        "agriculture" -> Color(0xFF169654)
-                        "food_processing" -> BrandSaffron
-                        "construction" -> BrandIndigo
-                        "handloom_textile", "apparel" -> Color(0xFFD32A84)
-                        else -> BrandTeal
-                    },
-                    modifier = Modifier.size(56.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(
-                            when (rec.role.sector) {
-                                "agriculture" -> "AG"
-                                "food_processing" -> "FD"
-                                "construction" -> "CN"
-                                "handloom_textile", "apparel" -> "TX"
-                                else -> "SK"
-                            },
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-                Spacer(Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(rec.role.job_role, fontSize = 17.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, maxLines = 3)
-                    Text("${rec.role.qp_code} · ${rec.role.ssc}", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
-                }
-                AssistChip(
-                    onClick = {},
-                    label = { Text(if (rec.role.isFundable()) "Fundable" else "Check", color = Color.White, fontSize = 11.sp) },
-                    colors = AssistChipDefaults.assistChipColors(
-                        containerColor = if (rec.role.isFundable()) Success else BrandSaffron
+        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
+            Icon(
+                Icons.Rounded.AutoAwesome,
+                null,
+                tint = BrandTeal,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(Modifier.width(11.dp))
+            Text(
+                text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun ResultCard(
+    viewModel: AppViewModel,
+    matched: MatchedRole,
+    isTop: Boolean,
+    onClick: () -> Unit
+) {
+    val role = matched.role
+    val accent = sectorColor(role.sector)
+
+    PremiumCard(onClick = onClick, accent = accent) {
+        Row(verticalAlignment = Alignment.Top) {
+            Column(Modifier.weight(1f)) {
+                if (isTop) {
+                    Badge(
+                        text = viewModel.tr("best_match"),
+                        color = BrandSaffron,
+                        icon = Icons.Rounded.Verified
                     )
+                    Spacer(Modifier.height(8.dp))
+                }
+                Text(
+                    role.job_role,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.height(3.dp))
+                Text(
+                    viewModel.sectorLabel(role.sector),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = accent
                 )
             }
+            Spacer(Modifier.width(12.dp))
+            ConfidenceRing(matched.confidence, viewModel.tr("match"))
+        }
 
-            Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(13.dp))
 
-            Row {
-                Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.padding(end = 4.dp)) {
-                    Text(
-                        if (rec.role.isLongTerm()) viewModel.tr("long_term") else viewModel.tr("short_term"),
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
-                    )
-                }
-                Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
-                    Text(
-                        "${viewModel.tr("level")} ${rec.role.levelLabel(viewModel.tr("level"))}",
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(rec.reason, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium)
-
-            Spacer(Modifier.height(8.dp))
-
-            if (rec.familyFitNote.isNotBlank()) {
-                Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f), modifier = Modifier.fillMaxWidth()) {
-                    Row(modifier = Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text("👨‍👩‍👧‍👦 ", fontSize = 14.sp)
-                        Text(rec.familyFitNote, fontSize = 13.sp, color = MaterialTheme.colorScheme.onTertiaryContainer, fontWeight = FontWeight.Bold)
-                    }
-                }
-                Spacer(Modifier.height(6.dp))
-            }
-
-            Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f), modifier = Modifier.fillMaxWidth()) {
-                Text(rec.skillGapNote, fontSize = 13.sp, color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.Bold, modifier = Modifier.padding(10.dp))
-            }
-
-            Spacer(Modifier.height(6.dp))
-
-            if (rec.regionOpportunity.isNotBlank()) {
-                Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f), modifier = Modifier.fillMaxWidth()) {
-                    Row(modifier = Modifier.padding(10.dp), verticalAlignment = Alignment.Top) {
-                        Text("📍 ", fontSize = 14.sp)
-                        Text(rec.regionOpportunity, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSecondaryContainer, fontWeight = FontWeight.Medium)
-                    }
-                }
-                Spacer(Modifier.height(6.dp))
-            }
-
-            Text(
-                rec.centre?.name ?: viewModel.tr("no_centre"),
-                fontSize = 14.sp,
-                color = if (rec.centre == null) BrandSaffron else MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Bold
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(7.dp),
+            verticalArrangement = Arrangement.spacedBy(7.dp)
+        ) {
+            Badge(
+                text = "${viewModel.tr("level")} ${role.nsqf_level.ifBlank { "—" }}",
+                color = BrandIndigo,
+                icon = Icons.Rounded.School
             )
-
-            Spacer(Modifier.height(10.dp))
-
-            Button(
-                onClick = onDetail,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Text(viewModel.tr("details"), fontWeight = FontWeight.Bold)
+            Badge(text = role.durationLabel(), color = BrandTeal)
+            Badge(
+                text = viewModel.tr(if (role.isLongTerm()) "long_term" else "short_term"),
+                color = BrandIndigo
+            )
+            if (role.isFundable()) {
+                Badge(
+                    text = viewModel.tr("fundable_badge"),
+                    color = Success,
+                    icon = Icons.Rounded.Check
+                )
             }
+        }
+
+        if (matched.reason.isNotBlank()) {
+            Spacer(Modifier.height(13.dp))
+            Text(
+                matched.reason,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        if (!matched.eligible) {
+            Spacer(Modifier.height(10.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Rounded.PriorityHigh,
+                    null,
+                    tint = Warning,
+                    modifier = Modifier.size(15.dp)
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    viewModel.tr("needs_edu"),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Warning
+                )
+            }
+        }
+
+        matched.centre?.let { centre ->
+            Spacer(Modifier.height(11.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Rounded.LocationOn,
+                    null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(15.dp)
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    "${centre.name}, ${centre.district}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
+        }
+
+        Spacer(Modifier.height(13.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                viewModel.tr("view_details"),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(Modifier.width(5.dp))
+            Icon(
+                Icons.AutoMirrored.Rounded.ArrowForward,
+                null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ConfidenceRing(confidence: Int, label: String) {
+    val target = (confidence.coerceIn(0, 100)) / 100f
+    val animated by animateFloatAsState(target, tween(700), label = "confidence")
+    val tone = when {
+        confidence >= 80 -> Success
+        confidence >= 60 -> BrandTeal
+        else -> BrandSaffron
+    }
+
+    Box(modifier = Modifier.size(62.dp), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(
+            progress = { 1f },
+            modifier = Modifier.size(62.dp),
+            color = tone.copy(alpha = 0.16f),
+            strokeWidth = 5.dp,
+            trackColor = Color.Transparent,
+            strokeCap = StrokeCap.Round
+        )
+        CircularProgressIndicator(
+            progress = { animated },
+            modifier = Modifier.size(62.dp),
+            color = tone,
+            strokeWidth = 5.dp,
+            trackColor = Color.Transparent,
+            strokeCap = StrokeCap.Round
+        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                "$confidence%",
+                style = MaterialTheme.typography.labelLarge,
+                color = tone
+            )
+            Text(
+                label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

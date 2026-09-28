@@ -1,212 +1,214 @@
-# Thozhil Thunai – JanDwar (Gateway for Citizens) | SIH26097
+# JanDwar — Gateway for Citizens
 
-**Voice-first, offline-capable, AI-powered livelihood discovery for SC communities under PM-AJAY**
+**Smart India Hackathon 2026 · Problem Statement 26097**
+*AI-Driven Voice Assistant for Livelihood Mapping and NSQF-Aligned Skilling
+Recommendations for SC Communities under the GIA component of PM-AJAY.*
 
-JanDwar is a premium production-ready Android app helping rural youth in Tamil Nadu discover NSQF-aligned skill training (516 QPs), verified nearby centres (20 centres), and livelihood options through a **real one-to-one conversation with Groq AI** – not forms, not deterministic keyword matching.
-
-Built for SIH26097 – 50% done base was enhanced to 100% premium, production-grade, commercial quality.
-
----
-
-## 🌟 Latest Release – v29 (2026-09-28) – JDK 25 + Pure Groq Explain
-
-**Fixed `BUG! Unsupported class file major version 69`**
-- Root cause: JDK 25 class files + Gradle 8.10.2 Groovy ASM doesn't support major 69
-- Fix: `Gradle 8.14.3` (first with Java 25 support, Groovy 4.0.22) + `AGP 8.8.2` + `Kotlin 2.0.21` + `KSP 2.0.21-1.0.28` + `compose compiler 1.5.14` + `jvmToolchain(17)` + `suppressUnsupportedCompileSdk 35`
-
-**Pure Groq One-to-One Conversation (No Deterministic Fallback)**
-- Removed `DeterministicParser` completely – you **are** talking to real Groq AI (`openai/gpt-oss-120b` → `20b` fallback)
-- Groq decides naturally what to ask (education, family occupation, current livelihood, interests, preference, district, mobility) – warm, like village elder, in user's language (ta/hi/te/kn/ml/en)
-- Understands **ANY course/branch/job** – ECE, CSE, MBA, BCA, B.Com, Nursing, Pharmacy, Fashion Design, Hotel Management, Data Science, Cyber Security, etc. – true NLU, not hardcoded list
-- End of conversation: Groq returns `final_summary` + `is_complete=true` (templated JSON)
-- **Step 3 – Ordinary code filtering (Excel-like, no AI)**: `AppRepository.matchRoles()` filters 516 QPs by education ≤3, 20km, self-employment etc.
-- **Step 4 – Groq explains Top 3**: `VoiceViewModel` calls `GroqExtractor.explainResultsWithGroq()` – Groq explains why each fits, spoken by TTS naturally in user's language
-- Each Groq response is spoken by TTS (Sarvam/Bhashini/Android)
-
-**Premium Production UI**
-- Dark mode premium, commercial-grade Compose Material3, animated voice orb (scales when listening/speaking), gradient header, conversation bubbles, top recommendations card
-- No technical debug chips – feels like real AI companion
-- Single-language UI fully switches ta/hi/te/kn/ml/en – TTS natural native
+Package: `in.jandwar.app` · minSdk 24 · targetSdk 35 · Kotlin 2.0.21 · Jetpack Compose
 
 ---
 
-## 🎯 How It Works – 4-Step Spec (As Requested)
+## 1. Build it
 
-**Step 1 – Bhashini STT / Android Voice (Free Gov, No AI training)**
-- `AndroidSpeechGateway` with BCP-47 `ta-IN, hi-IN, te-IN, kn-IN, ml-IN, en-IN`
-- Mic on/off instant toggle, self-echo detection, retry logic
-
-**Step 2 – ONLY AI Place – Send sentence to Groq API**
-- Prompt: "Pull out details: education level, current work, how far travel, job or self-employment"
-- Returns structured JSON: `edu, familyOccupation, currentLivelihood, interests, skills, preference, district, mobility, physicalConstraints, localOpportunity, next_question_native, is_complete, final_summary`
-- Real LLM empathetic contextual, not repeated fixed questions
-
-**Step 3 – Ordinary Programming Filtering Trades**
-- `AppRepository.matchRoles(UserProfile)` – Excel-like filtering:
-  - Level ≤3 for 8th, within 20km, self-employment vs wage, district, interests, family fit
-  - 516 QPs + 20 centres + districts from `assets/`
-
-**Step 4 – Tamil Spoken Answer + Groq Explanation**
-- After `is_complete=true`, `VoiceViewModel.explainResultsThenDone()`:
-  - Builds `topResultsForGroq` strings
-  - Calls `groqExtractor.explainResultsWithGroq(profile, top3, langCode)` – Groq explains warmly in langCode
-  - `ConversationController.speakResultsSummary()` speaks via Sarvam (bulbul:v1) → Bhashini → Android TTS
-  - User can ask questions, then navigates to Results screen
-
----
-
-## 🏗️ Architecture
-
-```
-[User Speech] → Android SpeechRecognizer (ta-IN etc.)
-       ↓ transcript
-TieredNluExtractor (PURE GROQ ONLY)
-  ├─ Bhashini NMT (ta→en) if needed
-  └─ GroqExtractor (gpt-oss-120b) → ProfileFragment + next_question_native
-       ↓ ProfileFragment
-VoiceViewModel.profile + AppViewModel.applyProfileFragment()
-       ↓ is_complete=true + final_summary
-AppRepository.matchRoles() – ordinary code, no AI – 516 QPs → Top 3 MatchedRole
-       ↓ Top 3 strings
-GroqExtractor.explainResultsWithGroq() – real AI explains results in user language
-       ↓ explanation text
-ConversationController.speakResultsSummary() – Sarvam/Bhashini/Android TTS
-       ↓ TTS done
-ResultsScreen – full details, fees, duration, centre contact
+```bash
+# From the project root
+./gradlew :app:assembleDebug
 ```
 
-**Tech Stack:**
-- Kotlin 2.0.21, Compose BOM 2024.02.00, Material3, Navigation Compose 2.7.6
-- Hilt 2.51.1 with KSP (not kapt), Serialization 1.6.2, OkHttp 4.12.0
-- Coroutines 1.7.3, AndroidX Core 1.12.0, Activity Compose 1.8.2
-- MinSdk 23, TargetSdk 35, CompileSdk 35, jvmToolchain 17
+The APK lands at `app/build/outputs/apk/debug/app-debug.apk`.
+
+In **Android Studio**: `File → Open…` → select this folder → wait for the Gradle
+sync → `Run ▶`. No other setup is needed.
+
+**Requirements**
+
+| | |
+|---|---|
+| JDK | 17 (Android Studio ships one; `File → Settings → Build → Gradle → Gradle JDK`) |
+| Android SDK | Platform 35 + Build-Tools 35.0.0 |
+| Gradle | 8.14.3 (the wrapper downloads it automatically) |
+| AGP | 8.7.3 |
+
+If your machine has 16 GB+ of RAM, you can speed builds up by raising the heap
+in `gradle.properties` (`org.gradle.jvmargs=-Xmx4096m`).
 
 ---
 
-## 📦 Project Structure (Kotlin Compose – Latest)
+## 2. The one optional thing you may want to fill in
 
-```
-app/src/main/java/in/jandwar/app/
-├── MainActivity.kt – NavGraph entry, Hilt
-├── ThozhilThunaiApp.kt – @HiltAndroidApp
-├── ai/
-│   ├── AiConfig.kt – loads assets/config.json (groq, bhashini, sarvam keys)
-│   ├── NluExtractor.kt – interface + ProfileFragment
-│   ├── GroqExtractor.kt – PURE GROQ only, gpt-oss-120b→20b, json_schema strict:true, reasoning_effort low, explainResultsWithGroq()
-│   ├── TieredNluExtractor.kt – PURE GROQ only (groqExtractor + bhashiniGateway), no deterministic
-│   ├── ConversationController.kt – STT/TTS state machine, self-echo detection, speakResultsSummary()
-│   ├── AndroidSpeechGateway.kt – SpeechRecognizer locale mapping
-│   ├── AndroidTtsSpeaker.kt – Android TTS fallback
-│   ├── BhashiniGateway.kt – Dhruva NMT/ASR/TTS
-│   ├── SarvamGateway.kt – bulbul:v1 premium TTS
-│   ├── SpeechGateway.kt – interface
-│   ├── ProfileFragment.kt – edu, family, current, interests, skills, pref, district, mobility
-│   └── DeterministicParser.kt – kept but NOT used (for offline pitch mock)
-├── data/
-│   ├── model/Models.kt – EducationLevel, Preference, Mobility, UserProfile, MatchedRole, ConversationMessage
-│   ├── local/AssetDataSource.kt – loads job_roles.json, centres.json, districts.json, i18n.json
-│   └── repository/AppRepository.kt – matchRoles() Excel-like filtering, interestLabel()
-├── di/AppModule.kt – Context, SharedPreferences, AssetDataSource
-├── ui/
-│   ├── theme/Color.kt, Theme.kt, Type.kt – premium dark/light
-│   ├── components/CommonComponents.kt – GradientHeader etc.
-│   ├── navigation/NavGraph.kt
-│   ├── screens/
-│   │   ├── SplashScreen.kt, OnboardingScreen.kt, LanguageScreen.kt
-│   │   ├── HomeScreen.kt, IntakeScreen.kt, VoiceScreen.kt (animated orb, conversation bubbles)
-│   │   ├── ResultsScreen.kt, DetailScreen.kt, CoursesScreen.kt, SettingsScreen.kt
-│   └── viewmodel/
-│       ├── AppViewModel.kt – language, profile, i18n tr()
-│       └── VoiceViewModel.kt – start(), explainResultsThenDone() calls Groq explain, TTS, isDone
-└── util/NetworkUtils.kt
-assets/
-├── job_roles.json – 516 QPs
-├── centres.json – 20 verified centres
-├── districts.json, i18n.json
-└── config.json – NOT in Git (you create, see CONFIG_GUIDE.md)
-```
-
----
-
-## 🔑 Configuration
-
-Create `app/src/main/assets/config.json` (NOT committed, excluded from zip):
+Open **`app/src/main/assets/config.json`**:
 
 ```json
 {
-  "bhashini_user_id": "07e29... UDYAT KEY",
-  "bhashini_inference_key": "n44PH... INFERENCE KEY",
-  "bhashini_app_id": "d0bed4a... APP ID (optional)",
-  "groq_api_key": "gsk_... YOUR GROQ KEY",
-  "sarvam_api_key": "sk_... YOUR SARVAM KEY (optional, best for Tamil TTS)"
+  "groq_api_key": "PASTE_YOUR_GROQ_API_KEY_HERE",
+  "groq_model": "llama-3.3-70b-versatile"
 }
 ```
 
-- Groq free tier: 1000 req/day gpt-oss-120b/20b, 6000 TPM, 300+ tokens/sec (fastest)
-- Bhashini: Dhruva pipeline for ta→en translation
-- Sarvam: bulbul:v1 Meera voice – most natural for Tamil/Hindi/Te/Kn/Ml
+* **Leave it as-is** → the app runs the built-in on-device conversation engine.
+  Everything works: the interview, matching, results, centres. No internet needed.
+* **Paste a free key** from <https://console.groq.com/keys> → the interview is
+  driven by a real LLM, so it flows naturally, handles digressions, and phrases
+  every question in the user's own language.
 
-See `CONFIG_GUIDE.md` and `BHASHINI_KEYS_VERIFIED.md` for portal mapping.
+The app treats placeholder text (`PASTE_…`, `your_…`, `<…>`, empty) as *no key*,
+so an unedited file never causes an error. Nothing else needs changing.
+
+> ⚠️ **Security note:** the previous revision of this repository had a live Groq
+> API key hard-coded in `get_groq_models.js`, `list_models.js` and `test_groq.js`.
+> Those files have been deleted, but the key is still in the git history —
+> **revoke it** at <https://console.groq.com/keys> and issue a new one.
 
 ---
 
-## 🛠️ Build & Run – JDK 25 Fix
+## 3. How the assistant works
 
-### Android Studio
-1. Open project, let Gradle sync (now 8.14.3 supports JDK 25)
-2. Device API 26+ recommended
-3. Run `app`
-
-### Command Line
-```bash
-# If you get major version 69 error, do:
-./gradlew --stop
-rm -rf .gradle
-./gradlew clean assembleDebug
-# APK at app/build/outputs/apk/debug/app-debug.apk
+```
+        ┌──────────────┐   speech    ┌───────────────┐
+        │ TtsSpeaker   │────────────▶│  Beneficiary  │
+        └──────▲───────┘             └───────┬───────┘
+               │                             │ voice
+       next question                         ▼
+        ┌──────┴────────────┐        ┌───────────────┐
+        │ ConversationEngine│◀───────│ VoiceListener │
+        └──────┬────────────┘  text  └───────────────┘
+               │ utterance
+               ▼
+        ┌──────────────┐    online + key    ┌────────────┐
+        │  HybridNlu   │───────────────────▶│ GroqClient │
+        └──────┬───────┘                    └────────────┘
+               │ always                            │ on failure
+               ▼                                   │
+        ┌──────────────┐                           │
+        │ OnDeviceNlu  │◀──────────────────────────┘
+        └──────┬───────┘
+               ▼
+        ┌──────────────┐
+        │ AppRepository│  → NSQF matching, skill gaps, centres, GIA funding
+        └──────────────┘
 ```
 
-**Requirements:**
-- JDK 17 or JDK 25 (Gradle 8.14.3 supports both via toolchain 17)
-- Android Studio Hedgehog+ with AGP 8.8.2
-- `compileSdk 35` – needs `android.suppressUnsupportedCompileSdk=35` in gradle.properties (already set)
+**The rule that drives the design: the assistant can never dead-end.**
 
-### Branches
-- `main` – stable v29 with JDK 25 fix + pure Groq explain
-- `arena/01a0e0fc-thozhil-thunai` – session branch, same code + zips
-- Raw zips: 
-  - https://github.com/rs-ragul/Thozhil-Thunai/raw/arena/01a0e0fc-thozhil-thunai/Thozhil-Thunai-FIXED-v29-JDK25-GROQ-EXPLAIN.zip
-  - https://github.com/rs-ragul/Thozhil-Thunai/raw/arena/01a0e0fc-thozhil-thunai/patch-v29-JDK25-GROQ-EXPLAIN.zip
+| What breaks | What the user sees |
+|---|---|
+| No API key | Scripted-but-warm on-device interview in all 6 languages |
+| No internet | Same — plus offline speech recognition where available |
+| Groq call fails mid-interview | Silently falls back for that turn; conversation continues |
+| No microphone / permission denied | Switches to typing, keeps the same conversation |
+| No TTS voice for the language | Questions stay readable on screen |
+| Speech not understood twice | Re-prompts, then offers the keyboard |
 
----
+`OnDeviceNlu` also runs on *every* cloud turn, so a district name or interest the
+LLM overlooked is still captured, and the cloud can never regress the profile.
 
-## 📊 Features Checklist – SIH26097
+### What the interview collects
 
-- [x] Voice-first: orb, STT, TTS, mic toggle instant, self-echo prevention
-- [x] Offline-capable: 516 QPs + 20 centres bundled, AssetDataSource, Android offline TTS fallback
-- [x] 516 QPs: job_roles.json NSQF
-- [x] 20 centres: centres.json verified
-- [x] 6 languages: en, ta, hi, te, kn, ml – single-language UI fully switches, TTS natural native
-- [x] PM-AJAY rules: SC community focus, honest data-gap disclosure, TAHDCO alert
-- [x] Verified honesty: shows verified centres or honest alert if none
-- [x] Premium production-ready: dark mode, Material3, commercial grade, no debug chips
+Education · family / traditional occupation · current livelihood · skills &
+interests · self-employment vs wage preference · mobility & physical constraints
+· district — the seven inputs the problem statement asks for, gathered
+conversationally rather than as a form.
 
 ---
 
-## 📝 Version History
+## 4. Matching engine (`AppRepository.matchRoles`)
 
-- **v29 (2026-09-28)**: JDK 25 fix Gradle 8.14.3 + AGP 8.8.2 + KSP + jvmToolchain 17 + VoiceViewModel Groq explains Top 3
-- **v28**: Gradle 8.14.3 attempt, pure Groq
-- **v27**: Pure Groq correct build.gradle, kapt fix attempt
-- **v26**: Pure Groq true AI, no deterministic
-- **v25**: Correct build with kapt conflict fix
-- **v22-24**: True AI any course, no fallback, ECE/CSE fix
-- **v18-21**: Premium dark UI, real Groq, no leak
+516 NSQF qualification packs scored against the profile. Every point awarded
+produces a matching `MatchFactor`, so the detail screen can explain *exactly*
+why a course surfaced.
 
-See `PROJECT_STATUS.md` for detailed status.
+| Signal | Weight |
+|---|---|
+| First interest hit / each additional | +85 / +18 |
+| Family occupation continuity | +55 |
+| Free-text skill match | +40 |
+| Current livelihood match | +32 |
+| Education requirement met / unmet | +30 / −22 per rank gap |
+| PM-AJAY GIA fundable sector | +26 |
+| Self-employment vs wage preference fit | +24 |
+| Mobility LOCAL with a centre / without | +20 / −14 |
+| Verified centre in district | +12 (+10 agri & food) |
+| Long-term pack below Class 10 | −14 |
+| Physically demanding role vs stated constraint | −55 |
+
+* Education is a **soft gate**: instead of hiding a course, the app flags
+  *"needs more schooling — ask the centre about a bridge course."*
+* Results are capped at 6 with a **max 2 per sector** diversity rule, so a
+  beneficiary sees genuine alternatives rather than six variants of one trade.
+* Confidence is normalised to 35–99 % against the best available match.
 
 ---
 
-## 📄 License & Credits
+## 5. Data (all bundled, all offline)
 
-SIH26097 – Thozhil Thunai – PM-AJAY – NSQF – Bhashini (MeitY) – Sarvam AI – Groq
+| File | Contents |
+|---|---|
+| `assets/job_roles.json` | 516 NSQF qualification packs across 7 sectors |
+| `assets/centres.json` | 20 verified training centres |
+| `assets/districts.json` | 38 TN districts (20 with a centre, 18 without) |
+| `assets/i18n.json` | 136 UI strings × 6 languages + interest vocabulary |
+| `assets/config.json` | AI key placeholder (see §2) |
+
+Languages: English, தமிழ், हिन्दी, తెలుగు, ಕನ್ನಡ, മലയാളം.
+
+PM-AJAY GIA priority domains (agriculture, food processing, construction,
+handloom & textile) account for **343 of the 516** packs; those are the ones
+badged as fundable.
+
+To change UI copy, edit `/home/user/work/gen_i18n.py`-style generators or the
+JSON directly — the repository resolves `lang → en → built-in fallback → key`,
+so a missing translation degrades instead of crashing.
+
+---
+
+## 6. Project layout
+
+```
+app/src/main/java/in/jandwar/app/
+├── JanDwarApp.kt                  @HiltAndroidApp
+├── MainActivity.kt                NavHost + transitions
+├── ai/
+│   ├── AiConfig.kt                reads assets/config.json, placeholder-aware
+│   ├── ConversationEngine.kt      speak → listen → understand → speak loop
+│   ├── GroqClient.kt              cloud LLM: interview + result narration
+│   ├── HybridNlu.kt               cloud → on-device router, never errors
+│   ├── OnDeviceNlu.kt             offline multilingual slot extraction
+│   ├── InterviewFlow.kt           conversational script, 6 languages
+│   ├── NluEngine.kt               contract
+│   ├── ProfileFragment.kt         accumulating profile + slot model
+│   ├── TtsSpeaker.kt              text-to-speech with voice selection
+│   └── VoiceListener.kt           speech recognition with typed failures
+├── data/
+│   ├── local/AssetDataSource.kt
+│   ├── model/Models.kt
+│   └── repository/AppRepository.kt matching engine + i18n
+├── di/AppModule.kt
+├── ui/
+│   ├── components/CommonComponents.kt   design system
+│   ├── navigation/NavGraph.kt
+│   ├── screens/                   10 screens
+│   ├── theme/                     colour, type, Material 3 theme
+│   └── viewmodel/
+└── util/NetworkMonitor.kt
+```
+
+---
+
+## 7. Honesty guarantees
+
+The app never invents a course, centre, fee, subsidy or batch date. When a
+district has no verified centre it says so and points at TAHDCO. Every
+recommendation screen carries the confirm-before-enrolling disclaimer, and the
+funding figure shown is the published GIA rule (up to ₹50,000 or 50 % of asset
+cost with loan, whichever is lower).
+
+Answers never leave the phone unless a Groq key is configured; with a key, only
+the conversation text is sent — no identifiers.
+
+---
+
+## 8. Historical documents
+
+`APP_SPEC.md` and `docs_JanDwar_Proposal.md` are earlier planning documents kept
+for reference. Where they disagree with this README or the code, **the code is
+authoritative** — they predate the current architecture.
