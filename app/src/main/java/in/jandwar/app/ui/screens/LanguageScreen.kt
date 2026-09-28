@@ -86,14 +86,14 @@ fun LanguageScreen(
                             label,
                             fontSize = if (code == "en") 24.sp else 27.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Ink,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Center,
                             maxLines = 2
                         )
                         Text(
                             englishNames[code] ?: code,
                             fontSize = 14.sp,
-                            color = Color(0xFF1C1F26),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -105,7 +105,7 @@ fun LanguageScreen(
         Text(
             "You can change this anytime from Settings.",
             fontSize = 14.sp,
-            color = Muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center

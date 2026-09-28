@@ -61,8 +61,8 @@ fun HomeScreen(
                 }
                 AssistChip(
                     onClick = onNavigateVoice,
-                    label = { Text(viewModel.tr("speak_button"), color = Color.White, fontSize = 12.sp) },
-                    colors = AssistChipDefaults.assistChipColors(containerColor = BrandTeal)
+                    label = { Text(viewModel.tr("speak_button"), color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold) },
+                    colors = AssistChipDefaults.assistChipColors(containerColor = MaterialTheme.colorScheme.primary)
                 )
             }
         }
@@ -75,7 +75,7 @@ fun HomeScreen(
                 Text(viewModel.tr("personalized_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                 Text(viewModel.tr("personalized_sub"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
                 TextButton(onClick = onNavigateIntake) {
-                    Text(viewModel.tr("start_intake") + "  ->", color = BrandTeal, fontWeight = FontWeight.Bold)
+                    Text(viewModel.tr("start_intake") + "  ->", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -85,7 +85,7 @@ fun HomeScreen(
                 Text(viewModel.tr("browse_title"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                 Text(viewModel.tr("browse_sub"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
                 TextButton(onClick = onNavigateCourses) {
-                    Text(viewModel.tr("browse_action") + "  ->", color = BrandTeal, fontWeight = FontWeight.Bold)
+                    Text(viewModel.tr("browse_action") + "  ->", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             }
         }

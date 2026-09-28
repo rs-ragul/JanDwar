@@ -45,7 +45,7 @@ fun CoursesScreen(
 
         PremiumCard {
             androidx.compose.foundation.layout.Column {
-                androidx.compose.material3.Text(viewModel.tr("browse_note"), fontSize = 14.sp, color = Muted)
+                androidx.compose.material3.Text(viewModel.tr("browse_note"), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.height(8.dp))
                 OutlinedTextField(
                     value = query,

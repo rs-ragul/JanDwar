@@ -97,11 +97,11 @@ fun StatCard(a: String, aLabel: String, b: String, bLabel: String) {
     PremiumCard {
         Row(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(a, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = BrandIndigo)
+                Text(a, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 Text(aLabel, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(b, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = BrandIndigo)
+                Text(b, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 Text(bLabel, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
             }
         }
@@ -143,14 +143,14 @@ fun ChipItem(text: String, selected: Boolean, onClick: () -> Unit, modifier: Mod
         onClick = onClick,
         label = { Text(text, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal) },
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = BrandTeal.copy(alpha = 0.15f),
-            selectedLabelColor = BrandIndigo,
-            containerColor = MaterialTheme.colorScheme.surface,
-            labelColor = MaterialTheme.colorScheme.onSurface
+            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         border = FilterChipDefaults.filterChipBorder(
-            borderColor = if (selected) BrandTeal else MaterialTheme.colorScheme.outline,
-            selectedBorderColor = BrandTeal,
+            borderColor = MaterialTheme.colorScheme.outline,
+            selectedBorderColor = MaterialTheme.colorScheme.primary,
             enabled = true,
             selected = selected,
             borderWidth = if (selected) 2.dp else 1.dp

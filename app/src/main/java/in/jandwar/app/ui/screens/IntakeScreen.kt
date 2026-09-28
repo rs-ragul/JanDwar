@@ -15,9 +15,7 @@ import `in`.jandwar.app.data.model.Mobility
 import `in`.jandwar.app.data.model.Preference
 import `in`.jandwar.app.ui.components.GradientHeader
 import `in`.jandwar.app.ui.components.PremiumCard
-import `in`.jandwar.app.ui.theme.BrandIndigo
 import `in`.jandwar.app.ui.theme.BrandSaffron
-import `in`.jandwar.app.ui.theme.BrandTeal
 import `in`.jandwar.app.ui.viewmodel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,11 +93,13 @@ fun IntakeScreen(
                 FilterChip(
                     selected = selected,
                     onClick = { viewModel.updateEducation(level) },
-                    label = { Text(label) },
+                    label = { Text(label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = BrandTeal.copy(alpha = 0.15f),
-                        selectedLabelColor = BrandIndigo
+                        selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
             }
@@ -117,7 +117,11 @@ fun IntakeScreen(
                         placeholder = { Text(if (viewModel.currentLang=="ta") "விவசாயம், அரசு, தையல்..." else "e.g., Farming, Government, Tailoring") },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        maxLines = 2
+                        maxLines = 2,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        )
                     )
                 }
             }
@@ -134,7 +138,11 @@ fun IntakeScreen(
                         placeholder = { Text(if (viewModel.currentLang=="ta") "மாணவர், விவசாயி, கூலி..." else "e.g., Student, Farmer, Daily wage") },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        maxLines = 2
+                        maxLines = 2,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        )
                     )
                 }
             }
@@ -151,11 +159,13 @@ fun IntakeScreen(
                 FilterChip(
                     selected = selected,
                     onClick = { viewModel.updatePreference(pref) },
-                    label = { Text(label) },
+                    label = { Text(label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = BrandTeal.copy(alpha = 0.15f),
-                        selectedLabelColor = BrandIndigo
+                        selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
             }
@@ -173,11 +183,13 @@ fun IntakeScreen(
                 FilterChip(
                     selected = selected,
                     onClick = { viewModel.updateMobility(mob) },
-                    label = { Text(label) },
+                    label = { Text(label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = BrandTeal.copy(alpha = 0.15f),
-                        selectedLabelColor = BrandIndigo
+                        selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
             }
@@ -192,7 +204,11 @@ fun IntakeScreen(
                         placeholder = { Text(if (viewModel.currentLang=="ta") "பாரமான வேலை செய்ய முடியாது..." else "e.g., Cannot do heavy lifting") },
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         shape = RoundedCornerShape(14.dp),
-                        maxLines = 2
+                        maxLines = 2,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        )
                     )
                 }
             }
@@ -227,7 +243,11 @@ fun IntakeScreen(
                         placeholder = { Text(if (viewModel.currentLang=="ta") "பால் தேவை அதிகம்..." else "e.g., Dairy demand high") },
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         shape = RoundedCornerShape(14.dp),
-                        maxLines = 3
+                        maxLines = 3,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        )
                     )
                 }
             }
@@ -241,11 +261,13 @@ fun IntakeScreen(
                 FilterChip(
                     selected = selected,
                     onClick = { viewModel.toggleInterest(chip.key) },
-                    label = { Text(chip.label) },
+                    label = { Text(chip.label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = BrandTeal.copy(alpha = 0.15f),
-                        selectedLabelColor = BrandIndigo
+                        selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
             }
@@ -265,12 +287,19 @@ fun IntakeScreen(
                 enabled = canSubmit,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = BrandIndigo)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text(viewModel.tr("submit"), fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
             if (!canSubmit) {
-                Text(viewModel.tr("no_results").ifBlank { "Please answer required questions" }, color = BrandSaffron, fontSize = 13.sp, modifier = Modifier.padding(top = 8.dp))
+                val missing = mutableListOf<String>()
+                if (viewModel.profile.education == null) missing.add(viewModel.tr("q_edu"))
+                if (viewModel.profile.preference == null) missing.add(viewModel.tr("q_pref"))
+                if (viewModel.profile.mobility == null) missing.add(viewModel.tr("q_travel"))
+                if (viewModel.profile.district.isBlank()) missing.add(viewModel.tr("q_dist"))
+                if (viewModel.profile.interests.isEmpty()) missing.add(viewModel.tr("q_int"))
+                val msg = if (missing.isEmpty()) "" else "Please complete: ${missing.joinToString(", ")}"
+                Text(msg.ifBlank { "Please answer required questions" }, color = MaterialTheme.colorScheme.error, fontSize = 13.sp, modifier = Modifier.padding(top = 8.dp))
             }
             Spacer(Modifier.height(24.dp))
         }
@@ -279,7 +308,7 @@ fun IntakeScreen(
     if (showDistrictSheet) {
         ModalBottomSheet(onDismissRequest = { showDistrictSheet = false }) {
             Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-                Text(viewModel.tr("select_district"), fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 12.dp))
+                Text(viewModel.tr("select_district"), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(bottom = 12.dp))
                 districts.forEach { district ->
                     TextButton(
                         onClick = {

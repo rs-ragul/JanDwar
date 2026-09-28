@@ -1,4 +1,4 @@
-in.jandwar.app.test.app-androidTest-0 G:\Project\JanDwar\app\build\generated\res\resValues\androidTest\debug
-in.jandwar.app.test.app-mergeDebugAndroidTestResources-1 G:\Project\JanDwar\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
-in.jandwar.app.test.app-mergeDebugAndroidTestResources-2 G:\Project\JanDwar\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
-in.jandwar.app.test.app-debugAndroidTest-3 G:\Project\JanDwar\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
+in.jandwar.app.test.app-androidTest-0 G:\Project\JanDwarNew\app\build\generated\res\resValues\androidTest\debug
+in.jandwar.app.test.app-mergeDebugAndroidTestResources-1 G:\Project\JanDwarNew\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+in.jandwar.app.test.app-mergeDebugAndroidTestResources-2 G:\Project\JanDwarNew\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+in.jandwar.app.test.app-debugAndroidTest-3 G:\Project\JanDwarNew\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources

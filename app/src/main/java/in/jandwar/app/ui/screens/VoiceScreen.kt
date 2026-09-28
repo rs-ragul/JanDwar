@@ -179,20 +179,8 @@ fun VoiceScreen(
 
         Spacer(Modifier.height(8.dp))
 
-        if (appViewModel.profile.isPartiallyComplete()) {
-            Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                appViewModel.profile.education?.let { AssistChip(onClick = {}, label = { Text(it.name, fontSize = 11.sp) }) }
-                if (appViewModel.profile.familyOccupation.isNotBlank()) {
-                    AssistChip(onClick = {}, label = { Text("Family: ${appViewModel.profile.familyOccupation.take(15)}", fontSize = 11.sp) })
-                }
-                if (appViewModel.profile.currentLivelihood.isNotBlank()) {
-                    AssistChip(onClick = {}, label = { Text("Now: ${appViewModel.profile.currentLivelihood.take(15)}", fontSize = 11.sp) })
-                }
-                if (appViewModel.profile.interests.isNotEmpty()) {
-                    AssistChip(onClick = {}, label = { Text(appViewModel.profile.interests.joinToString(), fontSize = 11.sp) })
-                }
-            }
-        }
+        // Removed debug chips - they made UI look technical, not like real AI companion
+        // Profile summary is shown via conversation history, not raw chips
 
         OutlinedTextField(
             value = typedText,
@@ -240,7 +228,7 @@ fun VoiceScreen(
             OutlinedButton(onClick = { voiceViewModel.stop(); onClose() }, modifier = Modifier.weight(1f).height(50.dp), shape = RoundedCornerShape(16.dp)) {
                 Text(appViewModel.tr("stop_listening"), fontSize = 14.sp)
             }
-            Button(onClick = { voiceViewModel.repeatQuestion() }, modifier = Modifier.weight(1f).height(50.dp), shape = RoundedCornerShape(16.dp), colors = ButtonDefaults.buttonColors(containerColor = BrandIndigo)) {
+            Button(onClick = { voiceViewModel.repeatQuestion() }, modifier = Modifier.weight(1f).height(50.dp), shape = RoundedCornerShape(16.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
                 Text(if (appViewModel.currentLang == "ta") "மீண்டும்" else "Repeat 🔁", fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }

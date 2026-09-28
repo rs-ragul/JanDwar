@@ -51,7 +51,7 @@ fun ResultsScreen(
                     Text(
                         "Family: ${viewModel.profile.familyOccupation} • Current: ${viewModel.profile.currentLivelihood}",
                         fontSize = 12.sp,
-                        color = BrandIndigo,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 4.dp)
                     )
@@ -193,9 +193,9 @@ fun CourseCard(rec: MatchedRole, viewModel: AppViewModel, onDetail: () -> Unit) 
                 onClick = onDetail,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = BrandIndigo)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text(viewModel.tr("details"))
+                Text(viewModel.tr("details"), fontWeight = FontWeight.Bold)
             }
         }
     }

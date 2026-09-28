@@ -1,26 +1,26 @@
 [
     {
-        "merged": "in.jandwar.app-debug-4:/drawable_splash_bg.xml.flat",
-        "source": "in.jandwar.app-main-6:/drawable/splash_bg.xml"
+        "merged": "in.jandwar.app-debug-56:/drawable_card_bg.xml.flat",
+        "source": "in.jandwar.app-main-58:/drawable/card_bg.xml"
     },
     {
-        "merged": "in.jandwar.app-debug-4:/drawable_logo_premium.png.flat",
-        "source": "in.jandwar.app-main-6:/drawable/logo_premium.png"
+        "merged": "in.jandwar.app-debug-56:/drawable_button_primary.xml.flat",
+        "source": "in.jandwar.app-main-58:/drawable/button_primary.xml"
     },
     {
-        "merged": "in.jandwar.app-debug-4:/drawable_chip_selected.xml.flat",
-        "source": "in.jandwar.app-main-6:/drawable/chip_selected.xml"
+        "merged": "in.jandwar.app-debug-56:/drawable_chip_plain.xml.flat",
+        "source": "in.jandwar.app-main-58:/drawable/chip_plain.xml"
     },
     {
-        "merged": "in.jandwar.app-debug-4:/drawable_button_primary.xml.flat",
-        "source": "in.jandwar.app-main-6:/drawable/button_primary.xml"
+        "merged": "in.jandwar.app-debug-56:/drawable_chip_selected.xml.flat",
+        "source": "in.jandwar.app-main-58:/drawable/chip_selected.xml"
     },
     {
-        "merged": "in.jandwar.app-debug-4:/drawable_card_bg.xml.flat",
-        "source": "in.jandwar.app-main-6:/drawable/card_bg.xml"
+        "merged": "in.jandwar.app-debug-56:/drawable_splash_bg.xml.flat",
+        "source": "in.jandwar.app-main-58:/drawable/splash_bg.xml"
     },
     {
-        "merged": "in.jandwar.app-debug-4:/drawable_chip_plain.xml.flat",
-        "source": "in.jandwar.app-main-6:/drawable/chip_plain.xml"
+        "merged": "in.jandwar.app-debug-56:/drawable_logo_premium.png.flat",
+        "source": "in.jandwar.app-main-58:/drawable/logo_premium.png"
     }
 ]

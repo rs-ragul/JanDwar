@@ -69,14 +69,14 @@ fun OnboardingScreen(
                 titles.getOrElse(page) { "Welcome" },
                 fontSize = 27.sp,
                 fontWeight = FontWeight.Bold,
-                color = Ink,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
                 bodies.getOrElse(page) { "" },
                 fontSize = 17.sp,
-                color = Muted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 4.dp, start = 4.dp, end = 4.dp)
             )

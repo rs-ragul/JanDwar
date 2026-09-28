@@ -53,7 +53,7 @@ fun SettingsScreen(
                 Button(
                     onClick = onLanguageChange,
                     shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = BrandTeal),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Change Language")
@@ -100,7 +100,7 @@ fun SettingsScreen(
                     },
                     enabled = !viewModel.isOfflineAiInstalled && !downloading,
                     shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = BrandIndigo),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(if (viewModel.isOfflineAiInstalled) "Installed" else "Download")
@@ -112,29 +112,15 @@ fun SettingsScreen(
             Column {
                 Text("TTS Engine (Important for Tamil/Hindi)", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                 Text("Current: ${viewModel.ttsEngine} - Tap to change if Tamil TTS is worst", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
-                Text("Recommended: sarvam for Tamil/Hindi (natural), android for offline", fontSize = 12.sp, color = BrandTeal, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 8.dp))
+                Text("Recommended: sarvam for Tamil/Hindi (natural), android for offline", fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 8.dp))
                 Button(
                     onClick = { showTtsDialog = true },
                     shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = BrandTeal),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Select TTS Engine")
                 }
-            }
-        }
-
-        PremiumCard {
-            Column {
-                Text("API Configuration Status", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                Text("Your config.json mapping:", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
-                Text("• UDYAT KEY (07e29...) → bhashini_user_id ✓ You have correct", fontSize = 12.sp, color = Success, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
-                Text("• INFERENCE (n44PH...) → bhashini_inference_key ✓ Correct", fontSize = 12.sp, color = Success, fontWeight = FontWeight.Bold)
-                Text("• App ID (d0bed4...) → bhashini_app_id ✓ Correct", fontSize = 12.sp, color = Success, fontWeight = FontWeight.Bold)
-                Text("• groq_api_key → Groq (AI) ✓", fontSize = 12.sp, color = Success, modifier = Modifier.padding(top = 4.dp))
-                Text("• sarvam_api_key → Sarvam (Best Tamil TTS) ✓", fontSize = 12.sp, color = Success, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(8.dp))
-                Text("Tip: For best Tamil voice, set TTS to 'sarvam'. Bhashini is for translation only.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
 

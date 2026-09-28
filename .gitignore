@@ -5,3 +5,9 @@ app/src/main/assets/config.json
 .gradle/
 build/
 app/build/
+**/build/
+local.properties
+*.iml
+.idea/
+# but keep runConfigurations
+!/.idea/runConfigurations/
