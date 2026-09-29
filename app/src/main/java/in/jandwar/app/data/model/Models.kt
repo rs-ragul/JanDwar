@@ -31,7 +31,13 @@ data class JobRole(
 
     fun isLongTerm(): Boolean = hoursInt() >= 600
 
+    /**
+     * Empty when the catalogue does not state the hours. hoursInt() falls
+     * back to 300 so ranking stays stable, but printing that number would be
+     * showing a beneficiary a default dressed up as a fact.
+     */
     fun durationLabel(): String {
+        if (!hasHours()) return ""
         val h = hoursInt()
         val months = Math.round(h / 130f).coerceAtLeast(1)
         return "$h hrs · ~$months ${if (months == 1) "month" else "months"}"

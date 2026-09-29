@@ -178,7 +178,7 @@ private fun CourseRow(
                         color = BrandIndigo
                     )
                     Spacer(Modifier.width(6.dp))
-                    Badge(text = role.durationLabel(), color = accent)
+                    Badge(text = role.durationLabel().ifBlank { "—" }, color = accent)
                     if (role.isFundable()) {
                         Spacer(Modifier.width(6.dp))
                         Badge(text = "GIA", color = Success)

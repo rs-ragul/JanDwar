@@ -225,7 +225,7 @@ private fun ResultCard(
                 color = BrandIndigo,
                 icon = Icons.Rounded.School
             )
-            Badge(text = role.durationLabel(), color = BrandTeal)
+            Badge(text = role.durationLabel().ifBlank { "—" }, color = BrandTeal)
             Badge(
                 text = viewModel.tr(if (role.isLongTerm()) "long_term" else "short_term"),
                 color = BrandIndigo

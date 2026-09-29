@@ -148,7 +148,7 @@ fun DetailScreen(
                     }
                     Spacer(Modifier.height(12.dp))
                     KeyValueRow(viewModel.tr("qp_code"), role.qp_code.ifBlank { "—" })
-                    KeyValueRow(viewModel.tr("duration"), role.durationLabel())
+                    KeyValueRow(viewModel.tr("duration"), role.durationLabel().ifBlank { "—" })
                     KeyValueRow(viewModel.tr("sector"), viewModel.sectorLabel(role.sector))
                     KeyValueRow(viewModel.tr("ssc"), role.ssc.ifBlank { "—" })
                 }

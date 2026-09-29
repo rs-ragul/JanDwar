@@ -64,6 +64,11 @@ def is_long_term(role) -> bool:
 
 
 def duration_label(role) -> str:
+    """Empty when the catalogue does not state the hours -- hours_int()
+    falls back to 300 so ranking stays stable, but showing that number to a
+    beneficiary would be presenting a default as a fact."""
+    if not any(c.isdigit() for c in str(role.get("notional_hours", ""))):
+        return ""
     h = hours_int(role)
     months = max(1, round(h / 130))
     return "%d hrs · ~%d %s" % (h, months, "month" if months == 1 else "months")

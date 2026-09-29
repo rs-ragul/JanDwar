@@ -4,39 +4,41 @@
 *AI-Driven Voice Assistant for Livelihood Mapping and NSQF-Aligned Skilling
 Recommendations for SC Communities under the GIA component of PM-AJAY.*
 
-Package: `in.jandwar.app` · minSdk 24 · targetSdk 35 · Kotlin 2.0.21 · Jetpack Compose
+Package `in.jandwar.app` · **v2.8 (versionCode 10)** · minSdk 24 · targetSdk 35
+· Kotlin 2.0.21 · Jetpack Compose
+
+> **The app is offline-first and offline-complete.** Every feature — the spoken
+> interview, slot extraction in six languages, NSQF matching, skill-gap
+> reasoning, centre lookup, funding rules — runs on the device with no network
+> and no API key. A Groq key is an *optional* upgrade that makes the
+> conversation freer; it is not required for anything.
 
 ---
 
 ## 1. Build it
 
 ```bash
-# From the project root
-./gradlew :app:assembleDebug
+./gradlew :app:assembleDebug          # → app/build/outputs/apk/debug/app-debug.apk
 ```
 
-The APK lands at `app/build/outputs/apk/debug/app-debug.apk`.
-
-In **Android Studio**: `File → Open…` → select this folder → wait for the Gradle
-sync → `Run ▶`. No other setup is needed.
-
-**Requirements**
+In **Android Studio**: `File → Open…` → select this folder → wait for the
+Gradle sync → `Run ▶`. Nothing else to configure.
 
 | | |
 |---|---|
-| JDK | 17 (Android Studio ships one; `File → Settings → Build → Gradle → Gradle JDK`) |
+| JDK | 17 |
 | Android SDK | Platform 35 + Build-Tools 35.0.0 |
-| Gradle | 8.14.3 (the wrapper downloads it automatically) |
+| Gradle | 8.14.3 (wrapper downloads it) |
 | AGP | 8.7.3 |
 
-If your machine has 16 GB+ of RAM, you can speed builds up by raising the heap
-in `gradle.properties` (`org.gradle.jvmargs=-Xmx4096m`).
+On a machine with 16 GB+ RAM, raise `org.gradle.jvmargs` in `gradle.properties`
+to `-Xmx4096m` for faster builds.
 
 ---
 
-## 2. The one optional thing you may want to fill in
+## 2. The one optional thing
 
-Open **`app/src/main/assets/config.json`**:
+`app/src/main/assets/config.json`:
 
 ```json
 {
@@ -45,19 +47,13 @@ Open **`app/src/main/assets/config.json`**:
 }
 ```
 
-* **Leave it as-is** → the app runs the built-in on-device conversation engine.
-  Everything works: the interview, matching, results, centres. No internet needed.
-* **Paste a free key** from <https://console.groq.com/keys> → the interview is
-  driven by a real LLM, so it flows naturally, handles digressions, and phrases
-  every question in the user's own language.
+* **Leave it alone** → the on-device engine runs the whole interview. This is
+  the tested, primary path.
+* **Paste a free key** from <https://console.groq.com/keys> → the LLM phrases
+  the questions and handles digressions more loosely.
 
-The app treats placeholder text (`PASTE_…`, `your_…`, `<…>`, empty) as *no key*,
-so an unedited file never causes an error. Nothing else needs changing.
-
-> ⚠️ **Security note:** the previous revision of this repository had a live Groq
-> API key hard-coded in `get_groq_models.js`, `list_models.js` and `test_groq.js`.
-> Those files have been deleted, but the key is still in the git history —
-> **revoke it** at <https://console.groq.com/keys> and issue a new one.
+Placeholder text (`PASTE_…`, `your_…`, `<…>`, empty) is treated as *no key*, so
+an unedited file never errors.
 
 ---
 
@@ -74,17 +70,18 @@ so an unedited file never causes an error. Nothing else needs changing.
         └──────┬────────────┘  text  └───────────────┘
                │ utterance
                ▼
-        ┌──────────────┐    online + key    ┌────────────┐
-        │  HybridNlu   │───────────────────▶│ GroqClient │
-        └──────┬───────┘                    └────────────┘
-               │ always                            │ on failure
-               ▼                                   │
-        ┌──────────────┐                           │
-        │ OnDeviceNlu  │◀──────────────────────────┘
+        ┌──────────────┐   key + online   ┌────────────┐
+        │  HybridNlu   │─────────────────▶│ GroqClient │   (optional)
+        └──────┬───────┘                  └─────┬──────┘
+               │ ALWAYS                         │ on any failure
+               ▼                                │
+        ┌──────────────┐                        │
+        │ OnDeviceNlu  │◀───────────────────────┘
+        │ 3 596 forms  │
         └──────┬───────┘
                ▼
         ┌──────────────┐
-        │ AppRepository│  → NSQF matching, skill gaps, centres, GIA funding
+        │ AppRepository│ → NSQF matching · skill gaps · centres · GIA funding
         └──────────────┘
 ```
 
@@ -92,30 +89,67 @@ so an unedited file never causes an error. Nothing else needs changing.
 
 | What breaks | What the user sees |
 |---|---|
-| No API key | Scripted-but-warm on-device interview in all 6 languages |
-| No internet | Same — plus offline speech recognition where available |
-| Groq call fails mid-interview | Silently falls back for that turn; conversation continues |
-| No microphone / permission denied | Switches to typing, keeps the same conversation |
+| No API key | Full on-device interview in all 6 languages |
+| No internet | Same, plus offline speech recognition where the device has the pack |
+| Groq fails mid-interview | Silent fallback for that turn; conversation continues |
+| Mic denied / absent | Switches to typing, same conversation |
 | No TTS voice for the language | Questions stay readable on screen |
-| Speech not understood twice | Re-prompts, then offers the keyboard |
+| Not understood twice | Re-prompts, then offers the keyboard |
 
-`OnDeviceNlu` also runs on *every* cloud turn, so a district name or interest the
-LLM overlooked is still captured, and the cloud can never regress the profile.
+`OnDeviceNlu` runs on **every** turn, cloud or not, so a district the LLM missed
+is still captured and the cloud can never regress the profile.
 
-### What the interview collects
+### What the interview collects — 9 slots
 
 Education · family / traditional occupation · current livelihood · skills &
-interests · self-employment vs wage preference · mobility & physical constraints
-· district — the seven inputs the problem statement asks for, gathered
-conversationally rather than as a form.
+interests · self-employment vs wage preference · mobility · physical
+constraints · **state** · **district**.
+
+State is asked, never inferred, and the district question is then scoped to
+that state: *"And which district in Kerala is your home?"*
 
 ---
 
-## 4. Matching engine (`AppRepository.matchRoles`)
+## 4. The offline NLU
 
-516 NSQF qualification packs scored against the profile. Every point awarded
-produces a matching `MatchFactor`, so the detail screen can explain *exactly*
-why a course surfaced.
+`OnDeviceNlu.kt` + `Lexicon.kt`, driven by `assets/lexicon.json` —
+**3 596 surface forms across 38 categories**, covering English, Tamil, Hindi,
+Telugu, Kannada, Malayalam in native script *and* romanised, including
+code-mixed and misspelled forms people actually speak.
+
+Matcher rules (Python in `server/app/core/lexicon.py` is the reference
+implementation; Kotlin mirrors it exactly):
+
+* one `fold()` applied to both forms and input; tokenise on whitespace
+* phrases match as substrings; Indic single words only when ≥ 4 chars;
+  Latin single words must match a whole token
+* exact matches win via a global owner index; fuzzy matching only for unseen
+  tokens, first character must agree
+* edit tolerance scales on `max(len(a), len(b))`
+* **longest matched form wins** — this replaced a precedence list that could
+  not express specificity and inverted under negation
+
+Things it gets right that a naive keyword matcher does not:
+
+| Said | Understood as |
+|---|---|
+| "college 2nd year" | Class 12 **completed**, currently a Student |
+| "12th dropout" | Class 10 completed, not a student |
+| "I studied up to 10th" | Class 10 — *not* Uttar Pradesh |
+| "I speak Tamil" | a language remark — *not* Tamil Nadu |
+| "anywhere in my district" vs "anywhere in the state" | two different mobility answers |
+| "no problem at all" | constraints answered "None", not left blank |
+
+**Never hand-edit `assets/lexicon.json`.** Edit `work/lexicon_extra.py`, run
+`python3 work/gen_lexicon.py`, then both test suites.
+
+---
+
+## 5. Matching engine (`AppRepository.matchRoles`)
+
+**476 NSQF qualification packs** scored against the profile. Every point
+produces a `MatchFactor`, so the detail screen explains exactly why a course
+surfaced.
 
 | Signal | Weight |
 |---|---|
@@ -124,91 +158,134 @@ why a course surfaced.
 | Free-text skill match | +40 |
 | Current livelihood match | +32 |
 | Education requirement met / unmet | +30 / −22 per rank gap |
-| PM-AJAY GIA fundable sector | +26 |
+| PM-AJAY GIA eligible sector | +26 |
 | Self-employment vs wage preference fit | +24 |
 | Mobility LOCAL with a centre / without | +20 / −14 |
-| Verified centre in district | +12 (+10 agri & food) |
+| Centre in district | +12 (+10 agri & food) |
 | Long-term pack below Class 10 | −14 |
 | Physically demanding role vs stated constraint | −55 |
 
-* Education is a **soft gate**: instead of hiding a course, the app flags
-  *"needs more schooling — ask the centre about a bridge course."*
-* Results are capped at 6 with a **max 2 per sector** diversity rule, so a
-  beneficiary sees genuine alternatives rather than six variants of one trade.
-* Confidence is normalised to 35–99 % against the best available match.
+* Education is a **soft gate**: a course above the person's level is flagged
+  *"needs more schooling — ask about a bridge course"*, not hidden.
+* Top 6, **max 2 per sector**, so the user sees real alternatives.
+* Confidence normalised to 35–99 % against the best available match.
 
 ---
 
-## 5. Data (all bundled, all offline)
+## 6. Data — all bundled, all offline
 
 | File | Contents |
 |---|---|
-| `assets/job_roles.json` | 516 NSQF qualification packs across 7 sectors |
-| `assets/centres.json` | 20 verified training centres |
-| `assets/districts.json` | 38 TN districts (20 with a centre, 18 without) |
-| `assets/i18n.json` | 136 UI strings × 6 languages + interest vocabulary |
-| `assets/config.json` | AI key placeholder (see §2) |
+| `assets/job_roles.json` | 540 rows → **476 usable NSQF packs**, 13 sectors |
+| `assets/centres.json` | **660 training centres** across 5 states — 294 CONFIRMED, 350 LIKELY, 16 UNVERIFIED, each with its source URL and retrieval date |
+| `assets/districts.json` | **187 districts** (185 with a centre) + `by_state` breakdown |
+| `assets/district_economy.json` | 187 rows; 52 carry a researched "what this district runs on" note |
+| `assets/gia_funding_rules.json` | PM-AJAY GIA rules researched per state, all 5 |
+| `assets/i18n.json` | **156 UI strings × 6 languages** + 17 occupation labels × 6 |
+| `assets/lexicon.json` | **3 596 NLU surface forms / 38 categories** (generated) |
+| `assets/config.json` | optional AI key placeholder |
+
+**Coverage by state**
+
+| State | Districts | Centres |
+|---|---|---|
+| Tamil Nadu | 38 | 180 |
+| Uttar Pradesh | 75 | 109 |
+| Karnataka | 31 | 142 |
+| Andhra Pradesh | 29 | 83 |
+| Kerala | 14 | 146 |
 
 Languages: English, தமிழ், हिन्दी, తెలుగు, ಕನ್ನಡ, മലയാളം.
 
-PM-AJAY GIA priority domains (agriculture, food processing, construction,
-handloom & textile) account for **343 of the 516** packs; those are the ones
-badged as fundable.
-
-To change UI copy, edit `/home/user/work/gen_i18n.py`-style generators or the
-JSON directly — the repository resolves `lang → en → built-in fallback → key`,
-so a missing translation degrades instead of crashing.
+**Funding.** `gia_funding_rules.json` records, for three of the five states,
+that the central GIA guidelines state *no* QP/sector whitelist. All 13 sectors
+in the catalogue are therefore eligible; duration decides the programme type
+(RPL 32–80 h · short-term 200–600 h · long-term > 600 h), not eligibility.
 
 ---
 
-## 6. Project layout
+## 7. Project layout
 
 ```
 app/src/main/java/in/jandwar/app/
 ├── JanDwarApp.kt                  @HiltAndroidApp
 ├── MainActivity.kt                NavHost + transitions
-├── ai/
-│   ├── AiConfig.kt                reads assets/config.json, placeholder-aware
-│   ├── ConversationEngine.kt      speak → listen → understand → speak loop
-│   ├── GroqClient.kt              cloud LLM: interview + result narration
-│   ├── HybridNlu.kt               cloud → on-device router, never errors
-│   ├── OnDeviceNlu.kt             offline multilingual slot extraction
+├── ai/                            12 files
+│   ├── AiConfig.kt                reads config.json, placeholder-aware
+│   ├── ConversationEngine.kt      speak → listen → understand → speak
+│   ├── GroqClient.kt              optional cloud LLM
+│   ├── HybridNlu.kt               router; never returns an error
+│   ├── OnDeviceNlu.kt             offline slot extraction, 6 languages
+│   ├── Lexicon.kt                 longest-match fuzzy matcher
 │   ├── InterviewFlow.kt           conversational script, 6 languages
 │   ├── NluEngine.kt               contract
-│   ├── ProfileFragment.kt         accumulating profile + slot model
-│   ├── TtsSpeaker.kt              text-to-speech with voice selection
-│   └── VoiceListener.kt           speech recognition with typed failures
-├── data/
-│   ├── local/AssetDataSource.kt
-│   ├── model/Models.kt
-│   └── repository/AppRepository.kt matching engine + i18n
+│   ├── ProfileFragment.kt         accumulating profile, 9 slots
+│   ├── TtsSpeaker.kt / VoiceListener.kt
+│   └── MicEarcon
+├── data/{local,model,repository}/
 ├── di/AppModule.kt
-├── ui/
-│   ├── components/CommonComponents.kt   design system
-│   ├── navigation/NavGraph.kt
-│   ├── screens/                   10 screens
-│   ├── theme/                     colour, type, Material 3 theme
-│   └── viewmodel/
+├── ui/{components,navigation,screens,theme,viewmodel}/   10 screens
 └── util/NetworkMonitor.kt
+
+server/          FastAPI mirror: REST + Twilio IVR + WhatsApp webhooks
+tools/           check_nlu.py · check_answers.py · extract_flow.py
+work/            generators: gen_lexicon.py · gen_i18n.py · gen_icons.py
 ```
 
 ---
 
-## 7. Honesty guarantees
+## 8. Tests
 
-The app never invents a course, centre, fee, subsidy or batch date. When a
-district has no verified centre it says so and points at TAHDCO. Every
-recommendation screen carries the confirm-before-enrolling disclaimer, and the
-funding figure shown is the published GIA rule (up to ₹50,000 or 50 % of asset
-cost with loan, whichever is lower).
+```bash
+python3 tools/check_nlu.py        # lexicon self-audit
+python3 tools/check_answers.py    # realistic spoken answers, per question
+```
 
-Answers never leave the phone unless a Groq key is configured; with a key, only
-the conversation text is sent — no identifiers.
+```
+check_nlu.py      31 NLU cases · 17 occupation labels × 6 languages
+                  2 906 / 2 906 surface forms resolve to their own detector
+
+check_answers.py  EDUCATION 56 · EDUCATION_IN_PROGRESS 20 · FAMILY_OCCUPATION 46
+                  CURRENT_LIVELIHOOD 47 · INTERESTS 48 · PREFERENCE 35
+                  MOBILITY 36 · CONSTRAINTS 38 · STATE 27
+                  TOTAL 353 / 353  (100 %)
+```
+
+`check_answers.py` is the one that matters: none of its utterances were copied
+from the lexicon, and enum slots assert the *value*, because filling a slot
+with the wrong value is worse than leaving it empty. Both exit non-zero on
+failure. Run them after **any** vocabulary change.
 
 ---
 
-## 8. Historical documents
+## 9. Low-connectivity channels (`server/`)
 
-`APP_SPEC.md` and `docs_JanDwar_Proposal.md` are earlier planning documents kept
-for reference. Where they disagree with this README or the code, **the code is
-authoritative** — they predate the current architecture.
+A FastAPI service mirrors the same engine for people with no smartphone:
+
+* `GET /api/{health,languages,roles,centres}`, `POST /api/{session,say,match}`
+* `GET|POST /ivr/voice`, `POST /ivr/{lang,turn}` — Twilio IVR, keypad wins over
+  speech, per-language Google voices (`ta-IN-Standard-C` etc.; a bare
+  `language=` attribute without an explicit `voice` is broken for every Indian
+  language)
+* `GET|POST /whatsapp/webhook` — voice notes and text
+
+See `server/IVR.md` and `render.yaml`.
+
+---
+
+## 10. Honesty guarantees
+
+Never invents a course, centre, fee, subsidy or batch date. Every centre
+carries its evidence level and source URL; where a district has no centre the
+app says so. The funding figure shown is the published GIA rule. Answers never
+leave the phone unless a Groq key is configured, and then only conversation
+text — no identifiers.
+
+---
+
+## 11. History
+
+`CHANGES.md` is the engineering log — 69 numbered entries, each with the
+symptom, the actual cause and the fix. `docs_JanDwar_Proposal.md` is an early
+planning document; where it disagrees with the code, **the code is
+authoritative**.

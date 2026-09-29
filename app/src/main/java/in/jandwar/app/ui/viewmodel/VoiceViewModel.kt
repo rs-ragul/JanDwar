@@ -104,7 +104,7 @@ class VoiceViewModel @Inject constructor(
             buildString {
                 append(m.role.job_role)
                 append(" (NSQF ").append(m.role.nsqf_level.ifBlank { "-" }).append(", ")
-                append(m.role.durationLabel()).append(")")
+                append(m.role.durationLabel().ifBlank { "-" }).append(")")
                 if (m.reason.isNotBlank()) append(" — ").append(m.reason)
                 m.centre?.let { append(" — centre: ").append(it.name).append(", ").append(it.district) }
             }

@@ -555,3 +555,95 @@ a figure that says something. Settings still lists both.
 This is the same mistake as entry 55, one release later and one size
 smaller: a whitelist that has to be edited whenever the data grows. The
 lesson holds — derive from the data, or the data will outgrow the code.
+
+### 70. Documentation brought back in line with the code
+
+`README.md` had drifted badly — it still claimed 516 roles, 20 centres,
+38 Tamil Nadu districts and 136 UI strings, figures from before the five-state
+research drop. Rewritten against the actual assets: 476 packs / 13 sectors,
+660 centres across 5 states, 187 districts, 156 × 6 strings, 3 596 lexicon
+forms, 9 interview slots. Added a section on the offline NLU (matcher rules
+and the cases it gets right), the per-state coverage table, and the test
+figures.
+
+Added `PROJECT_STATUS.md`: PS-requirement checklist, current numbers, an
+honest list of the seven known gaps, and a prioritised next-steps plan.
+
+### 71. Data-update package for the IVR/WhatsApp service; device-testing note corrected
+
+The centre research landed after the IVR service was already being built
+against the old catalogue, so the two had drifted. Packaged a drop-in update
+(`JanDwar-IVR-data-update.zip`): the eight asset JSONs, the regenerated
+`server/data/flow.json`, the server core/channel modules as a reference to
+diff against, the two test suites, and a dependency-free `verify.py` that
+checks a drop in about a second.
+
+Four of the changes are not merely "more rows" and will misbehave silently
+against old code:
+
+* `districts.json` decodes to an **object** now (`all`, `with_centre`,
+  `without_centre`, `by_state`, `note`), not a flat list. Code that iterates
+  it gets five keys instead of 187 districts.
+* The interview gained a **STATE** slot *before* DISTRICT — nine slots — and
+  district matching is state-scoped. An older `flow.json` has no STATE
+  question at all.
+* **268 of the 660 centres have no phone number**, distributed very unevenly
+  (Tamil Nadu 168/180 have one; Uttar Pradesh 17/109). A voice channel has to
+  branch on this or it reads out dead air. Numbers are also frequently two
+  values joined by `/`.
+* `job_roles.json` carries 540 rows of which **476** survive `isValidName()`.
+  If the server's filter differs from the app's by even one clause, the phone
+  and the phone-call recommend different courses.
+
+Separately, gap 1 in `PROJECT_STATUS.md` claimed the app had never been run
+on a physical device. That was wrong: every build is installed and tested on
+a real Android phone by the team. Corrected — the gap is not "untested
+hardware", it is that device behaviour (mic, TTS voices, ASR language packs)
+is only observable on that side, so the fix loop depends on symptoms being
+reported back.
+
+### 72. All 187 districts now understood in their own script; full audit added
+
+`DISTRICT_ALIASES` held native-script spellings for Tamil Nadu's 38 districts
+and nothing for the other 149 — every district in Andhra Pradesh, Karnataka,
+Kerala and Uttar Pradesh. It was written when the app was Tamil-Nadu-only and
+was never extended after the five-state research drop. A Telugu speaker
+saying "అనంతపురం", a Kannada speaker saying "ಬೆಳಗಾವಿ", a Malayalam speaker
+saying "ആലപ്പുഴ" or a Hindi speaker saying "वाराणसी" got nothing: the last
+question of the interview failed, retried twice, skipped, and the profile
+ended with no district — so no centre was shown.
+
+Worse, three of the Tamil Nadu keys did not match `districts.json` at all
+("Nilgiris" vs "The Nilgiris", "Tirupattur" vs "Tirupathur", "Villupuram" vs
+"Viluppuram"), so those three districts silently had no aliases either. 152
+districts in total.
+
+All 187 now carry their name in the script of their own state's language,
+plus the old or colloquial English name where one is still in use — Bangalore,
+Bellary, Trivandrum, Calicut, Vizag, Allahabad, Banaras, Gulbarga, Mysore,
+Shimoga, Bijapur, Faizabad, Noida, Kanpur. 363 forms, all 550 name+alias
+combinations verified to resolve to the right district, both state-scoped and
+unscoped.
+
+The data now lives in one place (`work/district_aliases.py`) and is written
+into `ai/OnDeviceNlu.kt` and `server/app/core/nlu.py` by
+`work/gen_district_aliases.py`, which refuses to write unless the key set
+exactly equals `districts.json`. That is what makes the "Nilgiris" class of
+silent miss impossible to reintroduce — the same lesson as entries 55 and 69,
+finally enforced by a generator instead of a promise.
+
+**`tools/audit.py`** — new. 37 checks across assets, geography resolution, the
+interview in all six languages, the recommender over all 187 districts, and
+Kotlin/Python parity. It found three further defects, now fixed:
+
+* `district_economy.json` keyed one district "Bhadohi (Sant Ravidas Nagar)"
+  while `districts.json` calls it "Bhadohi", so that district's economy note
+  never loaded.
+* `"u p"` was listed as a spoken form of Uttar Pradesh but could never match:
+  the detector strips the space from the form and looks the result up among
+  the input tokens, and "u p" tokenises to "u" and "p". Both engines now also
+  index the concatenation of each adjacent token pair.
+* `durationLabel()` printed "300 hrs · ~2 months" for the 90 roles whose
+  notional hours the source catalogue does not state. 300 is the ranking
+  fallback, not a fact about the course. It now returns empty and every call
+  site renders a dash, matching how `nsqf_level` was already handled.
