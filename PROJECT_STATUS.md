@@ -80,6 +80,7 @@ Three suites, all green, all runnable offline from the repo root:
 python3 tools/audit.py          37/37  whole-app functional audit
 python3 tools/check_answers.py  353/353 realistic spoken answers
 python3 tools/check_nlu.py      31 cases, 2906/2906 lexicon forms
+python3 tools/check_telephony.py 16/16  IVR audio format conversion
 ```
 
 `tools/audit.py` is the new one. It drives the real engine rather than a
@@ -101,7 +102,7 @@ sector map, and a check that no API key sits in the source.
 | 1 | **Device testing is done by you, not by me** — every build ships to a real Android phone and is tested there; I cannot reproduce device behaviour in the sandbox | Low, as long as findings come back to me: mic, TTS voices and ASR language packs are all device-specific | Report what breaks; I fix against the real symptom |
 | 2 | District economy depth only for TN (38/38) and KL (14/14); AP/KA/UP have ~4 each | "why this trade here" falls back to the centre name for ~135 districts | 1 research pass |
 | 3 | 350 of 660 centres are LIKELY, not CONFIRMED | We label it honestly, but a judge may probe | Spot-verify 20-30 by phone |
-| 4 | IVR/WhatsApp now live at `jandwar.onrender.com`, but `/ivr/audio` returns **32-bit IEEE-float WAV**; Twilio `<Play>` needs 16-bit PCM or mu-law | Playback will be static or rejected on a real call | Convert in the audio route, ~20 min |
+| 4 | IVR/WhatsApp live at `jandwar.onrender.com`; the float32-WAV playback bug is **fixed** in `adapters/telephony.py` but the deployed instance still runs the old build | Calls stay silent until the fix is redeployed | Redeploy from `main` |
 | 5 | Offline speech **recognition** still depends on the device having the language pack | Tamil/Hindi ASR may fall back to network on a bare phone | Document it; pre-install packs on the demo phone |
 | 6 | No analytics / no way to know what users actually said | Cannot show adoption evidence | Out of scope for SIH |
 | 7 | 64 malformed rows in the source catalogue are filtered, not fixed | 476 shown instead of 540 | Clean the source data |

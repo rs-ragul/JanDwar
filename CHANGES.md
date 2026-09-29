@@ -647,3 +647,50 @@ Kotlin/Python parity. It found three further defects, now fixed:
   notional hours the source catalogue does not state. 300 is the ranking
   fallback, not a fact about the course. It now returns empty and every call
   site renders a dash, matching how `nsqf_level` was already handled.
+
+### 73. /ivr/audio returned float32 WAV, which no telephony provider will play
+
+Found by actually fetching the deployed endpoint rather than trusting it:
+
+```
+curl -s "https://jandwar.onrender.com/ivr/audio?lang=ta&text=..." -o t.wav
+200  audio/wav  37002 bytes
+RIFF WAVE, format tag 3 (IEEE_FLOAT), 32-bit, mono, 8000 Hz, peak 1.006
+```
+
+Everything about that response looks healthy — 200, the right content type, a
+plausible byte count, and the file opens in any desktop player. But Twilio's
+`<Play>` accepts MP3, 16-bit PCM WAV and mu-law/a-law only. Handed 32-bit
+float it rejects the media or plays static, so the caller hears silence while
+every log line says success. The peak of 1.006 is also just over full scale
+and would have clipped audibly the moment anything quantised it.
+
+New `server/app/adapters/telephony.py` rewrites whatever the synthesiser
+returns into 8 kHz mono 16-bit PCM (or mu-law via `?fmt=ulaw`, which is what
+the PSTN carries anyway and is a quarter the bytes). It parses PCM 8/16/24,
+IEEE float 32/64, mu-law and WAVE_FORMAT_EXTENSIBLE, down-mixes to mono,
+resamples, and normalises the peak to 0.95 — but only downward, so quiet
+audio is never pumped up. Standard library only: the server has four
+dependencies, `numpy` is not one of them, and `audioop` was removed in
+Python 3.13, so neither was available to lean on.
+
+The mu-law codec is worth a note. The first version encoded at full 16-bit
+resolution and disagreed with the reference on 28 of 65 536 values, all at
+segment boundaries. G.711 works on a 14-bit magnitude and clips at 8159, not
+32635. Corrected, the encoder now matches `audioop` **exactly on all 65 536
+inputs** and the decoder on all 256 — the kind of "nearly right" that passes
+a smoke test and then sounds wrong down a phone line.
+
+Non-WAV payloads (an MP3 from a different provider) pass through untouched
+with a warning rather than being mangled, and a missing synthesiser still
+returns 404 rather than crashing. Responses now carry a one-day
+`Cache-Control`, since the same prompt in the same language is identical
+every time and Twilio refetches it on every call.
+
+`tools/check_telephony.py` — new, 16 checks: every input format converts,
+duration survives resampling, clipping is removed, quiet audio is left alone,
+stereo is down-mixed, non-WAV raises rather than corrupts, and the mu-law
+codec is compared against the reference implementation value by value.
+
+The Android app is unaffected — this is server-side only, so the v2.9 APK
+stands.

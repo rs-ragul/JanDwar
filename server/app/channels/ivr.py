@@ -28,6 +28,7 @@ from ..config import settings
 from ..core import data
 from ..core.engine import Engine, SessionStore, question
 from ..deps import get_engine, get_speech, get_store
+from ..adapters import telephony
 
 log = logging.getLogger("jandwar.ivr")
 router = APIRouter(prefix="/ivr", tags=["ivr"])
@@ -246,10 +247,31 @@ def _transcribe_url(url: str, lang: str) -> str | None:
 
 
 @router.get("/audio")
-async def audio(text: str = "", lang: str = "en"):
-    """Serves Bhashini-synthesised speech so <Play> can fetch it."""
+async def audio(text: str = "", lang: str = "en", fmt: str = "pcm16"):
+    """
+    Serves Bhashini-synthesised speech so <Play> can fetch it.
+
+    Bhashini hands back 32-bit IEEE-float WAV. Twilio's <Play> accepts MP3,
+    16-bit PCM WAV and mu-law only -- given float32 it plays static or
+    rejects the media outright, and the caller hears nothing while curl still
+    reports a cheerful 200. So everything is rewritten to 8 kHz mono 16-bit
+    PCM (or mu-law with ?fmt=ulaw) before it leaves this process.
+    """
     speech = get_speech()
     wav = speech.synthesize(text, lang) if speech.available() else None
     if not wav:
         return Response(status_code=404)
-    return Response(content=wav, media_type="audio/wav")
+
+    media = "audio/wav"
+    try:
+        before = telephony.describe(wav)
+        wav = telephony.to_telephony_wav(wav, "ulaw" if fmt == "ulaw" else "pcm16")
+        log.debug("audio %s -> %s", before, telephony.describe(wav))
+    except telephony.NotWav as e:
+        # Not a WAV we understand (an MP3, say). Passing it through is the
+        # right call -- Twilio plays MP3 natively -- but say so in the log,
+        # because silently shipping a format the provider may reject is the
+        # exact failure this function exists to prevent.
+        log.warning("audio left unconverted (%s); provider may reject it", e)
+    return Response(content=wav, media_type=media,
+                    headers={"Cache-Control": "public, max-age=86400"})
