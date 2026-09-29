@@ -22,3 +22,6 @@ captures/
 # ── OS ─────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+
+
+app/src/main/assets/config.json
