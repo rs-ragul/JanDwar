@@ -11,6 +11,6 @@
     "  3. Rebuild. Nothing else to change.",
     "Leave the placeholder text as-is to stay fully offline."
   ],
-  "groq_api_key": "PASTE_YOUR_GROQ_API_KEY_HERE",
-  "groq_model": "llama-3.3-70b-versatile"
+  "groq_api_key": "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",
+  "groq_model": "openai/gpt-oss-20b"
 }

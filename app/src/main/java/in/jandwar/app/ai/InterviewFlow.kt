@@ -213,6 +213,60 @@ object InterviewFlow {
                 "കോഴ്‌സിനായി യാത്ര ചെയ്യാൻ കഴിയുമോ, അതോ വീടിനടുത്ത് വേണോ?"
             )
         ),
+        // Asked gently and phrased so that "no" is an easy, normal answer --
+        // this is the PS's "physical constraints", not a medical interview.
+        Slot.CONSTRAINTS to mapOf(
+            "en" to listOf(
+                "Is there any health problem or physical difficulty I should keep in mind? If there is none, just say no.",
+                "One more thing — any health issue that makes heavy work hard for you? It is perfectly fine to say no."
+            ),
+            "ta" to listOf(
+                "நான் கவனத்தில் கொள்ள வேண்டிய ஏதேனும் உடல்நலப் பிரச்சினை அல்லது உடல் ரீதியான சிரமம் உள்ளதா? இல்லையென்றால் இல்லை என்று சொல்லுங்கள்.",
+                "இன்னொரு விஷயம் — கனமான வேலை செய்ய கஷ்டமாக இருக்கும் ஏதேனும் உடல்நலக் குறைவு உண்டா? இல்லை என்று சொல்வதில் தவறில்லை."
+            ),
+            "hi" to listOf(
+                "क्या कोई स्वास्थ्य समस्या या शारीरिक कठिनाई है जो मुझे ध्यान में रखनी चाहिए? न हो तो बस ना कह दीजिए.",
+                "एक और बात — कोई ऐसी तकलीफ जिससे भारी काम मुश्किल हो? ना कहना बिल्कुल ठीक है."
+            ),
+            "te" to listOf(
+                "నేను గుర్తుంచుకోవలసిన ఏదైనా ఆరోగ్య సమస్య లేదా శారీరక ఇబ్బంది ఉందా? లేకపోతే లేదు అని చెప్పండి.",
+                "ఇంకొక విషయం — బరువైన పని కష్టం చేసే ఏదైనా ఆరోగ్య సమస్య ఉందా? లేదు అని చెప్పడం పూర్తిగా సరైనదే."
+            ),
+            "kn" to listOf(
+                "ನಾನು ಗಮನದಲ್ಲಿ ಇಟ್ಟುಕೊಳ್ಳಬೇಕಾದ ಯಾವುದೇ ಆರೋಗ್ಯ ಸಮಸ್ಯೆ ಅಥವಾ ದೈಹಿಕ ತೊಂದರೆ ಇದೆಯೇ? ಇಲ್ಲದಿದ್ದರೆ ಇಲ್ಲ ಎಂದು ಹೇಳಿ.",
+                "ಇನ್ನೊಂದು ವಿಷಯ — ಭಾರದ ಕೆಲಸ ಕಷ್ಟವಾಗಿಸುವ ಯಾವುದೇ ಆರೋಗ್ಯ ಸಮಸ್ಯೆ ಇದೆಯೇ? ಇಲ್ಲ ಎನ್ನುವುದು ಸಂಪೂರ್ಣ ಸರಿ."
+            ),
+            "ml" to listOf(
+                "ഞാൻ ഓർത്തുവയ്ക്കേണ്ട എന്തെങ്കിലും ആരോഗ്യ പ്രശ്നമോ ശാരീരിക ബുദ്ധിമുട്ടോ ഉണ്ടോ? ഇല്ലെങ്കിൽ ഇല്ല എന്ന് പറഞ്ഞാൽ മതി.",
+                "ഒരു കാര്യം കൂടി — കനത്ത ജോലി പ്രയാസമാക്കുന്ന എന്തെങ്കിലും ബുദ്ധിമുട്ട് ഉണ്ടോ? ഇല്ല എന്ന് പറയുന്നതിൽ ഒരു കുഴപ്പവുമില്ല."
+            )
+        ),
+        Slot.STATE to mapOf(
+            "en" to listOf(
+                "Which state do you live in? I have centres in Tamil Nadu, Kerala, Karnataka, Andhra Pradesh and Uttar Pradesh.",
+                "Before I look for centres — which state is your home in? Tamil Nadu, Kerala, Karnataka, Andhra Pradesh or Uttar Pradesh?"
+            ),
+            "ta" to listOf(
+                "நீங்கள் எந்த மாநிலத்தில் வசிக்கிறீர்கள்? தமிழ்நாடு, கேரளா, கர்நாடகா, ஆந்திரப் பிரதேசம், உத்தரப் பிரதேசம் ஆகியவற்றில் மையங்கள் உள்ளன.",
+                "மையங்களைத் தேடும் முன் — உங்கள் ஊர் எந்த மாநிலத்தில்? தமிழ்நாடு, கேரளா, கர்நாடகா, ஆந்திரா அல்லது உத்தரப் பிரதேசமா?"
+            ),
+            "hi" to listOf(
+                "आप किस राज्य में रहते हैं? मेरे पास तमिलनाडु, केरल, कर्नाटक, आंध्र प्रदेश और उत्तर प्रदेश के केंद्र हैं।",
+                "केंद्र ढूंढने से पहले — आपका घर किस राज्य में है? तमिलनाडु, केरल, कर्नाटक, आंध्र प्रदेश या उत्तर प्रदेश?"
+            ),
+            "te" to listOf(
+                "మీరు ఏ రాష్ట్రంలో నివసిస్తున్నారు? తమిళనాడు, కేరళ, కర్ణాటక, ఆంధ్రప్రదేశ్, ఉత్తరప్రదేశ్‌లలో కేంద్రాలు ఉన్నాయి.",
+                "కేంద్రాలు వెతకడానికి ముందు — మీ ఇల్లు ఏ రాష్ట్రంలో ఉంది? తమిళనాడు, కేరళ, కర్ణాటక, ఆంధ్రప్రదేశ్ లేదా ఉత్తరప్రదేశ్?"
+            ),
+            "kn" to listOf(
+                "ನೀವು ಯಾವ ರಾಜ್ಯದಲ್ಲಿ ವಾಸಿಸುತ್ತೀರಿ? ತಮಿಳುನಾಡು, ಕೇರಳ, ಕರ್ನಾಟಕ, ಆಂಧ್ರಪ್ರದೇಶ ಮತ್ತು ಉತ್ತರ ಪ್ರದೇಶದಲ್ಲಿ ಕೇಂದ್ರಗಳಿವೆ.",
+                "ಕೇಂದ್ರ ಹುಡುಕುವ ಮೊದಲು — ನಿಮ್ಮ ಮನೆ ಯಾವ ರಾಜ್ಯದಲ್ಲಿದೆ? ತಮಿಳುನಾಡು, ಕೇರಳ, ಕರ್ನಾಟಕ, ಆಂಧ್ರಪ್ರದೇಶ ಅಥವಾ ಉತ್ತರ ಪ್ರದೇಶ?"
+            ),
+            "ml" to listOf(
+                "നിങ്ങൾ ഏത് സംസ്ഥാനത്താണ് താമസിക്കുന്നത്? തമിഴ്‌നാട്, കേരളം, കർണാടക, ആന്ധ്രാപ്രദേശ്, ഉത്തർപ്രദേശ് എന്നിവിടങ്ങളിൽ കേന്ദ്രങ്ങളുണ്ട്.",
+                "കേന്ദ്രം തിരയുന്നതിന് മുൻപ് — നിങ്ങളുടെ വീട് ഏത് സംസ്ഥാനത്താണ്? തമിഴ്‌നാട്, കേരളം, കർണാടക, ആന്ധ്രാപ്രദേശ് അതോ ഉത്തർപ്രദേശോ?"
+            )
+        ),
         Slot.DISTRICT to mapOf(
             "en" to listOf(
                 "Which district do you live in?",
@@ -243,6 +297,73 @@ object InterviewFlow {
 
     fun question(slot: Slot, lang: String, seed: Int = 0): String =
         pick(QUESTIONS[slot] ?: emptyMap(), lang, seed)
+
+    /**
+     * Same as [question], but the district prompt names the state the person
+     * already gave. "Which district of Kerala?" both sounds like someone who
+     * was listening and stops the answer being matched against 187 districts
+     * when only 14 are possible.
+     */
+    fun question(slot: Slot, lang: String, seed: Int, state: String?): String {
+        if (slot == Slot.DISTRICT && !state.isNullOrBlank()) {
+            return pick(DISTRICT_IN_STATE, lang, seed).replace("%s", stateLabel(state, lang))
+        }
+        return question(slot, lang, seed)
+    }
+
+    private val DISTRICT_IN_STATE = mapOf(
+        "en" to listOf(
+            "Which district of %s do you live in?",
+            "And which district in %s is your home?"
+        ),
+        "ta" to listOf(
+            "%s மாநிலத்தில் எந்த மாவட்டத்தில் வசிக்கிறீர்கள்?",
+            "%s-ல் உங்கள் ஊர் எந்த மாவட்டத்தில் உள்ளது?"
+        ),
+        "hi" to listOf(
+            "%s के किस जिले में आप रहते हैं?",
+            "%s में आपका घर किस जिले में है?"
+        ),
+        "te" to listOf(
+            "%s లోని ఏ జిల్లాలో మీరు నివసిస్తున్నారు?",
+            "%s లో మీ ఇల్లు ఏ జిల్లాలో ఉంది?"
+        ),
+        "kn" to listOf(
+            "%s ರಾಜ್ಯದ ಯಾವ ಜಿಲ್ಲೆಯಲ್ಲಿ ನೀವು ವಾಸಿಸುತ್ತೀರಿ?",
+            "%s ನಲ್ಲಿ ನಿಮ್ಮ ಮನೆ ಯಾವ ಜಿಲ್ಲೆಯಲ್ಲಿದೆ?"
+        ),
+        "ml" to listOf(
+            "%s ലെ ഏത് ജില്ലയിലാണ് നിങ്ങൾ താമസിക്കുന്നത്?",
+            "%s ൽ നിങ്ങളുടെ വീട് ഏത് ജില്ലയിലാണ്?"
+        )
+    )
+
+    /** English state name rendered in the interview language. */
+    fun stateLabel(state: String, lang: String): String =
+        STATE_LABELS[state]?.get(lang) ?: state
+
+    private val STATE_LABELS: Map<String, Map<String, String>> = mapOf(
+        "Tamil Nadu" to mapOf(
+            "en" to "Tamil Nadu", "ta" to "தமிழ்நாடு", "hi" to "तमिलनाडु",
+            "te" to "తమిళనాడు", "kn" to "ತಮಿಳುನಾಡು", "ml" to "തമിഴ്‌നാട്"
+        ),
+        "Kerala" to mapOf(
+            "en" to "Kerala", "ta" to "கேரளா", "hi" to "केरल",
+            "te" to "కేరళ", "kn" to "ಕೇರಳ", "ml" to "കേരളം"
+        ),
+        "Karnataka" to mapOf(
+            "en" to "Karnataka", "ta" to "கர்நாடகா", "hi" to "कर्नाटक",
+            "te" to "కర్ణాటక", "kn" to "ಕರ್ನಾಟಕ", "ml" to "കർണാടക"
+        ),
+        "Andhra Pradesh" to mapOf(
+            "en" to "Andhra Pradesh", "ta" to "ஆந்திரப் பிரதேசம்", "hi" to "आंध्र प्रदेश",
+            "te" to "ఆంధ్రప్రదేశ్", "kn" to "ಆಂಧ್ರಪ್ರದೇಶ", "ml" to "ആന്ധ്രാപ്രദേശ്"
+        ),
+        "Uttar Pradesh" to mapOf(
+            "en" to "Uttar Pradesh", "ta" to "உத்தரப் பிரதேசம்", "hi" to "उत्तर प्रदेश",
+            "te" to "ఉత్తరప్రదేశ్", "kn" to "ಉತ್ತರ ಪ್ರದೇಶ", "ml" to "ഉത്തർപ്രദേശ്"
+        )
+    )
 
     // ── Acknowledgements ────────────────────────────────────────────────────
 

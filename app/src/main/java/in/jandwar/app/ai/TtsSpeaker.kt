@@ -3,6 +3,7 @@ package `in`.jandwar.app.ai
 import android.content.Context
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.os.SystemClock
 import android.speech.tts.UtteranceProgressListener
 import android.speech.tts.Voice
 import android.util.Log
@@ -20,7 +21,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class TtsSpeaker @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val earcon: MicEarcon
 ) {
     private var tts: TextToSpeech? = null
     private var ready = false
@@ -134,19 +136,55 @@ class TtsSpeaker @Inject constructor(
         return s
     }
 
+    /**
+     * True from the moment we ask the engine to speak until it reports done.
+     *
+     * The recogniser must never be started while this is set, or it
+     * transcribes the assistant's own voice.
+     */
+    @Volatile
+    private var speaking = false
+
+    /**
+     * When the engine last reported `onDone`, or 0 if speech was hard-stopped.
+     *
+     * `onDone` fires when *synthesis* completes, which is a beat before the
+     * audio has drained out of the speaker. Callers must keep the mic shut for
+     * a short tail after this timestamp. A hard `stop()` flushes the audio
+     * track immediately, so it records 0 to mean "no tail, safe right now".
+     */
+    @Volatile
+    private var finishedAt = 0L
+
+    fun isSpeaking(): Boolean = speaking
+
+    /** Elapsed-realtime of the last natural end of speech; 0 if hard-stopped. */
+    fun finishedAt(): Long = finishedAt
+
     /** Speaks [text]; [onDone] always fires exactly once, even on failure. */
     fun speak(text: String, onDone: () -> Unit) {
+        // The recogniser's beeps are suppressed by muting the streams that
+        // carry them -- which includes the one speech comes out of. Releasing
+        // here guarantees the assistant is always audible no matter how fast
+        // the reply follows the answer, and brings any pending closing blip
+        // forward so it lands before the reply rather than over it.
+        earcon.releaseForSpeech()
         val engine = tts
         val clean = clean(text)
         if (!ready || engine == null || clean.isBlank()) {
+            speaking = false
+            finishedAt = 0L
             onDone()
             return
         }
+        speaking = true
         val id = "jd_${System.nanoTime()}"
         var delivered = false
         val finishOnce = {
             if (!delivered) {
                 delivered = true
+                speaking = false
+                finishedAt = SystemClock.elapsedRealtime()
                 onDone()
             }
         }
@@ -196,6 +234,9 @@ class TtsSpeaker @Inject constructor(
             tts?.stop()
         } catch (_: Exception) {
         }
+        // A hard stop flushes the audio track, so there is no tail to wait out.
+        speaking = false
+        finishedAt = 0L
     }
 
     fun shutdown() {

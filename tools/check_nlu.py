@@ -171,6 +171,76 @@ def check_occupation_labels():
     return 1 if bad else 0
 
 
+def check_every_form_resolves():
+    """
+    Every surface form resolves to its own detector.
+
+    The point of this is regression pressure on *adding vocabulary*. Slang is
+    the one part of this system that will keep growing, and each new word is a
+    chance to collide with a category that already exists. The failures this
+    caught when the lexicon went from 1,480 to 3,158 forms were not cosmetic:
+
+      "+2"                     -> None    (Class 12 in Tamil Nadu, unmatched)
+      "veliyoor poga mudiyathu"-> state   (means *cannot* leave town)
+      "baahar nahi ja sakta"   -> state   (means *cannot* go outside)
+
+    The mobility ones inverted the answer: a person who cannot leave their
+    village was recorded as willing to travel anywhere in the state, and the
+    recommender then sent them to a centre in another district. A category
+    that cannot recognise its own vocabulary is worse than an empty one,
+    because it fails silently.
+    """
+    import os
+    import sys as _sys
+    server = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "server")
+    server = os.path.normpath(server)
+    if server not in _sys.path:
+        _sys.path.insert(0, server)
+    from app.core import data, nlu as N
+    e = N.Nlu()
+    raw = data.lexicon_forms()
+
+    EDU = dict(N.EDU_ORDER)
+    OCC = dict(N.OCCUPATION_ORDER)
+    PREF = {"pref.self_strong": "pref_self", "pref.self_weak": "pref_self",
+            "pref.wage_strong": "pref_wage", "pref.wage_weak": "pref_wage"}
+    MOB = {"mob.state": "state", "mob.anywhere": "state",
+           "mob.district": "district", "mob.local": "local"}
+
+    fails, checked = [], 0
+    for cat, flist in raw.items():
+        for f in flist:
+            s = N.normalise(f)
+            checked += 1
+            if cat in EDU:
+                got, want = e.detect_education(s), EDU[cat]
+            elif cat in PREF:
+                got, want = e.detect_preference(s), PREF[cat]
+            elif cat in MOB:
+                got, want = e.detect_mobility(s), MOB[cat]
+            elif cat.startswith("interest."):
+                want = cat.split(".", 1)[1]
+                got = want if want in e.detect_interests(s) else e.detect_interests(s)
+            elif cat.startswith("occ."):
+                want = OCC.get(cat)
+                if not want:
+                    checked -= 1
+                    continue
+                got = e.detect_occupation(s)
+            else:
+                checked -= 1          # markers are context-dependent
+                continue
+            if got != want:
+                fails.append((cat, f, want, got))
+
+    if fails:
+        for cat, f, want, got in fails[:25]:
+            print("  FAIL %-20s %-28s want=%-14s got=%s" % (cat, f, want, got))
+        raise SystemExit("%d of %d surface forms do not resolve to their own "
+                         "detector" % (len(fails), checked))
+    print("all %d surface forms resolve to their own detector" % checked)
+
+
 def main():
     bad = 0
     for fn, text, want in CASES:
@@ -184,7 +254,11 @@ def main():
         return 1
     print("all %d NLU cases pass (%d surface forms in lexicon)"
           % (total, sum(len(v) for v in LEX.values())))
-    return check_occupation_labels()
+    rc = check_occupation_labels()
+    if rc:
+        return rc
+    check_every_form_resolves()
+    return 0
 
 
 if __name__ == "__main__":

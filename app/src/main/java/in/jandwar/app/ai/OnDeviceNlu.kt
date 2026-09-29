@@ -28,7 +28,11 @@ class OnDeviceNlu @Inject constructor(
         if (text.isEmpty()) return frag
         val s = normalise(text)
 
-        frag.district = detectDistrict(s, text)
+        frag.state = detectState(s, text)
+        frag.district = detectDistrict(s, text, frag.state)
+        // A recognised district settles the state even when the person never
+        // named it — "I'm in Ernakulam" is unambiguous.
+        if (frag.state == null) frag.district?.let { frag.state = stateOfDistrict(it) }
         frag.edu = detectEducation(s)
         // Strict here: this utterance may be answering something else
         // entirely, and a loose read of "I work in the district office"
@@ -61,8 +65,22 @@ class OnDeviceNlu @Inject constructor(
         val s = normalise(text)
 
         when (slot) {
-            ProfileFragment.Slot.EDUCATION ->
-                detectEducationLoose(s)?.let { frag.edu = it }
+            ProfileFragment.Slot.EDUCATION -> {
+                detectEducationLoose(s)?.let {
+                    // Record what was actually *completed*. "college 2nd
+                    // year" mentions a degree but has finished Class 12, and
+                    // reading it as `graduate` put the person at the top
+                    // education rank and offered them courses they cannot
+                    // yet enrol in. "12th dropout" completed Class 10.
+                    frag.edu = if (isInProgress(s) || isDropout(s))
+                        IN_PROGRESS_DOWNGRADE[it] ?: it else it
+                }
+                // Still enrolled is also a fact about their livelihood, and
+                // it answers a question we would otherwise ask again.
+                if (isInProgress(s) && !isDropout(s) && frag.currentLivelihood == null) {
+                    frag.currentLivelihood = "Student"
+                }
+            }
 
             ProfileFragment.Slot.FAMILY_OCCUPATION ->
                 if (!frag.hasFamilyOccupation()) {
@@ -87,18 +105,64 @@ class OnDeviceNlu @Inject constructor(
             ProfileFragment.Slot.MOBILITY ->
                 detectMobilityLoose(s)?.let { frag.mobility = it }
 
-            ProfileFragment.Slot.DISTRICT -> Unit // district needs an exact hit
+            // "No" is a real answer here, not a failure to understand. Without
+            // this the slot would stay empty and the interview would ask again.
+            ProfileFragment.Slot.CONSTRAINTS ->
+                frag.physicalConstraints = when {
+                    hasExact(s, "marker.constraint") -> text.take(120)
+                    has(s, "marker.no") -> NO_CONSTRAINT
+                    has(s, "marker.yes") -> text.take(120)
+                    // Anything else volunteered is kept verbatim; a blank or
+                    // unintelligible reply leaves the slot open to re-ask.
+                    text.length >= 2 -> text.take(120)
+                    else -> null
+                }
+
+            // A wrong guess here sends someone to a centre in another state,
+            // so the generic pass stays strict; only when this *is* the
+            // question do "TN", "AP", "UP" count as answers.
+            ProfileFragment.Slot.STATE ->
+                if (!frag.hasState()) frag.state = extractStateAnswer(text)
+
+            ProfileFragment.Slot.DISTRICT -> Unit
         }
         return frag
     }
 
+    /**
+     * District answer interpreted inside a state the user already named.
+     *
+     * Scoping matters twice over: it removes cross-state false hits, and it
+     * lets a short or misheard reply be resolved against 14–75 candidates
+     * instead of 187.
+     */
+    fun extractDistrictIn(raw: String, state: String): String? {
+        val text = raw.trim()
+        if (text.isEmpty()) return null
+        return detectDistrict(normalise(text), text, state)
+    }
+
+    /** All districts of a state, for the caller to offer as choices. */
+    fun districtsOfState(state: String): List<String> =
+        try {
+            assetDataSource.loadDistricts().districtsOf(state)
+        } catch (e: Exception) {
+            emptyList()
+        }
+
+    companion object {
+        /** Sentinel stored when the user says they have no difficulty. */
+        const val NO_CONSTRAINT = "None"
+    }
+
     // ── Normalisation ───────────────────────────────────────────────────────
 
-    private fun normalise(t: String): String =
-        t.lowercase()
-            .replace(Regex("[\\p{Punct}&&[^+]]"), " ")
-            .replace(Regex("\\s+"), " ")
-            .trim()
+    /**
+     * Delegates to [Lexicon.fold] so the utterance and the lexicon forms are
+     * normalised by one function. Two near-identical copies is how every
+     * punctuated form became dead data last time.
+     */
+    private fun normalise(t: String): String = Lexicon.fold(t)
 
     private fun String.hasAny(vararg words: String): Boolean =
         words.any { this.contains(it) }
@@ -133,8 +197,37 @@ class OnDeviceNlu @Inject constructor(
         "edu.class5" to "class5"
     )
 
-    private fun detectEducation(s: String): String? =
-        EDU_ORDER.firstOrNull { (key, _) -> has(s, key) }?.second
+    private val EDU_KEYS = EDU_ORDER.map { it.first }
+
+    /**
+     * Longest matched surface form wins, not list order.
+     *
+     * "pre university" contains "university", so an ordered scan reported
+     * `graduate` for a Class 12 answer. Ties fall back to [EDU_ORDER].
+     */
+    /**
+     * What a person has *completed* when they are still mid-course. Someone
+     * in their second year of a degree has finished Class 12, not the degree.
+     */
+    private val IN_PROGRESS_DOWNGRADE = mapOf(
+        "graduate" to "class12",
+        "iti_diploma" to "class10",
+        "class12" to "class10",
+        "class10" to "class8",
+        "class8" to "class5",
+        "class5" to "class5"
+    )
+
+    /** Still enrolled - "college 2nd year", "studying", "final year". */
+    private fun isInProgress(s: String): Boolean = has(s, "marker.in_progress")
+
+    /** Left before finishing - completed only the level below, not a student. */
+    private fun isDropout(s: String): Boolean = has(s, "marker.dropout")
+
+    private fun detectEducation(s: String): String? {
+        val key = lex.bestMatch(s, EDU_KEYS) ?: return null
+        return EDU_ORDER.firstOrNull { it.first == key }?.second
+    }
 
     private fun detectEducationLoose(s: String): String? {
         detectEducation(s)?.let { return it }
@@ -189,12 +282,30 @@ class OnDeviceNlu @Inject constructor(
      * consulted *before* the generic one. The bare "anywhere" then means the
      * widest option, which is what a speaker who volunteers it intends.
      */
-    private fun detectMobility(s: String): String? = when {
-        has(s, "mob.state") -> "state"
-        has(s, "mob.district") -> "district"
-        has(s, "mob.local") -> "local"
-        has(s, "mob.anywhere") -> "state"
-        else -> null
+    private val MOB_ORDER = listOf(
+        "mob.state" to "state",
+        "mob.district" to "district",
+        "mob.local" to "local",
+        "mob.anywhere" to "state"
+    )
+
+    /**
+     * Longest matched form wins, exactly as for education.
+     *
+     * Precedence cannot express specificity, and here it was inverting the
+     * answer. "வெளியூர் போக முடியாது" -- *cannot* go out of town --
+     * contains the bare word "வெளியூர்" (out-of-town), which is a
+     * `mob.state` form, so a state-first scan recorded someone who cannot
+     * leave their village as willing to travel anywhere in the state, and the
+     * recommender then offered them a course in another district. Hindi
+     * "बाहर नहीं जा सकता" (contains "बाहर") failed the same way.
+     *
+     * The negated phrase is always the longer match, so longest-wins reads
+     * the negation correctly without a separate negation parser.
+     */
+    private fun detectMobility(s: String): String? {
+        val cat = lex.bestMatch(s, MOB_ORDER.map { it.first }) ?: return null
+        return MOB_ORDER.firstOrNull { it.first == cat }?.second
     }
 
     /** Only unmistakable evidence, for utterances answering a different question. */
@@ -322,14 +433,112 @@ class OnDeviceNlu @Inject constructor(
         }
     }
 
-    private fun detectDistrict(s: String, original: String): String? {
+    private fun detectDistrict(s: String, original: String, state: String? = null): String? {
         val lowerOriginal = original.lowercase()
+        val allowed: Set<String>? = state
+            ?.takeIf { it.isNotBlank() }
+            ?.let { districtsOfState(it).toSet().takeIf { set -> set.isNotEmpty() } }
         // Longest form first so "Tiruvannamalai" wins over "Tiruvallur"-like prefixes.
         return districtIndex
+            .filter { allowed == null || allowed.contains(it.first) }
             .flatMap { (name, forms) -> forms.map { name to it } }
             .sortedByDescending { it.second.length }
             .firstOrNull { (_, form) -> s.contains(form) || lowerOriginal.contains(form) }
             ?.first
+    }
+
+    // ── State ───────────────────────────────────────────────────────────────
+
+    private val stateOfDistrictIndex: Map<String, String> by lazy {
+        val out = HashMap<String, String>()
+        try {
+            assetDataSource.loadDistricts().by_state.forEach { (st, d) ->
+                d.all.forEach { out[it.lowercase()] = st }
+            }
+        } catch (e: Exception) {
+            // leave empty; state simply stays unknown and gets asked
+        }
+        out
+    }
+
+    fun stateOfDistrict(district: String): String? =
+        stateOfDistrictIndex[district.trim().lowercase()]
+
+    /**
+     * English state name -> spoken forms across the six languages.
+     *
+     * Deliberately hand-written rather than generated: these are the five
+     * states the catalogue covers, people say them in many ways ("TN",
+     * "AP", "Andhra", "UP", "Kerala"), and a wrong reading here silently
+     * routes someone to centres 2000 km away.
+     */
+    private val STATE_FORMS: Map<String, List<String>> = mapOf(
+        "Tamil Nadu" to listOf(
+            "tamil nadu", "tamilnadu", "tamil naadu", "tn", "tamil",
+            "தமிழ்நாடு", "தமிழ் நாடு", "तमिलनाडु", "तमिल नाडु",
+            "తమిళనాడు", "ತಮಿಳುನಾಡು", "തമിഴ്നാട്", "തമിഴ്‌നാട്"
+        ),
+        "Kerala" to listOf(
+            "kerala", "keralam", "kerela",
+            "கேரளா", "கேரளம்", "केरल", "केरला",
+            "కేరళ", "ಕೇರಳ", "കേരളം", "കേരള"
+        ),
+        "Karnataka" to listOf(
+            "karnataka", "karnatak", "karnataka state",
+            "கர்நாடகா", "கர்நாடகம்", "कर्नाटक", "कर्नाटका",
+            "కర్ణాటక", "ಕರ್ನಾಟಕ", "കർണാടക", "കർണ്ണാടക"
+        ),
+        "Andhra Pradesh" to listOf(
+            "andhra pradesh", "andhrapradesh", "andhra", "ap", "andra",
+            "ஆந்திரப் பிரதேசம்", "ஆந்திரா", "आंध्र प्रदेश", "आंध्रप्रदेश", "आंध्रा",
+            "ఆంధ్రప్రదేశ్", "ఆంధ్ర", "ಆಂಧ್ರಪ್ರದೇಶ", "ಆಂಧ್ರ", "ആന്ധ്രാപ്രദേശ്", "ആന്ധ്ര"
+        ),
+        "Uttar Pradesh" to listOf(
+            "uttar pradesh", "uttarpradesh", "up", "u p", "uttra pradesh", "utter pradesh",
+            "உத்தரப் பிரதேசம்", "உத்திரப் பிரதேசம்", "उत्तर प्रदेश", "उत्तरप्रदेश", "यूपी",
+            "ఉత్తరప్రదేశ్", "ಉತ್ತರ ಪ್ರದೇಶ", "ഉത്തർപ്രദേശ്", "ഉത്തര്‍പ്രദേശ്"
+        )
+    )
+
+    /**
+     * Ambiguous forms, only honoured when the person was *just asked* which
+     * state they live in.
+     *
+     * "up" is the reason this set exists: "I studied up to 10th" would
+     * otherwise put a Tamil speaker in Uttar Pradesh. "tamil" is a language
+     * as often as a place, and "ap" collides with ordinary speech. Inside the
+     * state question they are exactly what people say, so they are matched
+     * there — as whole tokens, never as substrings.
+     */
+    private val AMBIGUOUS_STATE_FORMS = setOf("tn", "ap", "up", "u p", "tamil")
+
+    /**
+     * @param allowAmbiguous true only when answering the state question.
+     */
+    private fun detectState(s: String, original: String, allowAmbiguous: Boolean = false): String? {
+        val lowerOriginal = original.lowercase()
+        val tokens = (s + " " + lowerOriginal)
+            .split(Regex("[^\\p{L}\\p{N}]+"))
+            .filter { it.isNotEmpty() }
+            .toSet()
+        return STATE_FORMS.entries
+            .flatMap { (name, forms) -> forms.map { name to it } }
+            .sortedByDescending { it.second.length }
+            .firstOrNull { (_, form) ->
+                if (form in AMBIGUOUS_STATE_FORMS) {
+                    allowAmbiguous && tokens.contains(form.replace(" ", ""))
+                } else {
+                    s.contains(form) || lowerOriginal.contains(form)
+                }
+            }
+            ?.first
+    }
+
+    /** State answer read in reply to the state question. */
+    fun extractStateAnswer(raw: String): String? {
+        val text = raw.trim()
+        if (text.isEmpty()) return null
+        return detectState(normalise(text), text, allowAmbiguous = true)
     }
 
     // ── Free text ───────────────────────────────────────────────────────────

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.jandwar.app.ai.AiConfig
+import `in`.jandwar.app.ai.InterviewFlow
 import `in`.jandwar.app.ai.MicEarcon
 import `in`.jandwar.app.ai.TtsSpeaker
 import `in`.jandwar.app.ai.ProfileFragment
@@ -143,8 +144,23 @@ class AppViewModel @Inject constructor(
         profile = profile.copy(mobility = mob)
     }
 
+    /**
+     * Changing state invalidates a district that belongs to the old one, so it
+     * is cleared rather than left behind to poison the centre lookup.
+     */
+    fun updateState(state: String) {
+        if (state == profile.state) return
+        val keepDistrict = profile.district.takeIf {
+            it.isNotBlank() && repository.districtsForState(state).contains(it)
+        } ?: ""
+        profile = profile.copy(state = state, district = keepDistrict)
+    }
+
     fun updateDistrict(district: String) {
-        profile = profile.copy(district = district)
+        // Typing/saying a district we recognise also settles the state, so the
+        // voice flow never has to ask twice.
+        val state = profile.state.ifBlank { repository.stateForDistrict(district).orEmpty() }
+        profile = profile.copy(district = district, state = state)
     }
 
     fun toggleInterest(key: String) {
@@ -181,7 +197,13 @@ class AppViewModel @Inject constructor(
         Preference.fromAiString(frag.preference)?.let { p = p.copy(preference = it) }
         Mobility.fromAiString(frag.mobility)?.let { p = p.copy(mobility = it) }
 
-        frag.district?.takeIf { it.isNotBlank() }?.let { p = p.copy(district = it) }
+        frag.state?.takeIf { it.isNotBlank() }?.let { p = p.copy(state = it) }
+        frag.district?.takeIf { it.isNotBlank() }?.let { d ->
+            p = p.copy(
+                district = d,
+                state = p.state.ifBlank { repository.stateForDistrict(d).orEmpty() }
+            )
+        }
         frag.familyOccupation?.takeIf { it.isNotBlank() }?.let { p = p.copy(familyOccupation = it) }
         frag.currentLivelihood?.takeIf { it.isNotBlank() }
             ?.let { p = p.copy(currentLivelihood = it) }
@@ -246,7 +268,7 @@ class AppViewModel @Inject constructor(
             confidence = 0,
             reason = repository.tr(currentLang, "reason_browse"),
             skillGapNote = repository.tr(currentLang, "gap_generic"),
-            centre = repository.getCentreForDistrict(profile.district)
+            centre = repository.getCentreForDistrict(profile.district, profile.state)
         )
     }
 
@@ -256,12 +278,44 @@ class AppViewModel @Inject constructor(
 
     fun districtsWithCentre(): List<String> = repository.getDistricts().with_centre
 
+    // ── State-scoped lookups ────────────────────────────────────────────────
+
+    fun states(): List<String> = repository.states()
+
+    /** English state name shown in the user's script. */
+    fun stateLabel(state: String): String = InterviewFlow.stateLabel(state, currentLang)
+
+    fun districtsForState(state: String): List<String> = repository.districtsForState(state)
+
+    /** Districts of the state on the profile; the full list if none chosen. */
+    fun districtsForCurrentState(): List<String> =
+        repository.districtsForState(profile.state)
+
+    fun districtsWithCentreForCurrentState(): Set<String> =
+        repository.districtsWithCentreIn(profile.state)
+
+    fun centreCountForState(state: String): Int = repository.centreCountForState(state)
+
     fun getCentreForDistrict(district: String): Centre? =
-        repository.getCentreForDistrict(district)
+        repository.getCentreForDistrict(district, profile.state)
+
+    fun centresForDistrict(district: String): List<Centre> =
+        repository.centresForDistrict(district, profile.state)
 
     fun sectors(): List<String> = repository.sectors()
 
     fun fundableCount(): Int = repository.fundableCount()
+
+    // ── Catalogue statistics shown on the home screen ───────────────────────
+
+    fun stateCount(): Int = repository.states().size
+
+    fun districtCount(): Int = repository.getDistricts().all.size
+
+    /** Actual training centres, not districts that happen to have one. */
+    fun centreCount(): Int = repository.totalCentreCount()
+
+    fun confirmedCentreCount(): Int = repository.confirmedCentreCount()
 
     fun totalRoleCount(): Int = _allRoles.value.size
 

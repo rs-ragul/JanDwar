@@ -2,6 +2,7 @@ package `in`.jandwar.app.data.repository
 
 import `in`.jandwar.app.data.local.AssetDataSource
 import `in`.jandwar.app.data.model.Centre
+import `in`.jandwar.app.data.model.DistrictEconomy
 import `in`.jandwar.app.data.model.DistrictsData
 import `in`.jandwar.app.data.model.EducationLevel
 import `in`.jandwar.app.data.model.I18nData
@@ -31,6 +32,9 @@ class AppRepository @Inject constructor(
     }
     private val centreList: List<Centre> by lazy { assetDataSource.loadCentres() }
     private val districtData: DistrictsData by lazy { assetDataSource.loadDistricts() }
+    private val districtEconomy: Map<String, DistrictEconomy> by lazy {
+        assetDataSource.loadDistrictEconomy()
+    }
     private val i18nData: I18nData by lazy { assetDataSource.loadI18n() }
 
     fun getJobRoles(): List<JobRole> = roles
@@ -46,10 +50,65 @@ class AppRepository @Inject constructor(
             )
         }
 
-    fun getCentreForDistrict(district: String): Centre? {
+    /**
+     * Nearest centre for a district, preferring a CONFIRMED record.
+     *
+     * [state] disambiguates: district names are not unique across India and
+     * the catalogue now spans five states. When it is known the search is
+     * scoped to it, so a Tiruvallur answer can never surface a centre in
+     * Uttar Pradesh.
+     */
+    fun getCentreForDistrict(district: String, state: String = ""): Centre? {
         if (district.isBlank()) return null
-        return centreList.firstOrNull { it.district.equals(district, ignoreCase = true) }
+        val inDistrict = centreList.filter {
+            it.district.equals(district, ignoreCase = true) &&
+                    (state.isBlank() || it.state.equals(state, ignoreCase = true))
+        }
+        if (inDistrict.isEmpty()) return null
+        return inDistrict.firstOrNull { it.isConfirmed() } ?: inDistrict.first()
     }
+
+    /** Every centre in a district, best-evidence first. */
+    fun centresForDistrict(district: String, state: String = ""): List<Centre> {
+        if (district.isBlank()) return emptyList()
+        return centreList
+            .filter {
+                it.district.equals(district, ignoreCase = true) &&
+                        (state.isBlank() || it.state.equals(state, ignoreCase = true))
+            }
+            .sortedByDescending { if (it.isConfirmed()) 1 else 0 }
+    }
+
+    // ── States ──────────────────────────────────────────────────────────────
+
+    /** The states the offline catalogue actually covers. */
+    fun states(): List<String> = districtData.states().ifEmpty {
+        centreList.map { it.state }.filter { it.isNotBlank() }.distinct().sorted()
+    }
+
+    fun districtsForState(state: String): List<String> {
+        if (state.isBlank()) return districtData.all
+        return districtData.districtsOf(state).ifEmpty {
+            centreList.filter { it.state.equals(state, ignoreCase = true) }
+                .map { it.district }.distinct().sorted()
+        }
+    }
+
+    fun districtsWithCentreIn(state: String): Set<String> =
+        if (state.isBlank()) districtData.with_centre.toSet()
+        else districtData.withCentreIn(state)
+
+    /** Which state a district sits in; null when the name is unknown. */
+    fun stateForDistrict(district: String): String? =
+        districtData.stateOf(district)
+            ?: centreList.firstOrNull { it.district.equals(district, ignoreCase = true) }?.state
+
+    fun centreCountForState(state: String): Int =
+        centreList.count { it.state.equals(state, ignoreCase = true) }
+
+    fun totalCentreCount(): Int = centreList.size
+
+    fun confirmedCentreCount(): Int = centreList.count { it.isConfirmed() }
 
     fun fundableCount(): Int = roles.count { it.isFundable() }
 
@@ -112,7 +171,7 @@ class AppRepository @Inject constructor(
         if (roles.isEmpty()) return emptyList()
 
         val eduRank = profile.education?.rank ?: EducationLevel.CLASS_8.rank
-        val centre = getCentreForDistrict(profile.district)
+        val centre = getCentreForDistrict(profile.district, profile.state)
         val results = ArrayList<MatchedRole>(roles.size)
 
         for (role in roles) {
@@ -295,12 +354,34 @@ class AppRepository @Inject constructor(
         }
     }
 
+    /**
+     * Why this trade makes sense *here*.
+     *
+     * This used to print the nearest centre and stop, which answers "where do
+     * I train?" but never the question the PS actually asks -- whether the
+     * local economy can absorb the trade. The researched per-district notes
+     * carry that: Ariyalur is a cement and lime belt, Salem is the silver
+     * anklet hub. The note is appended only when the district's strong
+     * sectors actually include this role's sector, so the claim is never
+     * decorative.
+     */
     private fun buildRegionOpportunity(role: JobRole, profile: UserProfile, lang: String): String {
         val district = profile.district
-        val centre = getCentreForDistrict(district)
+        val centre = getCentreForDistrict(district, profile.state)
+        val econ = districtEconomy[district]
+
+        val parts = mutableListOf<String>()
+        if (centre != null) parts += "${centre.name}, ${centre.district}"
+        if (econ != null && econ.note.isNotBlank() &&
+            econ.strongSectors.contains(role.sector)
+        ) {
+            parts += econ.note
+        }
+        if (parts.isNotEmpty()) return parts.joinToString(" — ")
+
         return when {
-            centre != null -> "${centre.name}, ${centre.district}"
             profile.localOpportunity.isNotBlank() -> profile.localOpportunity
+            econ != null && econ.note.isNotBlank() -> econ.note
             district.isNotBlank() && districtData.without_centre.contains(district) ->
                 tr(lang, "no_centre")
             else -> tr(lang, "reason_base")

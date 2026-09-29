@@ -1,0 +1,42 @@
+# Render blueprint — deploys the JanDwar IVR/WhatsApp server on the free tier.
+#
+# Render reads this file automatically when you create a Blueprint from the
+# repo, so there is nothing to type into the dashboard.
+#
+# RENDER_EXTERNAL_URL is injected by Render, and app/config.py picks it up, so
+# the public URL the telephony provider needs is configured with zero effort.
+
+services:
+  - type: web
+    name: jandwar
+    runtime: python
+    plan: free
+    rootDir: server
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: JANDWAR_DEFAULT_LANG
+        value: en
+      - key: IVR_PROVIDER
+        value: twilio
+
+      # ── Optional. Leave blank and everything still works. ──────────────
+      # Bhashini (Govt of India speech). Fill these in Render's dashboard,
+      # never in this file.
+      - key: BHASHINI_USER_ID
+        sync: false
+      - key: BHASHINI_ULCA_KEY
+        sync: false
+      - key: BHASHINI_INFERENCE_KEY
+        sync: false
+
+      # WhatsApp Cloud API
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_VERIFY_TOKEN
+        value: jandwar

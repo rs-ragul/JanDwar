@@ -3,7 +3,7 @@
 Every file below was touched while fixing the project for SIH 2026 PS 26097.
 **40 added · 37 modified · 44 deleted · 1 renamed.**
 
-APK in this bundle: **versionCode 5 / versionName 2.3** — includes the post-install UI fixes 26 to 29, the field-test fixes 30 to 40, and the language-accuracy pass 41 to 47 below.
+APK in this bundle: **versionCode 9 / versionName 2.7** — includes the post-install UI fixes 26 to 29, the field-test fixes 30 to 40, the language-accuracy pass 41 to 48, and the third field test 49 to 52, and the vocabulary expansion 53 to 57 below.
 
 ---
 
@@ -83,6 +83,16 @@ APK in this bundle: **versionCode 5 / versionName 2.3** — includes the post-in
 | 46 | Free-text answers were rendered verbatim as chips, so one chip could be a whole sentence. | Chips are truncated at 26 characters and de-duplicated case-insensitively. |
 | 47 | **The recogniser's start/stop beeps were harsh and constant** — once per question, they became the dominant sound of the app. | New `MicEarcon`: the platform earcon streams are muted for the duration of each recognition session and replaced with a quiet synthesised sine blip — rising when the mic opens, falling when it closes — shaped by a raised-cosine envelope so there is no click. No audio asset ships. Streams are always restored, including on cancel and release. A Settings toggle turns the cue off entirely; the loud system beeps stay suppressed either way. |
 | 48 | **Occupation chips stayed in English in every language.** The NLU writes a canonical label such as *Dairy farming* onto the profile, and the chip row printed it verbatim — so a Tamil session showed "Dairy farming" sitting next to `பால் பண்ணை`. | The profile still stores the canonical English string, because role matching and the cloud prompt both key off it; only the **display** is translated, through a new `occupation` map in `i18n.json` (17 labels × 6 languages). Chips and the "matches your family work" line on Results now render in the session language, and free text the user typed passes through untouched. `tools/check_nlu.py` now also fails if any label the NLU can emit is missing a translation. |
+
+### Third field test (v2.4)
+
+| # | Problem | Fix |
+|---|---|---|
+| 49 | **The new cue played when the mic opened, but the old harsh beep still played when it closed.** `closeMic()` unmuted the earcon streams *first* and then played our blip — and the platform emits its stop earcon at exactly that moment, so it went straight through the reopened streams. | The mute now outlives the recognition session. `MicEarcon` owns the lifecycle: `releaseAfterCue()` keeps the streams muted for a further 260 ms, so the platform's stop beep is emitted into silence and discarded, then unmutes and plays our own falling blip. `releaseNow()` restores audio with no cue on cancel and teardown. `TtsSpeaker.speak()` calls `releaseForSpeech()`, which guarantees the reply is never swallowed by our own mute and pulls a still-pending blip forward so it lands *before* the reply instead of over it. Release is keyed to a new `sessionOpen` flag rather than `micLive`, so a session that fails before the mic goes live still restores the streams. |
+| 50 | **The launcher icon was the whole badge shrunk down.** The adaptive foreground contained the logo's own bezel and rounded square, which Android then masked again — a rounded square inside a rounded square, with the emblem filling only **17%** of the canvas and sitting 29 px left of centre. | The emblem is now lifted off its background properly. `tools/gen_icons.py` fits a bilinear model of the blue-to-teal gradient from background pixels only, derives alpha from each pixel's distance to that model, then *unmixes* `P = aF + (1-a)B` so antialiased edges carry no blue fringe. The foreground is the bare emblem, centred to the half-pixel and filling **57%** of the canvas — just inside Android's 61% safe zone. The adaptive background is a vector gradient sampled from the real badge (`#001AA8 → #0267A8 → #05D2BC`), and the legacy pre-API-26 icons are composed and masked rather than nested. |
+| 51 | The in-app emblem was one 144 px asset used at 84 dp, so it upscaled and blurred on 3x and 4x screens. | Generated per density from the source artwork: 96/144/192/288/384 px for mdpi through xxxhdpi. |
+| 52 | **The PS asks for "mobility *and physical constraints*", but the interview never asked about constraints** — they were only captured if the user happened to volunteer them mid-sentence, and the scoring penalty for a limiting condition therefore almost never fired. | New `CONSTRAINTS` slot between mobility and district, phrased so that "no" is an easy and normal answer, in all six languages. "No" is recorded as a real answer (the `None` sentinel) rather than a failure to understand, so the interview does not loop on it; a stated difficulty is kept verbatim, shown back as a chip and fed to the existing scoring rule. Profile completeness is now 8 fields, not 7. |
+
 
 
 ---
@@ -232,3 +242,316 @@ APK in this bundle: **versionCode 5 / versionName 2.3** — includes the post-in
 * AGP is pinned to **8.7.3** (not 8.8.x) as the safest match for
   Gradle 8.14.3 + Kotlin 2.0.21 + KSP 2.0.21-1.0.28.
 * `android.enableJetifier` was removed: deprecated, and it slows every build.
+
+---
+
+## Vocabulary expansion (53 to 57) — v2.5
+
+The offline understanding was Latin-heavy: per category Tamil had 3 to 13
+surface forms and Telugu, Kannada and Malayalam often only 2 to 6. A person
+answering in their own words was frequently not understood at all.
+
+**The lexicon went from 1,480 to 3,234 surface forms across all 36 categories
+and all 6 languages** (`work/lexicon_extra.py`, merged by `work/gen_lexicon.py`).
+
+Three kinds of form were added for every category, and the third is the one
+usually missed:
+
+1. the dictionary word — ஐந்தாம் வகுப்பு, पाँचवीं कक्षा;
+2. the spoken contraction — அஞ்சாங்கிளாஸ், ಐದನೇ ಕ್ಲಾಸ್;
+3. the **romanisation** — "anjaam class", "aidane class". One English word
+   mid-sentence flips many recognisers into Latin output for the whole
+   utterance, so every native form needs a romanised twin.
+
+Regional exam names are treated as first-class vocabulary, because nobody
+answers "class twelve": **SSLC** (TN/Karnataka Class 10), **PUC** (Karnataka
+Class 12), **HSC** and **+2** (TN), **Matric** (Hindi belt), **Intermediate**
+(Telangana/Andhra).
+
+| # | Problem found by the new audit | Fix |
+|---|---|---|
+| 53 | `detect_mobility` checked `mob.state` first, so **"வெளியூர் போக முடியாது"** — *cannot* go out of town — matched the bare word *வெளியூர்* and was recorded as **willing to travel anywhere in the state**. Hindi "बाहर नहीं जा सकता" and English "cannot go far" failed identically. The recommender then offered a centre in another district to someone who cannot leave their village. | `detect_mobility` now uses longest-match (`best_match`), like education. The negated phrase is always the longer match, so the negation is read correctly without a separate negation parser. Fixed in both the Kotlin and Python engines. |
+| 54 | The tokeniser split on a character class that discarded `+`, so the token `2` could never equal the surface form `+2` — **Class 12 in Tamil Nadu was dead data**. | Split on whitespace only; `fold()` has already reduced every punctuation mark except `+` to a space. Both engines now tokenise identically. |
+| 55 | Romanised Indic vocabulary made the Latin fuzzy floor unsafe. At tolerance 1, **"pass"** in *"PUC pass aagiruken"* matched **"pasu"** (cow) and recorded a cattle-rearing interest; at tolerance 2, **"appuram"** (afterwards) matched **"appalam"** (a snack) and recorded food processing. | Latin tolerance floor raised: ≤4 chars → 0 edits, ≤7 → 1, else 2. |
+| 56 | Short Indic forms matched inside unrelated longer words: **ಹೊಲ** (field, farming) sits inside **ಹೊಲಿಗೆ** (sewing), so *"ಹೊಲಿಗೆ ಕೆಲಸ ಗೊತ್ತು"* — I know tailoring — also reported an interest in agriculture. | Indic forms under four codepoints must now match as a whole token; at four or more the agglutinative-suffix substring rule still applies (மாடு still reaches மாடுகள்). |
+| 57 | The two matchers disagreed: Kotlin computed fuzzy tolerance from the **shorter** string, Python from the **longer** one, so the app and the IVR line could classify the same sentence differently. | Kotlin aligned to `maxOf`. |
+
+### Regression
+
+`tools/check_nlu.py` gained `check_every_form_resolves()`, which asserts that
+**every surface form resolves to its own detector**. This is deliberate
+pressure on future vocabulary changes: slang is the one part of the system
+that will keep growing, and each new word is a chance to collide with an
+existing category. A category that cannot recognise its own vocabulary is
+worse than an empty one, because it fails silently.
+
+```
+$ python3 tools/check_nlu.py
+all 31 NLU cases pass (3234 surface forms in lexicon)
+all 17 occupation labels translated into 6 languages
+all 2673 surface forms resolve to their own detector
+```
+
+To add more slang: edit `work/lexicon_extra.py`, re-run `work/gen_lexicon.py`,
+then run `tools/check_nlu.py`. Never hand-edit `lexicon.json`.
+
+### Answer coverage (58 to 60) — the test that actually matters
+
+`check_nlu.py` audits the lexicon against *itself*: every surface form must
+resolve to its own detector. That proves internal consistency and nothing
+about real speech, because it only ever feeds the engine words it already
+knows. Passing it at 100% is compatible with failing every real sentence.
+
+**`tools/check_answers.py`** asks the opposite question, and it is the one the
+PS cares about: *for each question the interview asks, is a realistic spoken
+answer understood?* 306 utterances written as people speak — full sentences,
+code-mixed, contracted, hedged, negated, with filler and politeness — across
+all 8 questions and all 6 languages. None were copied from the lexicon.
+
+A slot counts only if the engine fills **that** slot when **that** question
+was asked; filling some other slot does not count, because the interview
+would still re-ask something the person already answered. For the three enum
+slots the **value** is asserted too — filling `mobility` with the wrong value
+is worse than leaving it empty, since the interview moves on satisfied and
+the recommender then scores against a fact the person never said.
+
+| # | Gap it caught | Fix |
+|---|---|---|
+| 58 | "i didn't go to school at all" was not understood. | `fold()` rewrites `didn't` to `didn t` for the stored form and the utterance alike, so the natural spelling with the apostrophe is what belongs in the generator. Added that plus "never went to school", "illiterate" and the five Indic equivalents. |
+| 59 | Telugu **"మా ఊర్లో మాత్రమే"** and Kannada **"ನಮ್ಮ ಊರಲ್ಲಿ ಮಾತ್ರ"** — *only in my village* — were not understood. The stem was present but the separate word carrying *only* (మాత్రమే / ಮಾತ್ರ) was never paired with it. | Added the paired forms for all six languages. |
+| 60 | "i can go anywhere in **the** district" was scored `state`, not `district`: a phrase match is a plain substring, the stored phrase omitted the article, so only the bare word "anywhere" matched and the answer was promoted to a wider radius than the person offered. "i can't travel, small children at home" was scored `district`. | Added the articled variants and the contraction spellings to `mob.district` / `mob.local`. |
+
+```
+$ python3 tools/check_answers.py
+  EDUCATION             56/56   100.0%
+  FAMILY_OCCUPATION     46/46   100.0%
+  CURRENT_LIVELIHOOD    47/47   100.0%
+  INTERESTS             48/48   100.0%
+  PREFERENCE            35/35   100.0%
+  MOBILITY              36/36   100.0%
+  CONSTRAINTS           38/38   100.0%
+
+  TOTAL                306/306  100.0%
+```
+
+Both suites should be run after any vocabulary change:
+`python3 tools/check_nlu.py && python3 tools/check_answers.py`.
+
+---
+
+## In-progress study and technical vocabulary (61 to 64) — v2.7
+
+### 61. "college 2nd year" was read as a completed degree
+
+Reported from the field: a second-year college student was being classified
+wrongly. The actual behaviour was worse than mis-reading it as school —
+`college 2nd year` resolved to **`graduate`**, the *top* education rank.
+
+The recommender uses that rank for NSQF entry eligibility, so a student two
+years from finishing was judged eligible for roles that require a completed
+degree, and the "skill gap" line told them they had none. Bare `2nd year`,
+`second year` and `1st year` were not understood at all, and the Tamil-script
+spelling **காலேஜ்** was missing entirely — only the Latin "college" was stored.
+
+The fix models what a person has actually *completed*:
+
+| Said | Completed | Also recorded |
+|---|---|---|
+| college 2nd year / B.Tech 3rd year / final year btech | `class12` | Student |
+| 1st year polytechnic / diploma 2nd year | `class10` | Student |
+| studying in 10th | `class8` | Student |
+| **12th dropout** | `class10` | *not* a student |
+| college dropout | `class12` | *not* a student |
+| I completed my degree | `graduate` | — |
+
+Two new categories carry it: `marker.in_progress` (Nth year, semester,
+pursuing, appearing, still studying, and the Indic equivalents) and
+`marker.dropout` (dropped out, discontinued, left studies). Dropping out is
+deliberately distinct from still being enrolled — both completed the level
+below, but only one is currently a student, and that is the answer to the
+livelihood question we would otherwise ask again.
+
+Native-script forms for "college" were added for all six languages, so
+`இரண்டாம் வருடம் காலேஜ்`, `कॉलेज दूसरा साल`, `ಕಾಲೇಜು ಎರಡನೇ ವರ್ಷ`,
+`കോളേജ് രണ്ടാം വർഷം` and `కాలేజీ రెండవ సంవత్సరం` all resolve correctly.
+
+### 62. Engineering and technical vocabulary
+
+The catalogue is full of machine, electrical and fabrication roles, but the
+lexicon could barely recognise anyone describing that work. Added across all
+six languages:
+
+- **Degree** — BE, B.Tech, M.Tech, mechanical, civil, EEE, ECE, CSE,
+  automobile, mechatronics, instrumentation, chemical, aeronautical.
+- **ITI/polytechnic trades as DGT names them** — fitter, turner, machinist,
+  tool and die maker, draughtsman, surveyor, electronics mechanic, mechanic
+  diesel, motor vehicle mechanic, RAC technician, wireman, sheet metal
+  worker, foundryman, pattern maker, lineman, COPA. People answer with the
+  trade, not the certificate.
+- **Shop-floor skills** — CNC, VMC, lathe, milling, arc/MIG/TIG welding,
+  soldering, PCB assembly, motor rewinding, panel wiring, switchgear, PLC,
+  SCADA, VFD, hydraulics, pneumatics, HVAC, solar panel installation,
+  inverter and UPS repair, CCTV, networking, computer hardware, AutoCAD,
+  3D printing, JCB/crane/forklift operation, vernier and micrometer.
+
+### 63. Lexicon 3,234 → 3,596 forms, 36 → 38 categories.
+
+### 64. The test suite gained an in-progress corpus
+
+`tools/check_answers.py` now carries `EDUCATION_IN_PROGRESS`, asserting the
+**completed** level rather than the level the sentence names — the assertion
+that would have caught bug 61 on the day it was written.
+
+```
+$ python3 tools/check_nlu.py
+all 31 NLU cases pass (3596 surface forms in lexicon)
+all 17 occupation labels translated into 6 languages
+all 2906 surface forms resolve to their own detector
+
+$ python3 tools/check_answers.py
+  EDUCATION             56/56   100.0%
+  EDUCATION_IN_PROGRESS 20/20   100.0%
+  FAMILY_OCCUPATION     46/46   100.0%
+  CURRENT_LIVELIHOOD    47/47   100.0%
+  INTERESTS             48/48   100.0%
+  PREFERENCE            35/35   100.0%
+  MOBILITY              36/36   100.0%
+  CONSTRAINTS           38/38   100.0%
+
+  TOTAL                326/326  100.0%
+```
+
+---
+
+## v2.8 — versionCode 10
+
+### 65. The whole catalogue was silently empty — `null` in `job_roles.json`
+
+**Symptom reported:** "Find my options" and "Browse all" both showed *no
+match found*; the assistant ended every interview with *"I could not find a
+confident match."*
+
+**Cause.** Not the recommender. `job_roles.json` carries
+`"nsqf_level": null` on 9 rows and `"notional_hours": null` on 19 (plus 11
+values written as JSON numbers rather than strings) — artefacts of the
+five-state research merge. `JobRole` declares both as non-nullable `String`,
+and kotlinx.serialization treats a `null` for a non-nullable property as a
+hard error. Because the file is decoded in **one** `decodeFromString<List<JobRole>>`
+call, those 28 values aborted the whole decode. The `catch` returned
+`emptyList()`, so all 540 roles vanished and every screen that lists or
+scores a role had nothing to work with. No crash, no visible error — just
+zero results everywhere.
+
+**Fix, in three layers** so it cannot recur:
+
+1. `job_roles.json` normalised — every value a string, nulls to `""`.
+2. `Json { coerceInputValues = true }` in `AssetDataSource`, which maps a
+   null onto the property default instead of throwing.
+3. A row-by-row `org.json` fallback for `job_roles.json` and `centres.json`.
+   If the strict decode ever fails again, a bad row costs one course rather
+   than the entire catalogue, and the reason is logged.
+
+### 66. State is now asked, never assumed
+
+The catalogue grew to five states in v2.6 but every code path still behaved
+as though everyone lived in Tamil Nadu:
+
+* the intake form offered **one flat list of 187 districts**, so a user in
+  Kerala scrolled past 75 Uttar Pradesh districts to find their own;
+* the interview jumped straight to *"which district do you live in?"*;
+* the Groq system prompt literally said *"in Tamil Nadu"*;
+* `getCentreForDistrict()` matched on district name alone, across states.
+
+Changes:
+
+* `UserProfile.state`, `ProfileFragment.state`, `Fragment.state` (server).
+* New slot `STATE`, ordered immediately before `DISTRICT` — nine slots now.
+* `districts.json`'s `by_state` block is finally parsed (`DistrictsData.by_state`,
+  `StateDistricts`); it was being discarded by `ignoreUnknownKeys`.
+* Intake is a **six**-step form: state, then district filtered to that state.
+  Each state tile shows its district and centre counts.
+* The district question names the state: *"And which district in Kerala is
+  your home?"* — `InterviewFlow.DISTRICT_IN_STATE`, state names localised
+  into all six languages via `STATE_LABELS`.
+* `OnDeviceNlu.STATE_FORMS` — 5 states × spoken forms in all six scripts.
+  `AMBIGUOUS_STATE_FORMS` (`tn`, `ap`, `up`, `u p`, `tamil`) are matched as
+  **whole tokens and only while answering the state question**, so
+  *"I studied up to 10th"* is not Uttar Pradesh and *"I speak Tamil"* is not
+  Tamil Nadu.
+* District detection is scoped to the known state, and a district that
+  belongs to another state can no longer sit under the wrong state name.
+* A recognised district back-fills the state (`stateOfDistrict`), so saying
+  "I'm in Ernakulam" does not trigger a redundant question.
+* Centre lookup takes the state and prefers a `CONFIRMED` record.
+* Groq prompt rewritten: five states, an explicit instruction never to infer
+  the state, and `canonicalState()` to snap "TN"/"andhra"/"uttarpradesh"
+  onto catalogue names.
+* Server mirrors all of it: `nlu.py` (`STATE_FORMS`, `detect_state`,
+  scoped `detect_district`, `state_of_district`), `engine.py`
+  (`INFERABLE` + `DISTRICT_IN_STATE` + `state_label`), `data.py`
+  (`states`, `districts_of_state`, `state_of_district`, state-scoped
+  `centre_for_district`), `recommend.py`. `flow.json` regenerated — 9 slots,
+  108 prompts.
+
+### 67. Home and Settings statistics were wrong
+
+The "centres" tile counted **districts that have a centre** (185) and
+labelled it *Verified centres*, understating the catalogue by 475. The
+districts tile was labelled *TN districts* after the data had covered five
+states for two releases.
+
+Now: **Roles · Fundable · States (5) · Districts (187) · Centres (660)**,
+plus a provenance line — *"294 of 660 centres are confirmed against the
+institution's own published page."* Settings shows the same figures with the
+confirmed count inline. New i18n keys `stat_states`, `stat_confirmed`,
+`q_state`, `select_state`, `state`, `district`, `confirmed` in all six
+languages; `stat_districts` and `stat_centres` retranslated.
+
+### 68. Tests
+
+`tools/check_answers.py` gains a 27-utterance `STATE` corpus with
+`EXPECTED_STATE` value assertions across all six languages, including the
+ambiguous short forms.
+
+```
+$ python3 tools/check_nlu.py
+all 31 NLU cases pass (3596 surface forms in lexicon)
+all 17 occupation labels translated into 6 languages
+all 2906 surface forms resolve to their own detector
+
+$ python3 tools/check_answers.py
+  EDUCATION             56/56   100.0%
+  EDUCATION_IN_PROGRESS 20/20   100.0%
+  FAMILY_OCCUPATION     46/46   100.0%
+  CURRENT_LIVELIHOOD    47/47   100.0%
+  INTERESTS             48/48   100.0%
+  PREFERENCE            35/35   100.0%
+  MOBILITY              36/36   100.0%
+  CONSTRAINTS           38/38   100.0%
+  STATE                 27/27   100.0%
+
+  TOTAL                353/353  100.0%
+```
+
+### 69. 20 roles were falsely labelled "not funded under PM-AJAY GIA"
+
+`ANNEXURE1_SECTOR` mapped the seven sectors the catalogue had **before** the
+five-state research drop. That drop brought six more — `automotive`,
+`healthcare`, `leather`, `tourism_hospitality`, `fisheries`,
+`aerospace_aviation` — and they were never added, so `isFundable()` returned
+false for the 20 roles in them. The Detail screen printed that as a flat
+statement of fact to the beneficiary, and the recommender docked those roles
+26 points.
+
+`assets/gia_funding_rules.json` contradicts it directly. For three of the
+five states the researched `qp_whitelist` field reads *"none stated —
+central GIA guidelines do not restrict sectors/QPs"*. All 13 sectors are now
+mapped, in `Models.kt` and `server/app/core/data.py`.
+
+Because every sector is now eligible, the home tile "Fundable packs" would
+simply have repeated the role count, so it shows **Sectors (13)** instead —
+a figure that says something. Settings still lists both.
+
+This is the same mistake as entry 55, one release later and one size
+smaller: a whitelist that has to be edited whenever the data grows. The
+lesson holds — derive from the data, or the data will outgrow the code.

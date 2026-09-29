@@ -1,0 +1,2254 @@
+{
+ "Alluri Sitharama Raju": {
+  "strong_sectors": [
+   "tribal agriculture (hill paddy, turmeric, pineapple)",
+   "coffee (Araku valley fringe)",
+   "NTFP (tamarind, adda leaf)"
+  ],
+  "source": "general economic geography; no centre this pass",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Paderu-HQ tribal district; SLBC confirms NO RSETI yet (UBI assigned); highest-priority PM-AJAY GIA target in AP along with Konaseema.",
+  "district": "Alluri Sitharama Raju",
+  "state": "Andhra Pradesh"
+ },
+ "Anakapalli": {
+  "strong_sectors": [
+   "jaggery (Anakapalli bellam market heritage)",
+   "aquaculture (coastal mandals)",
+   "agri-trade"
+  ],
+  "source": "general economic geography; 2 KVKs located here post-2022",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK BCT Haripuram + KVK Pottidorapalem; RSETI-uncovered per SLBC (UBI assigned); ITI Narsipatnam.",
+  "district": "Anakapalli",
+  "state": "Andhra Pradesh"
+ },
+ "Anantapur": {
+  "strong_sectors": [
+   "agriculture (groundnut, silk fringe in Hindupur side)",
+   "readymade garments cluster (Rayadurg - state profile)",
+   "horticulture (NYFRA-drip legacy)"
+  ],
+  "source": "https://dcmsme.gov.in/old/dips/state_wise_profile_16-17/AP%20State%20profile%202016.pdf (Rayadurg garments cluster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Driest district; 2 KVKs (Reddipalli, Kalyandurg) + RUDSETI Anantapur + JSS + 4 govt ITIs incl. women's ITI (unverified).",
+  "district": "Anantapur",
+  "state": "Andhra Pradesh"
+ },
+ "Annamayya": {
+  "strong_sectors": [
+   "handloom_textile/silk (Rayachoti, fringe of Madanapalle garment belt)",
+   "agro processing (mango, tamarind)",
+   "bus body building (Madanapalle cluster legacy — now largely in Madanapalle district)"
+  ],
+  "source": "https://dcmsme.gov.in/dips/amended%20chittoor%20dp%20march%202013.pdf (Madanapalle bus-body cluster listed under undivided Chittoor)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Kalikiri (district placement under re-verify note); Rajampet ITI moved OUT to YSR Kadapa (Dec 2025); no RSETI yet (SLBC: SBI assigned).",
+  "district": "Annamayya",
+  "state": "Andhra Pradesh"
+ },
+ "Bapatla": {
+  "strong_sectors": [
+   "aquaculture (coastal aqua ponds)",
+   "agriculture (paddy, tobacco)",
+   "salt/chemicals fringe"
+  ],
+  "source": "general economic geography; KVK-less, served by SBI RSETI Vetapalem remapped here",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New coastal district (2022); SBI RSETI Vetapalem falls inside it; no KVK of its own; aqua QPs (AGR/Q4905) fit directly.",
+  "district": "Bapatla",
+  "state": "Andhra Pradesh"
+ },
+ "Chittoor": {
+  "strong_sectors": [
+   "food_processing (mango pulp/fruit cluster, rice mills)",
+   "granite processing",
+   "handloom_textile (Nagari powerloom, Srikalahasti brass/pen craft)",
+   "tomato/litchi trade"
+  ],
+  "source": "https://dcmsme.gov.in/dips/amended%20chittoor%20dp%20march%202013.pdf (fruit-processing cluster: 67 units, ~20,000 employed; granite; Nagari powerloom; rice mills)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Fruit-processing cluster is a documented women-heavy livelihood; Union RSETI + INDSETI Kongareddypally; ITI Santhipuram (unverified); JSS Tirupati nearby.",
+  "district": "Chittoor",
+  "state": "Andhra Pradesh"
+ },
+ "Dr. B.R. Ambedkar Konaseema": {
+  "strong_sectors": [
+   "coconut and copra",
+   "aquaculture/shrimp (delta ponds)",
+   "dairy and banana"
+  ],
+  "source": "general economic geography; district SC Society page (konaseema.ap.gov.in) documents SC skill programmes",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Godavari-delta HQ Amalapuram; SLBC confirms NO RSETI yet (UBI assigned); no KVK of its own (Kalavacharla KVK serves nearby East Godavari); aqua QP fit is direct.",
+  "district": "Dr. B.R. Ambedkar Konaseema",
+  "state": "Andhra Pradesh"
+ },
+ "East Godavari": {
+  "strong_sectors": [
+   "oil & natural gas",
+   "food_processing (rice, coconut)",
+   "paper (Rajahmundry)",
+   "aquaculture"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state_wise_dips/APState%20Profile2014-15.pdf (ONGC/oil; MSME base)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Kalavacharla (CTRI) + Union RSETI Rajahmundry (official phone on record) + JSS Kakinada side; largest large/mega-project count in AP (216 per state profile).",
+  "district": "East Godavari",
+  "state": "Andhra Pradesh"
+ },
+ "Eluru": {
+  "strong_sectors": [
+   "handloom_textile (Eluru carpets — wool/hand-knotted heritage)",
+   "food_processing (rice mills)",
+   "gold jewellery cluster (Eluru town — MSE-CDP assisted)",
+   "aquaculture fringe (kolleru)"
+  ],
+  "source": "https://www.dcmsme.gov.in/schemes/Final_agenda%20_37th.pdf (gold jewellery cluster Eluru; ceramic cluster Dwaraka Tirumala nearby)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Union RSETI Eluru + JSS Eluru + DLC ITI Eluru + ITI Nuzvid remapped here; Kolleru aqua belt adds AGR/Q4905 fit.",
+  "district": "Eluru",
+  "state": "Andhra Pradesh"
+ },
+ "Guntur": {
+  "strong_sectors": [
+   "chilli trade (Guntur = Asia's largest chilli market)",
+   "handloom_textile (Mangalagiri handloom, zari saris, powerloom/spinning-ginning cluster)",
+   "food_processing (turmeric Duggirala, dal milling Vinukonda)",
+   "tobacco"
+  ],
+  "source": "https://dcmsme.gov.in/dips/guntur%20profile_ap.pdf (clusters: Duggirala turmeric, Piduguralla lime, zari saris, foundry Narasaraopet, powerloom/ginning 66,150 employed)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Lam (SVVU) + SBI RSETI Guntur + JSS Guntur + ITI Tenali; APSCCF HQ at Amaravati.",
+  "district": "Guntur",
+  "state": "Andhra Pradesh"
+ },
+ "Kakinada": {
+  "strong_sectors": [
+   "aquaculture/shrimp processing & export",
+   "fertilizers/petro fringe",
+   "ports"
+  ],
+  "source": "general economic geography; JSS Kakinada on MoE legacy table",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New district (2022); ITI Jaggampeta remapped here; SLBC lists it RSETI-uncovered (UBI assigned); aqua QP cluster fit.",
+  "district": "Kakinada",
+  "state": "Andhra Pradesh"
+ },
+ "Krishna": {
+  "strong_sectors": [
+   "aquaculture",
+   "agriculture (paddy, mango)",
+   "metal/ferro fringe",
+   "machilipatnam port revival"
+  ],
+  "source": "general economic geography; KVK Ghantasala + Union RSETI Machilipatnam + INDSETI Rustumbada",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Kalamkari block-print craft (Pedana, Machilipatnam) is a GI handloom/artisan livelihood needing skilling.",
+  "district": "Krishna",
+  "state": "Andhra Pradesh"
+ },
+ "Kurnool": {
+  "strong_sectors": [
+   "stone cluster (Bethemeherla — MSE-CDP assisted)",
+   "agriculture (sunflower, paddy)",
+   "energy fringe"
+  ],
+  "source": "https://www.dcmsme.gov.in/schemes/Final_agenda%20_37th.pdf (stone cluster Bethemeherla)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "CB RSETI B.Thandrapadu + SBI RSETI Yemmiganur + KVK Banavasi + ITI Alur; Konda Reddy fort-area trade economy.",
+  "district": "Kurnool",
+  "state": "Andhra Pradesh"
+ },
+ "Madanapalle": {
+  "strong_sectors": [
+   "readymade garments (Madanapalle garment cluster)",
+   "bus body building (legacy cluster)",
+   "horticulture (tomato, mango, tamarind)"
+  ],
+  "source": "https://dcmsme.gov.in/dips/amended%20chittoor%20dp%20march%202013.pdf (Madanapalle bus-body cluster 242 units, ~3,000 employed)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "NEW district (Dec-2025 gazette); apparel QPs and garment-skilling are the natural GIA fit; ITI Pileru (unverified) mapped here.",
+  "district": "Madanapalle",
+  "state": "Andhra Pradesh"
+ },
+ "Markapuram": {
+  "strong_sectors": [
+   "slate/stone works (Markapur slate pencils)",
+   "agriculture (dry crops)",
+   "handloom fringe"
+  ],
+  "source": "general economic geography; MSME state profile (Prakasam-basis)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "NEW district (Dec-2025 gazette) carved from Prakasam; ITI Markapur mapped here; tribal-adjacent pockets suit GIA outreach.",
+  "district": "Markapuram",
+  "state": "Andhra Pradesh"
+ },
+ "Nandyal": {
+  "strong_sectors": [
+   "cement (Nandyal belt)",
+   "agriculture (cotton, chilli)",
+   "stone/quarrying"
+  ],
+  "source": "general economic geography; KVK Yagantipalle (best-KVK-2024) on official site",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Pendekanti KVK Yagantipalle + ITI Dhone/AS Peta (unverified/likely); RSETI-uncovered per SLBC (UBI assigned) though CB RSETI Kurnool is adjacent.",
+  "district": "Nandyal",
+  "state": "Andhra Pradesh"
+ },
+ "NTR": {
+  "strong_sectors": [
+   "agri-trade (Vijayawada hub)",
+   "pharma/manufacturing fringe",
+   "aquaculture (Nandigama side)"
+  ],
+  "source": "general economic geography; ATKUR RSETI mapped here by SLBC",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Vijayawada commercial hub; KVK Garikapadu + ATKUR RSETI (existence-grade) + JSS Vijayawada + TCP Centre for PH.",
+  "district": "NTR",
+  "state": "Andhra Pradesh"
+ },
+ "Palnadu": {
+  "strong_sectors": [
+   "cement/lime (Piduguralla burnt-lime cluster — MSE-CDP assisted)",
+   "agriculture (cotton, chilli)",
+   "quarrying"
+  ],
+  "source": "https://dcmsme.gov.in/dips/guntur%20profile_ap.pdf (Piduguralla burnt-lime cluster listed under undivided Guntur)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New district (2022, HQ Narasaraopet); foundry cluster Narasaraopet (66 units); ITI Macherla (residential) remapped here; RSETI-uncovered per SLBC.",
+  "district": "Palnadu",
+  "state": "Andhra Pradesh"
+ },
+ "Parvathipuram Manyam": {
+  "strong_sectors": [
+   "tribal & hill agriculture",
+   "handloom fringe (Parvathipuram area)",
+   "cashew"
+  ],
+  "source": "general economic geography; no centre this pass beyond 2 ITIs",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New tribal-majority district (2022, HQ Parvathipuram); govt ITIs Salur + Seethampeta mapped here; RSETI-uncovered per SLBC (SBI assigned).",
+  "district": "Parvathipuram Manyam",
+  "state": "Andhra Pradesh"
+ },
+ "Polavaram": {
+  "strong_sectors": [
+   "tribal agriculture",
+   "Polavaram project economy (construction-linked wage work)",
+   "NTFP"
+  ],
+  "source": "general economic geography; KVK Pandirimamidi located in Rampachodavaram (new HQ)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "NEWEST district (Dec-2025 gazette, HQ Rampachodavaram); KVK Pandirimamidi mapped here — its only documented training centre; highest-priority GIA gap area.",
+  "district": "Polavaram",
+  "state": "Andhra Pradesh"
+ },
+ "Prakasam": {
+  "strong_sectors": [
+   "aquaculture (Kandukur-Ongole coast)",
+   "agriculture (tobacco, pulses)",
+   "mineral/stone fringe"
+  ],
+  "source": "https://dcmsme.gov.in/old/dips/state_wise_profile_16-17/AP%20State%20profile%202016.pdf (highest MSME count in AP: 23,548 units)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Darsi + KVK Kandukur (CTRI) + RUDSETI Ongole + JSS Ongole + ITI Boys Ongole; Markapuram district carved out Dec-2025 (ITI Markapur left with it).",
+  "district": "Prakasam",
+  "state": "Andhra Pradesh"
+ },
+ "Sri Sathya Sai": {
+  "strong_sectors": [
+   "horticulture (Puttaparthi belt)",
+   "silk fringe (Penukonda-Dharmavaram side)",
+   "pilgrim economy"
+  ],
+  "source": "general economic geography; CB RSETI Puttaparthi on Canara official list",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New district (2022, HQ Puttaparthi); CB RSETI Sri Sathya Sai (opened post-SLBC-gap listing) + Dharmavaram silk workers nearby in Anantapur side.",
+  "district": "Sri Sathya Sai",
+  "state": "Andhra Pradesh"
+ },
+ "Sri Potti Sriramulu Nellore": {
+  "strong_sectors": [
+   "aquaculture/shrimp (Nellore = AP aqua heartland)",
+   "thermal power & port (Dodlapalle/Krishnapatnam)",
+   "industrial belt: steel, glass, footwear, edible oil"
+  ],
+  "source": "https://spsnellore.ap.gov.in/district-industries-centre/ (9 mega industries, Rs 37,670 cr investment, 13,599 employed — official DIC page)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Aqua-farmer QPs map directly; KVK Kavali + Union RSETI Venkatachalam + 5 govt ITIs (Nellore, Sangam, Podalakur, Gudur DLC, Vakadu); DIC contacts on official page (GM 9849770677).",
+  "district": "Sri Potti Sriramulu Nellore",
+  "state": "Andhra Pradesh"
+ },
+ "Srikakulam": {
+  "strong_sectors": [
+   "brass/bell-metal craft (Budithi — GI)",
+   "agriculture (paddy, cashew)",
+   "pharma/pellets fringe"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state_wise_dips/APState%20Profile2014-15.pdf (Budithi brass cluster listed)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Amadalavalasa + SBI RSETI Srikakulam + 3 govt ITIs (Rajam, Srikakulam, Etcherla-W unverified); Manyam district carved out 2022.",
+  "district": "Srikakulam",
+  "state": "Andhra Pradesh"
+ },
+ "Tirupati": {
+  "strong_sectors": [
+   "pilgrim economy services",
+   "electronics_automation (Tirupati electronics park)",
+   "textile/garment units",
+   "aviation fringe"
+  ],
+  "source": "general economic geography; APSCCF/APSSDC activity visible on district portals",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK RASS Karakambadi + KVK Periyavaram + INDSETI Tirupati-area + German/English overseas-skilling centre (SC Corp Aug-2026); strong convergence potential.",
+  "district": "Tirupati",
+  "state": "Andhra Pradesh"
+ },
+ "Visakhapatnam": {
+  "strong_sectors": [
+   "steel (VSP)",
+   "ports & petro",
+   "IT-ITeS",
+   "pharma (Pharma City nearby)",
+   "fisheries (coastal)"
+  ],
+  "source": "general economic geography; SBI RSETI Pendurthi per SLBC minutes",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Industrial capital: ITI Steel City Gajuwaka (DGT Model ITI, principal contact verified), ITI Old Kancharapalem, ITI Narava, SBI RSETI Pendurthi, JSS Vizag, CIFNET unit (unverified); overseas-skilling centre (SC Corp).",
+  "district": "Visakhapatnam",
+  "state": "Andhra Pradesh"
+ },
+ "Vizianagaram": {
+  "strong_sectors": [
+   "steel & ferro alloys",
+   "pharma",
+   "cashew processing",
+   "sugarcane"
+  ],
+  "source": "https://vizianagaram.ap.gov.in/dic/ (official DIC: 43 large/mega industries, Rs 2,910 cr, 24,025 employed; sectors listed)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Rastakuntabai + ITI Bobbili (unverified); DIC contacts on official page (GM 9000518258).",
+  "district": "Vizianagaram",
+  "state": "Andhra Pradesh"
+ },
+ "West Godavari": {
+  "strong_sectors": [
+   "aquaculture/shrimp (the aqua capital belt)",
+   "coconut & oil palm",
+   "paddy",
+   "ceramic (Dwaraka Tirumala cluster)"
+  ],
+  "source": "https://www.dcmsme.gov.in/schemes/Final_agenda%20_37th.pdf (ceramic & refractory cluster Dwaraka Tirumala)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Undi + KVK Venkataramannagudem (Dr YSRHU); RSETI situation: old Eluru RSETI now falls in Eluru district — SLBC lists WG as RSETI-uncovered (UBI assigned); AGR/Q4905 aqua QP is a direct fit.",
+  "district": "West Godavari",
+  "state": "Andhra Pradesh"
+ },
+ "YSR Kadapa": {
+  "strong_sectors": [
+   "engineering cluster (Kopparthi — state profile)",
+   "mining (asarite, barytes Mangampeta)",
+   "agriculture (banana, papaya, tomato)",
+   "fly-ash brick cluster (Proddutur)"
+  ],
+  "source": "https://dcmsme.gov.in/old/dips/state_wise_profile_16-17/AP%20State%20profile%202016.pdf (Kopparthi engineering cluster) + 37th MSME agenda (Proddutur fly-ash)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "CB RSETI Kadapa + KVK Utukur + KVK Vonipenta + ITI Rajampet (moved in Dec-2025); SC Society eligibility detail published on kadapa.ap.gov.in.",
+  "district": "YSR Kadapa",
+  "state": "Andhra Pradesh"
+ },
+ "Bagalkot": {
+  "strong_sectors": [
+   "food_processing (Ilkal-style weaving heritage; boundary-area cement; chilli/red-gram trade)"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (state cluster list)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Bagalkote runs farm-pond-cum-fish, poultry, dairy and goat demo units; RUDSETI + Karnataka Bank RSETI + govt ITI Kaladagi serve the town cluster.",
+  "district": "Bagalkot",
+  "state": "Karnataka"
+ },
+ "Ballari": {
+  "strong_sectors": [
+   "mining and steel (JSW/Hospet belt)",
+   "agriculture (cotton, jowar)"
+  ],
+  "source": "general economic geography; KVK Ballari gist (ATARI)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Mining-linked informal work dominates Hospet-Sandur belt; KVK Hagari + CB RSETI Ballari + govt ITIs.",
+  "district": "Ballari",
+  "state": "Karnataka"
+ },
+ "Belagavi": {
+  "strong_sectors": [
+   "foundry and casting cluster (Belagavi city)",
+   "food_processing (sugarcane)",
+   "aerospace_aviation (Belagavi aerospace park)"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (foundry cluster listed)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Two KVKs (BIRDS NGO + KLE), CB RSETI, RUDSETI-free but 6 ITI-area records; GTTC and KGTTI Belagavi for precision/technical skilling.",
+  "district": "Belagavi",
+  "state": "Karnataka"
+ },
+ "Bengaluru Rural": {
+  "strong_sectors": [
+   "apparel (Peenya spillover)",
+   "electronics_automation (Narsapura-adjacent corridors)",
+   "dairy"
+  ],
+  "source": "https://bangalorerural.nic.in/en/district-skill-development-office/ (DSDO page)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Hadonahalli with dairy/poultry/sheep/piggery demo units; CB RSETI Hoskote and RUDSETI Arashinakunte both inside the district.",
+  "district": "Bengaluru Rural",
+  "state": "Karnataka"
+ },
+ "Bengaluru Urban": {
+  "strong_sectors": [
+   "IT-ITeS",
+   "electronics_automation",
+   "aerospace_aviation (HAL/ISRO/BEL corridor)",
+   "apparel (Peenya)",
+   "media_entertainment"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (IT/ITES and apparel clusters)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "State skilling apex: KSDC/CMKKY HQ, GTTC + KGTTI Bengaluru, CBIIT Malleshwaram, DGT Model ITI Hosur Road (1,721 seats); no dedicated KVK (IIHR Hessarghatta serves horticulture).",
+  "district": "Bengaluru Urban",
+  "state": "Karnataka"
+ },
+ "Bidar": {
+  "strong_sectors": [
+   "handloom_textile (Bidri craft)",
+   "agriculture (pulses)"
+  ],
+  "source": "general economic geography; KVK Bidar",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Bidriware is a GI handicraft with artisan skilling need; KVK + govt ITIs Bhalki/Aurad.",
+  "district": "Bidar",
+  "state": "Karnataka"
+ },
+ "Chamarajanagar": {
+  "strong_sectors": [
+   "handloom_textile (Kollegal handloom cluster)",
+   "food_processing (jaggery)",
+   "NTFP/forest produce"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (Kollegal handloom cluster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "4 govt ITIs incl. two women's ITIs; KVK Hardanahally; SC-dominant district with high PM-AJAY relevance.",
+  "district": "Chamarajanagar",
+  "state": "Karnataka"
+ },
+ "Chikkaballapur": {
+  "strong_sectors": [
+   "handloom_textile (silk filature/reeling)",
+   "horticulture (grape, mango)",
+   "food_processing"
+  ],
+  "source": "https://dcmsme.gov.in/dips/chikkaballapur.pdf (silk filature noted in DIP)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Silk-reeling workforce noted in MSME DIP; 8 centre records incl. CB RSETI Doddamarali and 7 govt ITIs.",
+  "district": "Chikkaballapur",
+  "state": "Karnataka"
+ },
+ "Chikkamagaluru": {
+  "strong_sectors": [
+   "plantation (coffee, pepper)",
+   "food_processing (curing works)"
+  ],
+  "source": "KVK Mudigere host (UAHS) gist, ATARI",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Coffee-estate wage labour + small grower economy; KVK Mudigere with coffee nursery demo; Union RSETI presence (directory-verified only).",
+  "district": "Chikkamagaluru",
+  "state": "Karnataka"
+ },
+ "Chitradurga": {
+  "strong_sectors": [
+   "wind energy",
+   "agriculture (groundnut, jowar)",
+   "stone quarrying"
+  ],
+  "source": "general economic geography",
+  "confidence": "LIKELY",
+  "livelihood_notes": "RUDSETI Chitradurga + CB-strong ITI network (6 records); KVK Hiriyur Babbur farm.",
+  "district": "Chitradurga",
+  "state": "Karnataka"
+ },
+ "Dakshina Kannada": {
+  "strong_sectors": [
+   "food_processing (cashew, tile/beedi heritage)",
+   "petrochemicals (MRPL)",
+   "gold/jewellery cluster (Mangaluru)",
+   "IT-ITeS"
+  ],
+  "source": "https://dcmsme.gov.in/dips/dakshina.pdf (cashew, tile, beedi, gold ornament clusters in DIP 2016-17)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Cashew-processing women workforce flagged in DIP; RUDSETI Ujire (founding RUDSETI w/ SDME Trust), KVK Kankanady, govt ITIs Belthangady/Vittla.",
+  "district": "Dakshina Kannada",
+  "state": "Karnataka"
+ },
+ "Davanagere": {
+  "strong_sectors": [
+   "food_processing (benne-dosa/khara ecosystem aside: maize, oil milling)",
+   "textile powerloom (heritage)",
+   "sugar"
+  ],
+  "source": "general economic geography; state profile cluster list",
+  "confidence": "LIKELY",
+  "livelihood_notes": "CB RSETI Old Tholahunase + 3 govt ITIs; JSS Davanagere (unverified).",
+  "district": "Davanagere",
+  "state": "Karnataka"
+ },
+ "Dharwad": {
+  "strong_sectors": [
+   "agri-implements cluster (Hubballi)",
+   "education services",
+   "food_processing"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (Hubli agricultural-implements cluster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "RUDSETI Dharwad Gandhi Nagar; UAS Dharwad hosts 6+ KVKs state-wide; govt ITI Vidyanagar.",
+  "district": "Dharwad",
+  "state": "Karnataka"
+ },
+ "Gadag": {
+  "strong_sectors": [
+   "handloom_textile (Gadag powerloom/betelweed)",
+   "wind energy"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (Gadag powerloom cluster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Powerloom weaving is the signature livelihood; KVK Hulkoti (NGO-hosted) + ITI(W) Gadag; TSC/Q2404 shuttleless-weaving fitter QP maps here.",
+  "district": "Gadag",
+  "state": "Karnataka"
+ },
+ "Hassan": {
+  "strong_sectors": [
+   "agriculture (coffee fringe, potato)",
+   "metal-ware cluster",
+   "food_processing"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (Hassan metal-ware cluster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "CB RSETI KIADB Hassan; KVK Kandail; GTTC Hassan centre.",
+  "district": "Hassan",
+  "state": "Karnataka"
+ },
+ "Haveri": {
+  "strong_sectors": [
+   "agriculture (chilli Byadagi, cotton)",
+   "cardamom-curing trade heritage"
+  ],
+  "source": "KVK Hanumanmatti host (UAS Dharwad), ATARI",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Byadagi chilli drying/grading is a large informal livelihood; 2 govt ITIs (Savanur, Holalu-Byadagi) + KVK.",
+  "district": "Haveri",
+  "state": "Karnataka"
+ },
+ "Kalaburagi": {
+  "strong_sectors": [
+   "food_processing (dal mills - Gulburga tur pulse milling cluster)",
+   "cement"
+  ],
+  "source": "https://dcmsme.gov.in/dips/state-profile.pdf (dal-mill cluster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Pulse-milling and sugar-cane wage economy; 2 KVKs + ITI(W) MSK Mill Rd + KGTTI Kalaburagi + GTTC CoE (Siemens).",
+  "district": "Kalaburagi",
+  "state": "Karnataka"
+ },
+ "Kodagu": {
+  "strong_sectors": [
+   "plantation (coffee, spice)",
+   "tourism/homestay services"
+  ],
+  "source": "https://dcmsme.gov.in/dips/kodagu.pdf (plantation economy, DIP 2016-17)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Coffee-curing and homestay hospitality jobs; 3 govt ITIs incl. two women's institutes + KVK Gonikoppal + Union RSETI Kudige.",
+  "district": "Kodagu",
+  "state": "Karnataka"
+ },
+ "Kolar": {
+  "strong_sectors": [
+   "handloom_textile (silk reeling KGF/Narsapura-side filatures)",
+   "stone carving (Shivarpatna)",
+   "auto-components (Narsapura park)",
+   "aerospace_aviation (proposed scope in DIP)"
+  ],
+  "source": "https://dcmsme.gov.in/dips/kolar.pdf (KGF, Narsapura auto hub, Shivarpatna stone carving, silk; DIP 2016-17)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Silk-reeling is a major women's wage livelihood; 2 KVKs (Chintamani + Tamaka) + CB RSETI Tamaka + 4 govt ITIs.",
+  "district": "Kolar",
+  "state": "Karnataka"
+ },
+ "Koppal": {
+  "strong_sectors": [
+   "mining (iron ore fringe)",
+   "agriculture (jowar, sunflower)",
+   "handicraft (Kinnhal brass)"
+  ],
+  "source": "general economic geography; KVK Gangavati",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Kinnhal brass-metal artisan tradition; 3 govt ITIs + KVK Gangavati.",
+  "district": "Koppal",
+  "state": "Karnataka"
+ },
+ "Mandya": {
+  "strong_sectors": [
+   "food_processing (sugar, Mysore-style agro mills)",
+   "dairy (KMF strong)",
+   "paddy"
+  ],
+  "source": "general economic geography; KVK VC Farm",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Sugarcane wage + dairy co-op economy; GTTC Maddur + govt ITIs Mandya/Malavalli + RUDSETI-adjacent Mysuru hub.",
+  "district": "Mandya",
+  "state": "Karnataka"
+ },
+ "Mysuru": {
+  "strong_sectors": [
+   "handloom_textile (silk - CSR&TI Mysuru national hub)",
+   "food_processing",
+   "media_entertainment (heritage tourism)",
+   "IT-ITeS fringe"
+  ],
+  "source": "https://www.csrtimys.res.in/ (Central Silk Board national training institute located in Mysuru)",
+  "confidence": "CONFIRMED (sericulture institution)",
+  "livelihood_notes": "CSR&TI Mysuru runs fee-based + international sericulture courses; KVK Suttur (JSS NGO) with fishery/poultry/value-addition demos; RUDSETI Hinkal; JSS Mysuru.",
+  "district": "Mysuru",
+  "state": "Karnataka"
+ },
+ "Raichur": {
+  "strong_sectors": [
+   "thermal power",
+   "agriculture (paddy, pulses)",
+   "mining fringe"
+  ],
+  "source": "general economic geography; KVK Raichur",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Paddy-bowl wage economy; govt ITIs Lingasugur/Devadurga/Maski; KVK Raichur.",
+  "district": "Raichur",
+  "state": "Karnataka"
+ },
+ "Ramanagara": {
+  "strong_sectors": [
+   "handloom_textile (silk cocoon trade/reeling - 'silk city')",
+   "granite quarrying",
+   "food_processing (channapatna toys - GI wood craft)"
+  ],
+  "source": "general economic geography + KVK Ramanagara (ATARI)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Silk-reeling and Channapatna lacquer-toy artisan workforce; women-only CB RSETI Harohalli + ATI Jogaradoddi (artisan) + KVK + GTTC Kanakapura - the single best PM-AJAY GIA fit district in KA.",
+  "district": "Ramanagara",
+  "state": "Karnataka"
+ },
+ "Shivamogga": {
+  "strong_sectors": [
+   "agriculture (areca, paddy)",
+   "iron/steel fringe",
+   "food_processing (horticulture)"
+  ],
+  "source": "KVK Shivamogga official site (UAHS host)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Areca-bowl economy; KVK Navule + CB RSETI Holalur + 4 govt ITIs.",
+  "district": "Shivamogga",
+  "state": "Karnataka"
+ },
+ "Tumakuru": {
+  "strong_sectors": [
+   "industrial estates (machine tools, food)",
+   "agriculture (coconut Tiptur, areca)",
+   "food_processing"
+  ],
+  "source": "general economic geography; KVK Tiptur",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Two KVKs (ZARS Tiptur + IIHR-hosted Tumakuru) + 3 govt ITIs + JSS Tumakuru (unverified).",
+  "district": "Tumakuru",
+  "state": "Karnataka"
+ },
+ "Udupi": {
+  "strong_sectors": [
+   "food_processing (cashew)",
+   "banking/services",
+   "dairy",
+   "beedi heritage"
+  ],
+  "source": "general economic geography; RUDSETI Brahmavar",
+  "confidence": "LIKELY",
+  "livelihood_notes": "RUDSETI Brahmavar + ATI Karkala (artisan) + KVK Brahmavar + govt ITI Byndoor.",
+  "district": "Udupi",
+  "state": "Karnataka"
+ },
+ "Uttara Kannada": {
+  "strong_sectors": [
+   "forestry/NTFP",
+   "fisheries (coastal)",
+   "tourism",
+   "food_processing (cashew)"
+  ],
+  "source": "general economic geography; KVK Sirsi",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Coastal fishing + forest economies; 2 CB-sponsored RSETIs (Kumta + Deshpande Haliyal) + ITI Mundagod + KVK Sirsi + JSS Karwar (unverified).",
+  "district": "Uttara Kannada",
+  "state": "Karnataka"
+ },
+ "Vijayanagara": {
+  "strong_sectors": [
+   "mining and steel (Hospet-Sandur)",
+   "tourism (Hampi)",
+   "agriculture"
+  ],
+  "source": "general economic geography; new-district note",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Newest district (2020); 3 govt ITIs mapped here under new boundaries (Sandur, Hampsagar, Itagi, Gudekote) + GTTC Hospet; no dedicated KVK yet (Ballari KVK covers).",
+  "district": "Vijayanagara",
+  "state": "Karnataka"
+ },
+ "Vijayapura": {
+  "strong_sectors": [
+   "food_processing (grapes - raisin cluster, dairy-BM Hills sweets)",
+   "handloom fringe"
+  ],
+  "source": "general economic geography; KVK Vijayapura site",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Raisin-drying and grape-packhouse workforce; 2 KVKs (RARS Hittnahalli + Indi) + RUDSETI + 2 govt ITIs.",
+  "district": "Vijayapura",
+  "state": "Karnataka"
+ },
+ "Yadgir": {
+  "strong_sectors": [
+   "agriculture (pulses, paddy)",
+   "food_processing (dal/pulse milling)"
+  ],
+  "source": "general economic geography; KVK Yadgir (ARS Kawadimatti)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "One of the most SC-population-share districts; KVK Kawadimatti + govt ITI Surpur; RSETI sponsor unverified (likely SBI).",
+  "district": "Yadgir",
+  "state": "Karnataka"
+ },
+ "Alappuzha": {
+  "district": "Alappuzha",
+  "note": "The coir capital of India - coir spinning, weaving and the Coir Board's NSQF-aligned national training centre sit here - plus backwater tourism (houseboats), marine/inland fisheries and paddy below sea level; large SC workforce in coir and fisheries livelihoods.",
+  "strong_sectors": [
+   "handicrafts",
+   "tourism_hospitality",
+   "fisheries",
+   "agriculture"
+  ],
+  "source": "http://www.ccriindia.org/home_page_of_nctdc.html",
+  "confidence": "LIKELY - coir-training centrality confirmed via the Coir Board institute site; tourism/fisheries from general documented knowledge, not individually re-verified",
+  "state": "Kerala"
+ },
+ "Ernakulam": {
+  "district": "Ernakulam",
+  "note": "Kochi anchors the state economy: port and Cochin Shipyard, petrochemicals/refinery, Infopark IT services, a huge private-hospital ecosystem, and marine fisheries (CMFRI-hosted KVK at Narakkal); construction and logistics absorb large informal SC labour.",
+  "strong_sectors": [
+   "it_ites",
+   "healthcare",
+   "logistics",
+   "fisheries",
+   "construction"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Idukki": {
+  "district": "Idukki",
+  "note": "High-range plantation economy - cardamom, tea, pepper and other spices - with Munnar tourism; plantation and estate labour includes a significant SC/Scheduled Tribe workforce.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "tourism_hospitality"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Kannur": {
+  "district": "Kannur",
+  "note": "Kerala's most urbanised district per the official MSME profile: plywood (Western India Plywood, Valapattanam), Keltron electronics units, and the traditional handloom and beedi trades that have long employed SC households; tourism at Kannur's beaches is growing.",
+  "strong_sectors": [
+   "handloom_textile",
+   "electronics_automation",
+   "construction",
+   "tourism_hospitality"
+  ],
+  "source": "https://dcmsme.gov.in/dips/DIPKANNUR.pdf",
+  "confidence": "CONFIRMED - MSME Brief Industrial Profile of Kannur (official) documents urbanisation, plywood and Keltron units; handloom/beedi from general documented knowledge",
+  "state": "Kerala"
+ },
+ "Kasaragod": {
+  "district": "Kasaragod",
+  "note": "Northernmost district: arecanut and plantation agriculture, cashew, beedi rolling in households, and small-scale fishing; the district's women-focused ASAP skilling initiative ('Dharppanam') targets accounting, bakery and community-work roles.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "handloom_textile",
+   "fisheries"
+  ],
+  "source": null,
+  "confidence": "LIKELY - agriculture/beedi from general documented knowledge; Dharppanam course list confirmed via ASAP Kerala CSP page",
+  "state": "Kerala"
+ },
+ "Kollam": {
+  "district": "Kollam",
+  "note": "Historic cashew-processing capital (still among India's largest), coir, marine fisheries (Neendakara-Sakthikulangara harbours) and mineral sand mining; cashew factories employ predominantly SC women workers.",
+  "strong_sectors": [
+   "food_processing",
+   "handicrafts",
+   "fisheries"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Kottayam": {
+  "district": "Kottayam",
+  "note": "Rubber heartland (tread rubber, latex exports, rubber-products cluster at Changanacherry) with footwear ancillarisation around Paragon/Lunar, ethnic-food cluster at Pala, screwpine-craft at Vaikom, and one of India's densest nursing/healthcare education belts.",
+  "strong_sectors": [
+   "rubber",
+   "healthcare",
+   "food_processing",
+   "handicrafts",
+   "leather"
+  ],
+  "source": "https://dcmsme.gov.in/dips/Dt%20%20profile-%20KOTTAYAM-WORKING.pdf",
+  "confidence": "CONFIRMED - MSME Brief Industrial Profile of Kottayam (official) documents the rubber clusters, footwear vendorisation, ethnic-food and screwpine clusters; healthcare from general documented knowledge",
+  "state": "Kerala"
+ },
+ "Kozhikode": {
+  "district": "Kozhikode",
+  "note": "Coastal services hub: marine fisheries (Beypore, Vadakara), tiles/wood legacy industries, growing Cyberpark IT services, healthcare destination hospitals, and strong food/hospitality trade.",
+  "strong_sectors": [
+   "fisheries",
+   "it_ites",
+   "healthcare",
+   "tourism_hospitality"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Malappuram": {
+  "district": "Malappuram",
+  "note": "Kerala's most populous district: Gulf-migration remittance economy, Kozhikode-orbit trade and retail, poultry and dairy smallholdings, handloom pockets, and a young population needing first-job skills (ASAP CSP at Pandikkad, KCAET at Tavanur).",
+  "strong_sectors": [
+   "retail",
+   "agriculture",
+   "food_processing",
+   "handloom_textile"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Palakkad": {
+  "district": "Palakkad",
+  "note": "Kerala's rice bowl with the state's second-largest industrial corridor (Kanjikode - auto components, steel, FMCG), wind farms in the Palghat gap, Chittur handloom, and large SC agricultural labour settlements; NIT Calicut sits at its edge.",
+  "strong_sectors": [
+   "agriculture",
+   "automotive",
+   "handloom_textile",
+   "electronics_automation"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Pathanamthitta": {
+  "district": "Pathanamthitta",
+  "note": "Rubber-smallholding economy with the Sabarimala pilgrimage services industry (hospitality, transport, retail) centred on its route towns; high out-migration for nursing and Gulf employment.",
+  "strong_sectors": [
+   "rubber",
+   "tourism_hospitality",
+   "healthcare"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Thiruvananthapuram": {
+  "district": "Thiruvananthapuram",
+  "note": "State capital: government employment, Technopark IT/ITeS, the new Vizhinjam deep-water port (with ASAP's marine-structural-fitter and port-adjacent skilling), Kovalam tourism, and the VSSC/ISRO space-industry orbit.",
+  "strong_sectors": [
+   "it_ites",
+   "logistics",
+   "tourism_hospitality",
+   "healthcare"
+  ],
+  "source": "https://asapkerala.gov.in/training_center/csp-vizhinjam/",
+  "confidence": "LIKELY - Vizhinjam port-skilling link confirmed via ASAP CSP Vizhinjam course list; IT/government/tourism from general documented knowledge",
+  "state": "Kerala"
+ },
+ "Thrissur": {
+  "district": "Thrissur",
+  "note": "Kerala's gold and jewellery capital (bulk of India's gold-loan and jewellery-trade ecosystem), plus Timber/plywood, Ayurveda manufacturers, the KAU/KVASU agricultural-dairy research campus at Mannuthy, and Guruvayur pilgrimage services.",
+  "strong_sectors": [
+   "gems_jewellery",
+   "agriculture",
+   "dairy",
+   "food_processing",
+   "tourism_hospitality"
+  ],
+  "source": "https://www.kvasu.ac.in/college/more/4",
+  "confidence": "LIKELY - dairy-science anchor confirmed via KVASU VKIDFT page; gold/jewellery and Ayurveda from general documented knowledge",
+  "state": "Kerala"
+ },
+ "Wayanad": {
+  "district": "Wayanad",
+  "note": "Hill district of spice and plantation agriculture (pepper, coffee, tea), eco-tourism, and tribal/SC smallholding communities vulnerable to crop shocks; skilling demand is agri-processing, tourism services and off-farm trades.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "tourism_hospitality"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Kerala"
+ },
+ "Ariyalur": {
+  "district": "Ariyalur",
+  "note": "Cement and lime belt (large limestone reserves feeding multiple cement plants) alongside paddy and cashew agriculture; much of the workforce is in construction materials and farm labour.",
+  "strong_sectors": [
+   "construction",
+   "agriculture",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass; consistent with MSME District Industrial Profile series (see report)",
+  "state": "Tamil Nadu"
+ },
+ "Chengalpattu": {
+  "district": "Chengalpattu",
+  "note": "Southern auto and electronics corridor of greater Chennai (Mahindra World City, Maraimalai Nagar, Sriperumbudur-adjacent plants) with leather and port-linked logistics on the GST road belt.",
+  "strong_sectors": [
+   "automotive",
+   "electronics_automation",
+   "leather",
+   "logistics"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Chennai": {
+  "district": "Chennai",
+  "note": "State's services engine: IT/ITeS, healthcare destination hospitals, auto-industry headquarters, port and an enormous informal services economy that absorbs migrant SC labour.",
+  "strong_sectors": [
+   "it_ites",
+   "healthcare",
+   "automotive",
+   "logistics",
+   "media_entertainment"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Coimbatore": {
+  "district": "Coimbatore",
+  "note": "Engineering and textile machinery hub - pumps, motors, castings, machine tools and jewellery - with cotton textile mills; Pollachi side is agricultural (coconut, cotton).",
+  "strong_sectors": [
+   "handloom_textile",
+   "electronics_automation",
+   "gems_jewellery",
+   "agriculture"
+  ],
+  "source": "https://dcmsme.gov.in/dips/IPS%20coimbatore%202012_t.pdf",
+  "confidence": "LIKELY - MSME Brief Industrial Profile of Coimbatore (2012-13, stale but official) documents the textile/cotton base",
+  "state": "Tamil Nadu"
+ },
+ "Cuddalore": {
+  "district": "Cuddalore",
+  "note": "SIPCOT chemical/petro complex and minor port on the northern coast; cashew processing, delta paddy, and a marine fishing belt around Chidambaram-Parangipettai.",
+  "strong_sectors": [
+   "agriculture",
+   "fisheries",
+   "food_processing",
+   "logistics"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Dharmapuri": {
+  "district": "Dharmapuri",
+  "note": "Mango and tapioca dominated agrarian district with horticulture and mango-pulp/food processing; large share of SC population engaged in agricultural labour.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Dindigul": {
+  "district": "Dindigul",
+  "note": "Known for its leather tanneries and locks/cottage metalware, plus chilli, banana and cotton trade; agro-processing and tanning employ large SC workforces.",
+  "strong_sectors": [
+   "leather",
+   "agriculture",
+   "food_processing",
+   "handicrafts"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Erode": {
+  "district": "Erode",
+  "note": "Handloom and powerloom cluster with a large textile processing base; significant dairy (Erode region) and poultry. Turmeric mandi (Erode terminates a big share of India's turmeric) drives agri-processing demand; readymade-garment and coir clusters are officially identified.",
+  "strong_sectors": [
+   "handloom_textile",
+   "agriculture",
+   "food_processing"
+  ],
+  "source": "https://dcmsme.gov.in/old/dips/ips%20erode%202012_tn.pdf",
+  "confidence": "LIKELY - MSME Brief Industrial Profile of Erode (2012, stale but official) documents the garment and coir clusters; turmeric/dairy from general district profile",
+  "state": "Tamil Nadu"
+ },
+ "Kallakurichi": {
+  "district": "Kallakurichi",
+  "note": "Paddy, sugarcane and cassava agriculture with sago/rice milling and wood-carving pockets (Chinna Salem); most rural employment is farm labour.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "handicrafts"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Kancheepuram": {
+  "district": "Kancheepuram",
+  "note": "Kanchipuram silk handloom tradition sits beside the Oragadam-Sriperumbudur auto/electronics manufacturing belt and leather units - the district straddles craft heritage and heavy industry.",
+  "strong_sectors": [
+   "handloom_textile",
+   "automotive",
+   "electronics_automation",
+   "leather"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Kanniyakumari": {
+  "district": "Kanniyakumari",
+  "note": "Rubber and coconut smallholdings, coir and handloom work, marine fishing villages, and a large tourism economy around Kanyakumari town; high density and high out-migration for work.",
+  "strong_sectors": [
+   "fisheries",
+   "handloom_textile",
+   "tourism_hospitality",
+   "agriculture"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Karur": {
+  "district": "Karur",
+  "note": "Home-textile export cluster (Karur is among India's largest handloom home-furnishings exporters), bus-body building, and TNPL paper mill; textile processing employs rural SC labour at scale.",
+  "strong_sectors": [
+   "handloom_textile",
+   "automotive",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Krishnagiri": {
+  "district": "Krishnagiri",
+  "note": "Hosur industrial belt (two-wheelers, EV and electronics manufacturing including Tata Electronics) plus mango pulp processing and granite; a rare district combining heavy industry and horticulture.",
+  "strong_sectors": [
+   "automotive",
+   "electronics_automation",
+   "agriculture",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Madurai": {
+  "district": "Madurai",
+  "note": "Agricultural-implement manufacturing (Melur), food products, knitted garments (Usilampatti/Urangampatti side), granite, and a big dairy (Aavin); the city anchors services and healthcare for the south.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "handloom_textile",
+   "healthcare"
+  ],
+  "source": "https://dcmsme.gov.in/old/dips/IPS%20Madurai%202012_tr.pdf",
+  "confidence": "LIKELY - MSME Brief Industrial Profile of Madurai (2012-13, stale but official) documents these clusters",
+  "state": "Tamil Nadu"
+ },
+ "Mayiladuthurai": {
+  "district": "Mayiladuthurai",
+  "note": "Cauvery-delta paddy economy with coconut and a coastal fishing strip; little large industry, so skilling demand is agriculture, marine fisheries and food processing.",
+  "strong_sectors": [
+   "agriculture",
+   "fisheries",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Nagapattinam": {
+  "district": "Nagapattinam",
+  "note": "Marine fisheries (one of TN's largest landing centres) plus delta paddy and thermal/port activity at Karaikal's edge; tsunami-era skilling programmes left a fisheries-training legacy.",
+  "strong_sectors": [
+   "fisheries",
+   "agriculture",
+   "logistics"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Namakkal": {
+  "district": "Namakkal",
+  "note": "Poultry capital of India's egg production with a huge feed and poultry-equipment economy, plus lorry-ownership/transport culture; dairy and maize growing support the feed mills.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "logistics"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "The Nilgiris": {
+  "district": "The Nilgiris",
+  "note": "Plantation economy (tea above all), horticulture and tourism (Ooty/Coonoor); tribal and SC communities work plantations and the hospitality trade.",
+  "strong_sectors": [
+   "agriculture",
+   "tourism_hospitality",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Perambalur": {
+  "district": "Perambalur",
+  "note": "Maize and cassava farming feeding sago and starch units, with Trichy's fabrication orbit at its edge; one of TN's poorer districts with high SC population share.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Pudukkottai": {
+  "district": "Pudukkottai",
+  "note": "Granite quarrying and processing, paddy/groundnut agriculture, and artisan metal/stone crafts; stone-work and construction materials employ many rural SC workers.",
+  "strong_sectors": [
+   "agriculture",
+   "construction",
+   "handicrafts"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Ramanathapuram": {
+  "district": "Ramanathapuram",
+  "note": "Marine fisheries and seaweed (Rameswaram/Gulf of Mannar), salt pans, coconut and chilli farming, and wind-farm maintenance work; tourism at Rameswaram is a services employer.",
+  "strong_sectors": [
+   "fisheries",
+   "renewable_energy",
+   "agriculture",
+   "tourism_hospitality"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Ranipet": {
+  "district": "Ranipet",
+  "note": "Leather tannery and finished-leather/footwear cluster (part of the Vellore-Ambur-Ranipet leather belt) plus SIPCOT chemical units and refractories/ceramics.",
+  "strong_sectors": [
+   "leather",
+   "construction",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Salem": {
+  "district": "Salem",
+  "note": "India's silver-anklet jewellery hub (~60% of national production), a major textile processing/powerloom centre, sago and mango processing, and Salem Steel Plant; coir and general engineering round it out.",
+  "strong_sectors": [
+   "gems_jewellery",
+   "handloom_textile",
+   "food_processing",
+   "agriculture"
+  ],
+  "source": "https://dcmsme.gov.in/dips/2016-17/DIP.SALEM.2015.16.1.pdf",
+  "confidence": "CONFIRMED - MSME Brief Industrial Profile of Salem (2015-16, official) documents silver jewellery scale, textiles and steel; sago/mango from general district profile",
+  "state": "Tamil Nadu"
+ },
+ "Sivaganga": {
+  "district": "Sivaganga",
+  "note": "Paddy, chillies and coconut agriculture with limestone/cement and emerging solar parks; traditional palm and coir crafts persist in rural blocks.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "renewable_energy",
+   "handicrafts"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Tenkasi": {
+  "district": "Tenkasi",
+  "note": "Wind-farm belt (Mekkarai-Tenkasi passes host large windmill fleets), paddy and banana agriculture, and Courtallam tourism; spillover employment in turbine O&M and hospitality.",
+  "strong_sectors": [
+   "renewable_energy",
+   "agriculture",
+   "tourism_hospitality"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Thanjavur": {
+  "district": "Thanjavur",
+  "note": "The Cauvery rice bowl - delta paddy, coconut and banana - with temple tourism and living crafts (bronze icons at Swamimalai, Thanjavur paintings, veena making).",
+  "strong_sectors": [
+   "agriculture",
+   "tourism_hospitality",
+   "handicrafts",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Theni": {
+  "district": "Theni",
+  "note": "Commercial banana, grapes and cardamom production with cotton ginning/spinning units; Vaigai-dam irrigation supports one of TN's most commercialised fruit economies.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "handloom_textile"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Thoothukudi": {
+  "district": "Thoothukudi",
+  "note": "All-weather port with salt, marine fisheries, spinning mills and mineral/carbon industries; fishing hamlets and salt-pan labour are major SC livelihood sources.",
+  "strong_sectors": [
+   "fisheries",
+   "logistics",
+   "handloom_textile",
+   "agriculture"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Tiruchirappalli": {
+  "district": "Tiruchirappalli",
+  "note": "Heavy electrical fabrication orbit around BHEL and a city gold-jewellery cluster, plus banana trade and education/healthcare services; welding and fabrication skills have standing demand.",
+  "strong_sectors": [
+   "gems_jewellery",
+   "construction",
+   "agriculture",
+   "healthcare"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Tirunelveli": {
+  "district": "Tirunelveli",
+  "note": "Paddy and banana agriculture, wind farms on the western edge, halwa/food brands, beedi rolling in rural blocks and cement at Alangulam side.",
+  "strong_sectors": [
+   "agriculture",
+   "renewable_energy",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Tirupathur": {
+  "district": "Tirupathur",
+  "note": "Ambur is one of India's biggest leather footwear manufacturing towns - tanning, shoe uppers and finished footwear employ a very large SC workforce; agriculture elsewhere.",
+  "strong_sectors": [
+   "leather",
+   "agriculture"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Tiruppur": {
+  "district": "Tiruppur",
+  "note": "India's knitwear export capital (cotton yarn to finished apparel), with ginning and the Palladam broiler-poultry belt; the apparel industry is the state's largest SC/women employer after agriculture.",
+  "strong_sectors": [
+   "apparel",
+   "handloom_textile",
+   "agriculture"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Tiruvallur": {
+  "district": "Tiruvallur",
+  "note": "Ennore-Manali petrochemical and power belt, ports (Kattupalli, Kamarajar), Gummidipoondi industrial estate and auto-component plants; heavy demand for industrial-entry-level skills.",
+  "strong_sectors": [
+   "automotive",
+   "logistics",
+   "construction",
+   "electronics_automation"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Tiruvannamalai": {
+  "district": "Tiruvannamalai",
+  "note": "Paddy and groundnut agriculture with rice mills, scent/flower-processing factories around Tiruvannamalai town, khadi weaving, and a very large pilgrimage-tourism economy.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "handloom_textile",
+   "tourism_hospitality"
+  ],
+  "source": "https://msmedi-chennai.gov.in/GARMS_Admin/basictools/images/DIPSReport/Tiruvannamalai.pdf",
+  "confidence": "LIKELY - MSME District Industrial Profile (Tiruvannamalai, official) documents scent/floriculture factories and rice mills; tourism from general district profile",
+  "state": "Tamil Nadu"
+ },
+ "Tiruvarur": {
+  "district": "Tiruvarur",
+  "note": "Among TN's most productive paddy districts (delta), with coconut, rice milling and MODI-era farm mechanisation services; rural SC labour is heavily agricultural.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Vellore": {
+  "district": "Vellore",
+  "note": "CMC makes it a national healthcare destination (hospital-career demand), alongside leather-adjacent industry on its edges, Katpadi manufacturing and gold-jewellery retail trade.",
+  "strong_sectors": [
+   "healthcare",
+   "leather",
+   "gems_jewellery"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass",
+  "state": "Tamil Nadu"
+ },
+ "Viluppuram": {
+  "district": "Viluppuram",
+  "note": "Sugar mills (4 factories), rice and sago milling, cotton ginning, limited inland fisheries, and wood carving around Kallakurichi-Chinna Salem; one of TN's largest rural labour pools.",
+  "strong_sectors": [
+   "agriculture",
+   "food_processing",
+   "handicrafts"
+  ],
+  "source": "https://dcmsme.gov.in/dips/2016-17/DIP.VILLUPURAM.2015.16.pdf",
+  "confidence": "CONFIRMED - MSME Brief Industrial Profile of Viluppuram (2015-16, official) documents sugar mills, rice/sago units, ginning and wood carving",
+  "state": "Tamil Nadu"
+ },
+ "Virudhunagar": {
+  "district": "Virudhunagar",
+  "note": "Sivakasi's printing, fireworks and matches cluster (India's pyrotechnics capital), cotton ginning and edible-oil pressing, and a strong trading/exporter community; home-based and hazardous work employs many SC women.",
+  "strong_sectors": [
+   "media_entertainment",
+   "agriculture",
+   "food_processing",
+   "handicrafts"
+  ],
+  "source": null,
+  "confidence": "LIKELY - not individually source-verified in this pass; printing mapped to media_entertainment (printing & publishing)",
+  "state": "Tamil Nadu"
+ },
+ "Agra": {
+  "strong_sectors": [
+   "leather (India's largest footwear hub; shoe cluster 5,000 units incl. 150 exporters)",
+   "handloom_textile (hand-knotted carpet cluster: 90 units, ~75,000 employed)",
+   "stone craft (marble)",
+   "food_processing (petha, dalmoth)"
+  ],
+  "source": "https://dcmsme.gov.in/dips/Agra.pdf (official MSME-DI profile: cluster tables, Leather Park, Foundry Nagar)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Leather QPs (Shoesmith 40h PM-Vishwakarma; Footwear Maker CTS 2080h) map 1:1 here; KVK Bichpuri + PNB-side RSETI absence — RSETI sponsor not captured this pass.",
+  "district": "Agra",
+  "state": "Uttar Pradesh"
+ },
+ "Aligarh": {
+  "strong_sectors": [
+   "engineering/locks & hardware ('Tala Nagari': ~2,500 lock units, ~Rs 1,500 cr turnover, ~10,000 employed; 85% of India's locks)",
+   "brass handicrafts",
+   "dairy/fringe"
+  ],
+  "source": "https://dcmsme.gov.in/old/dips/Aligarh.pdf (official MSME-DI profile)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK Aligarh (Central Dairy Farm complex) + JSS Aligarh + ICAR-adjacent lock-cluster skilling need.",
+  "district": "Aligarh",
+  "state": "Uttar Pradesh"
+ },
+ "Ambedkar Nagar": {
+  "strong_sectors": [
+   "agriculture (paddy, pulses)",
+   "powerloom fringe"
+  ],
+  "source": "general economic geography; KVK 2010 (NDUA&T)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; RSETI exists per SLBC (sponsor not captured).",
+  "district": "Ambedkar Nagar",
+  "state": "Uttar Pradesh"
+ },
+ "Amethi": {
+  "strong_sectors": [
+   "agriculture",
+   "PSU-linked services legacy"
+  ],
+  "source": "general economic geography; KVK Kathora (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New district (2019-era carve from Sultanpur/Faizabad sides); KVK present.",
+  "district": "Amethi",
+  "state": "Uttar Pradesh"
+ },
+ "Amroha": {
+  "strong_sectors": [
+   "handloom_textile (dari/weaving)",
+   "agriculture (mango, vegetables)"
+  ],
+  "source": "general economic geography; KVK Gajraula (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; RSETI established post-2015 (Syndicate/Prathama legacy).",
+  "district": "Amroha",
+  "state": "Uttar Pradesh"
+ },
+ "Auraiya": {
+  "strong_sectors": [
+   "agriculture",
+   "thermal power (Dibiyapur)"
+  ],
+  "source": "general economic geography; KVK Parwaha (2007)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Auraiya",
+  "state": "Uttar Pradesh"
+ },
+ "Ayodhya": {
+  "strong_sectors": [
+   "pilgrim-economy services (temple town boom)",
+   "agriculture (sugarcane, paddy)",
+   "food_processing"
+  ],
+  "source": "general economic geography; KVK Masodha (NDUA&T CRS)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "NDUA&T (Kumarganj, Ayodhya) hosts 10+ KVKs; RSETI present (PNB-legacy Sarva/Prathama belt).",
+  "district": "Ayodhya",
+  "state": "Uttar Pradesh"
+ },
+ "Azamgarh": {
+  "strong_sectors": [
+   "handloom_textile (saree weaving)",
+   "agriculture",
+   "small trade/diaspora remittance economy"
+  ],
+  "source": "general economic geography; KVK Singh Niketan (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; MSME RAMP lists Azamgarh among major handloom clusters.",
+  "district": "Azamgarh",
+  "state": "Uttar Pradesh"
+ },
+ "Baghpat": {
+  "strong_sectors": [
+   "agriculture (sugarcane, vegetables)",
+   "dairy"
+  ],
+  "source": "general economic geography; KVK Meerut Road (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Baghpat",
+  "state": "Uttar Pradesh"
+ },
+ "Bahraich": {
+  "strong_sectors": [
+   "food_processing (ODOP)",
+   "agriculture (paddy, sugarcane)",
+   "forest/NTFP fringe"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (ODOP table: Bahraich food processing)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs (1983 + 2018); RSETI present per SLBC.",
+  "district": "Bahraich",
+  "state": "Uttar Pradesh"
+ },
+ "Ballia": {
+  "strong_sectors": [
+   "agriculture (paddy, banana)",
+   "fisheries fringe (Ganga/ghat belt)"
+  ],
+  "source": "general economic geography; KVK Sohoan (1984)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Ballia",
+  "state": "Uttar Pradesh"
+ },
+ "Balrampur": {
+  "strong_sectors": [
+   "agriculture (sugarcane, paddy)",
+   "sugar mills"
+  ],
+  "source": "general economic geography; KVK Pachpedwa (2005)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Balrampur",
+  "state": "Uttar Pradesh"
+ },
+ "Banda": {
+  "strong_sectors": [
+   "agriculture (dryland, guava)",
+   "stone/quarrying (Bundelkhand)",
+   "handloom fringe (Chanderi-adjacent)"
+  ],
+  "source": "general economic geography; KVK Kamasin (2007)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Bundelkhand dryland economy; KVK + BUAT (Banda University of Agriculture & Technology) anchor.",
+  "district": "Banda",
+  "state": "Uttar Pradesh"
+ },
+ "Barabanki": {
+  "strong_sectors": [
+   "handloom_textile (Banarasi-adjacent weaving)",
+   "agriculture (opium belt legacy, sugarcane)",
+   "rose/kewda"
+  ],
+  "source": "general economic geography; KVK Haidargarh (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; RSETI present.",
+  "district": "Barabanki",
+  "state": "Uttar Pradesh"
+ },
+ "Bareilly": {
+  "strong_sectors": [
+   "furniture/wood (Bareilly 'furniture city' tag)",
+   "zari work",
+   "agriculture trade",
+   "IVRI livestock economy"
+  ],
+  "source": "general economic geography; KVK IVRI Izatnagar (1985)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "ICAR-IVRI hosted KVK gives livestock/dairy skilling edge.",
+  "district": "Bareilly",
+  "state": "Uttar Pradesh"
+ },
+ "Basti": {
+  "strong_sectors": [
+   "agriculture",
+   "handloom fringe"
+  ],
+  "source": "general economic geography; KVK Banjariaya Farm (1989)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Basti",
+  "state": "Uttar Pradesh"
+ },
+ "Bhadohi (Sant Ravidas Nagar)": {
+  "strong_sectors": [
+   "handloom_textile (hand-knotted carpets — largest carpet-weaving cluster of India with Mirzapur; ~3.2 million engaged across the region; 39% of India's carpet exports)"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (RAMP SIP: Mirzapur-Bhadohi largest handmade carpet cluster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Carpet weaving is the dominant SC-heavy wage livelihood; KVK (IIVR-hosted) present; strong PM-AJAY GIA fit.",
+  "district": "Bhadohi (Sant Ravidas Nagar)",
+  "state": "Uttar Pradesh"
+ },
+ "Bijnor": {
+  "strong_sectors": [
+   "agriculture (sugarcane)",
+   "wood/plywood",
+   "sugar mills"
+  ],
+  "source": "general economic geography; KVK Nagina (1992) + PNB RSETI Haidaur (official)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK + PNB RSETI both present.",
+  "district": "Bijnor",
+  "state": "Uttar Pradesh"
+ },
+ "Budaun": {
+  "strong_sectors": [
+   "agriculture (mentha, wheat)",
+   "handicraft fringe"
+  ],
+  "source": "general economic geography; KVK Ujhani (1992) + 2018 addition + PNB RSETI (official)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs + PNB RSETI.",
+  "district": "Budaun",
+  "state": "Uttar Pradesh"
+ },
+ "Bulandshahr": {
+  "strong_sectors": [
+   "pottery/ceramics (Khurja belt)",
+   "agriculture",
+   "engineering fringe"
+  ],
+  "source": "general economic geography; KVK Lakhaoti (2004) + PNB RSETI (official)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK + PNB RSETI; Khurja ceramic cluster (neighbouring SVPUA&T zone).",
+  "district": "Bulandshahr",
+  "state": "Uttar Pradesh"
+ },
+ "Chandauli": {
+  "strong_sectors": [
+   "agriculture (paddy bowl, 'rice bowl of UP')"
+  ],
+  "source": "general economic geography; KVK Bichiya Farm (2005)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Chandauli",
+  "state": "Uttar Pradesh"
+ },
+ "Chitrakoot": {
+  "strong_sectors": [
+   "tribal-adjacent dryland agriculture",
+   "ayurveda/herbal",
+   "pilgrim services"
+  ],
+  "source": "general economic geography; KVK Ganiwan (DDRI NGO, 1992)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Bundelkhand/tribal-edge district — high PM-AJAY GIA priority; NGO-hosted KVK.",
+  "district": "Chitrakoot",
+  "state": "Uttar Pradesh"
+ },
+ "Deoria": {
+  "strong_sectors": [
+   "agriculture (sugarcane, paddy)",
+   "small trade"
+  ],
+  "source": "general economic geography; KVK Malhana/IIVR (2009)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Deoria",
+  "state": "Uttar Pradesh"
+ },
+ "Etah": {
+  "strong_sectors": [
+   "agriculture (potato, wheat)",
+   "dairy"
+  ],
+  "source": "general economic geography; KVK Awagarh/RBS College (1982)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "College-hosted KVK.",
+  "district": "Etah",
+  "state": "Uttar Pradesh"
+ },
+ "Etawah": {
+  "strong_sectors": [
+   "dairy (Etawah cattle belt)",
+   "agriculture",
+   "lion safari tourism fringe"
+  ],
+  "source": "general economic geography; KVK Ambedkar Agri-Engg College Farm (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Etawah",
+  "state": "Uttar Pradesh"
+ },
+ "Farrukhabad": {
+  "strong_sectors": [
+   "handloom_textile (Farrukhabad prints)",
+   "agriculture (potato)",
+   "bangle trade fringe"
+  ],
+  "source": "general economic geography; KVK Lakula (2005)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; RSETI present.",
+  "district": "Farrukhabad",
+  "state": "Uttar Pradesh"
+ },
+ "Fatehpur": {
+  "strong_sectors": [
+   "agriculture",
+   "bindki-khaga weaving fringe"
+  ],
+  "source": "general economic geography; KVK Tharion (1989)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Fatehpur",
+  "state": "Uttar Pradesh"
+ },
+ "Firozabad": {
+  "strong_sectors": [
+   "glassware/bangles ('Glass City': 70% of India's unorganised glass output; 5-6 lakh direct workers; world bead capital)"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (ODOP: Firozabad glassware) + cluster study (aba academies)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Glass/bangle workforce incl. large home-based women workforce; KVK Hazaratpur present; glass-sector QPs recommended as next research pass.",
+  "district": "Firozabad",
+  "state": "Uttar Pradesh"
+ },
+ "Gautam Buddha Nagar": {
+  "strong_sectors": [
+   "IT-ITeS (Noida)",
+   "electronics_automation",
+   "media_entertainment (film city)"
+  ],
+  "source": "general economic geography; KVK Dadri (2005)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Noida employment hub; KVK present at urban fringe.",
+  "district": "Gautam Buddha Nagar",
+  "state": "Uttar Pradesh"
+ },
+ "Ghaziabad": {
+  "strong_sectors": [
+   "engineering/manufacturing",
+   "electronics_automation",
+   "construction"
+  ],
+  "source": "general economic geography; KVK Muradnagar (1992, phone on official ICAR roster)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK with published phone (01232-262300); RSETI was among the last set up (post-2015).",
+  "district": "Ghaziabad",
+  "state": "Uttar Pradesh"
+ },
+ "Ghazipur": {
+  "strong_sectors": [
+   "handloom_textile (Ghazipur jala/sarees)",
+   "agriculture",
+   "opium/alkaloid works employment"
+  ],
+  "source": "general economic geography; KVK P.G. College (2002) + KVK-2 Ankushpur (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs.",
+  "district": "Ghazipur",
+  "state": "Uttar Pradesh"
+ },
+ "Gonda": {
+  "strong_sectors": [
+   "agriculture (sugarcane, paddy)",
+   "dairy"
+  ],
+  "source": "general economic geography; KVK Gopalgram/DDRI (1989) + KVK-2 (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs (one NGO-hosted).",
+  "district": "Gonda",
+  "state": "Uttar Pradesh"
+ },
+ "Gorakhpur": {
+  "strong_sectors": [
+   "handloom/craft fringe",
+   "agriculture trade",
+   "education/services hub"
+  ],
+  "source": "general economic geography; GITI Chargawan (official site) + 2 KVKs",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Govt ITI Chargawan with full official contact; 2 KVKs; RSETI present (SBI/Purvanchal legacy).",
+  "district": "Gorakhpur",
+  "state": "Uttar Pradesh"
+ },
+ "Hamirpur": {
+  "strong_sectors": [
+   "dryland agriculture",
+   "quarrying/stone"
+  ],
+  "source": "general economic geography; KVK Kurara (2005)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Bundelkhand district; KVK present.",
+  "district": "Hamirpur",
+  "state": "Uttar Pradesh"
+ },
+ "Hapur": {
+  "strong_sectors": [
+   "food_processing (papad/achar)",
+   "pipeline/steel fabrication",
+   "agriculture trade"
+  ],
+  "source": "general economic geography; KVK Babugarh (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; RSETI established post-2015 (Syndicate legacy).",
+  "district": "Hapur",
+  "state": "Uttar Pradesh"
+ },
+ "Hardoi": {
+  "strong_sectors": [
+   "agriculture",
+   " brass/metal fringe"
+  ],
+  "source": "general economic geography; KVK Tatyora (2005) + KVK-2 Chittaura/CSSRI (2020)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs incl. salinity-reclamation specialisation.",
+  "district": "Hardoi",
+  "state": "Uttar Pradesh"
+ },
+ "Hathras": {
+  "strong_sectors": [
+   "handloom_textile (Hathras fort-area handicrafts)",
+   "agriculture (potato belt)",
+   "glass-bead fringe (Firozabad adjacency)"
+  ],
+  "source": "general economic geography; KVK Sikandara Rao (2009)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Hathras",
+  "state": "Uttar Pradesh"
+ },
+ "Jalaun": {
+  "strong_sectors": [
+   "dryland agriculture",
+   "quarrying"
+  ],
+  "source": "general economic geography; KVK Rura Mallu (2005)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Bundelkhand district; KVK present.",
+  "district": "Jalaun",
+  "state": "Uttar Pradesh"
+ },
+ "Jaunpur": {
+  "strong_sectors": [
+   "handloom_textile (Jaunpur special sarees)",
+   "agriculture",
+   "woollen durrie (ODOP)"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (ODOP: Jaunpur woollen durrie) + 2 KVKs",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs; durrie-weaving livelihood fits handloom QPs.",
+  "district": "Jaunpur",
+  "state": "Uttar Pradesh"
+ },
+ "Jhansi": {
+  "strong_sectors": [
+   "defence/ordnance employment",
+   "agriculture (dryland)",
+   "betel-leaf trade",
+   "tourism (fort)"
+  ],
+  "source": "general economic geography; KVK Bharari (1989) + PNB RSETI (official)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK + PNB RSETI; Bundelkhand pivot.",
+  "district": "Jhansi",
+  "state": "Uttar Pradesh"
+ },
+ "Kannauj": {
+  "strong_sectors": [
+   "food_processing/fragrance (kannauj perfume — GI; traditional distillation workforce)",
+   "agriculture (tobacco, beetel)"
+  ],
+  "source": "general economic geography; KVK Kannauj (2004; Anaughi/Jalalabad)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Perfumery (attar) artisan economy — natural herbal-products skilling niche.",
+  "district": "Kannauj",
+  "state": "Uttar Pradesh"
+ },
+ "Kanpur Dehat": {
+  "strong_sectors": [
+   "agriculture",
+   "leather-wage-work linkage to Kanpur city tanneries"
+  ],
+  "source": "general economic geography; KVK Daleep Nagar/ZARS (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Kanpur Dehat",
+  "state": "Uttar Pradesh"
+ },
+ "Kanpur Nagar": {
+  "strong_sectors": [
+   "leather (tanneries & saddlery — 'Leather City of India', ~Rs 6,500 cr export potential)",
+   "engineering/defence (Ordnance, IIT-K fringe)",
+   "textiles"
+  ],
+  "source": "general economic geography + MSME RAMP SIP; 3 govt ITIs captured (Ghatampur, Kalyanpur, Mahila Lal Bangla)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "The only district without its own KVK (served by Kanpur Dehat KVK); leather QPs map directly; tannery workforce includes large SC (Chamar/Jatav) community — highest PM-AJAY GIA relevance.",
+  "district": "Kanpur Nagar",
+  "state": "Uttar Pradesh"
+ },
+ "Kasganj": {
+  "strong_sectors": [
+   "agriculture",
+   "sugar mills"
+  ],
+  "source": "general economic geography; KVK Mohanpura (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New district; KVK present.",
+  "district": "Kasganj",
+  "state": "Uttar Pradesh"
+ },
+ "Kaushambi": {
+  "strong_sectors": [
+   "agriculture",
+   "hand-pump/casting cluster (Kauriam-Purmufti engineering belt)"
+  ],
+  "source": "general economic geography; NGO-hosted KVK Chayal (2006)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "SC-heavy district; NGO KVK; high PM-AJAY GIA priority.",
+  "district": "Kaushambi",
+  "state": "Uttar Pradesh"
+ },
+ "Kushinagar": {
+  "strong_sectors": [
+   "agriculture",
+   "Buddhist-circuit tourism"
+  ],
+  "source": "general economic geography; KVK Sarghatia/IIVR (2005)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present (pin discrepancy noted on record).",
+  "district": "Kushinagar",
+  "state": "Uttar Pradesh"
+ },
+ "Lakhimpur Kheri": {
+  "strong_sectors": [
+   "agriculture (sugarcane)",
+   "dudhwa-forestry fringe",
+   "dairy"
+  ],
+  "source": "general economic geography; KVK Chandan Chauki (2005) + KVK-2 Maheva/IISR (2019)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs (one sugarcane-specialised).",
+  "district": "Lakhimpur Kheri",
+  "state": "Uttar Pradesh"
+ },
+ "Lalitpur": {
+  "strong_sectors": [
+   "stone craft/granite",
+   "dryland agriculture",
+   "Sankhdba-style handicrafts"
+  ],
+  "source": "general economic geography; KVK Khiria Misra (2005) + PNB RSETI (official)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK + PNB RSETI; Bundelkhand heritage-craft potential.",
+  "district": "Lalitpur",
+  "state": "Uttar Pradesh"
+ },
+ "Lucknow": {
+  "strong_sectors": [
+   "apparel (Chikankari — GI embroidery, large women home-worker base)",
+   "services/IT",
+   "zardozi crafts",
+   "administration"
+  ],
+  "source": "general economic geography; IISR-KVK + ITIs Aliganj/Charbagh + JSS Lucknow captured",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Chikankari/zardozi is the flagship women-artisan livelihood — apparel QPs already in project map here; JSS present.",
+  "district": "Lucknow",
+  "state": "Uttar Pradesh"
+ },
+ "Maharajganj": {
+  "strong_sectors": [
+   "agriculture",
+   "cross-border trade (Sonauli)",
+   "forestry fringe"
+  ],
+  "source": "general economic geography; KVK Basuli (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Maharajganj",
+  "state": "Uttar Pradesh"
+ },
+ "Mahoba": {
+  "strong_sectors": [
+   "metal craft (Mahoba #1 metal-work ODOP)",
+   "stone (granite)",
+   "dryland agriculture"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (ODOP: Mahoba metal craft) + KVK Belatal (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Bundelkhand artisan district; KVK present.",
+  "district": "Mahoba",
+  "state": "Uttar Pradesh"
+ },
+ "Mainpuri": {
+  "strong_sectors": [
+   "agriculture",
+   "tamarind/pulse trade",
+   "craft fringe"
+  ],
+  "source": "general economic geography; KVK Regional Research Station (2004, phone verified via ICAR KVK portal)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK with verified contact (9758991541).",
+  "district": "Mainpuri",
+  "state": "Uttar Pradesh"
+ },
+ "Mathura": {
+  "strong_sectors": [
+   "dairy (Mathura peda; DUVASU belt)",
+   "pilgrim-economy services",
+   "agriculture"
+  ],
+  "source": "general economic geography; KVK Veterinary College/DUVASU (1984)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Veterinary-university hosted KVK — dairy skilling edge.",
+  "district": "Mathura",
+  "state": "Uttar Pradesh"
+ },
+ "Mau": {
+  "strong_sectors": [
+   "handloom_textile (Mau sarees — famed weaving town)",
+   "powerloom"
+  ],
+  "source": "general economic geography; KVK Pilkhi (1989)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Mau weaving is a major Muslim/artisan livelihood; handloom QP fit.",
+  "district": "Mau",
+  "state": "Uttar Pradesh"
+ },
+ "Meerut": {
+  "strong_sectors": [
+   "sports goods & scissors/innovative metalware (Meerut scissors ODOP)",
+   "gold jewellery",
+   "publishing",
+   "brewery/malt"
+  ],
+  "source": "general economic geography; Swami Kalyan Dev KVK Hastinapur (1992)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; RSETI present.",
+  "district": "Meerut",
+  "state": "Uttar Pradesh"
+ },
+ "Mirzapur": {
+  "strong_sectors": [
+   "handloom_textile (hand-knotted carpets — with Bhadohi 3.2M engaged)",
+   "stone ware/pottery",
+   "brassware"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (Mirzapur carpet ODOP; largest cluster) + KVK Barakachha/BHU (1984)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Carpet-weaving workforce (SC-heavy); strong PM-AJAY GIA fit.",
+  "district": "Mirzapur",
+  "state": "Uttar Pradesh"
+ },
+ "Moradabad": {
+  "strong_sectors": [
+   "metal craft ('Brass City' — exports to 40+ countries, ~Rs 12,000 cr potential)",
+   "horn/bone craft",
+   "engineering"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (Moradabad metal craft ODOP) + KVK Bilari (2004) + KVK-2 (2020) + ITI Chandausi captured",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Brass-artisan economy (large minority workforce); 2 KVKs; ITI Chandausi captured.",
+  "district": "Moradabad",
+  "state": "Uttar Pradesh"
+ },
+ "Muzaffarnagar": {
+  "strong_sectors": [
+   "agriculture (sugarcane — jaggery belt)",
+   "paper/pulp",
+   "steel rolling"
+  ],
+  "source": "general economic geography; KVK Baghara (1994) + KVK-2 Jansath (2018) + PNB RSETI Baghra (official)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs + PNB RSETI.",
+  "district": "Muzaffarnagar",
+  "state": "Uttar Pradesh"
+ },
+ "Pilibhit": {
+  "strong_sectors": [
+   "forestry/wood",
+   "agriculture",
+   "tiger-reserve ecotourism fringe"
+  ],
+  "source": "general economic geography; KVK RDI Pilibhit (1998) + ITI Pilibhit captured",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK + ITI captured.",
+  "district": "Pilibhit",
+  "state": "Uttar Pradesh"
+ },
+ "Pratapgarh": {
+  "strong_sectors": [
+   "agriculture (aonla — ODOP)",
+   "vegetable trade"
+  ],
+  "source": "general economic geography; NGO KVK Kalakankar (1999)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Aonla-processing livelihood; NGO KVK.",
+  "district": "Pratapgarh",
+  "state": "Uttar Pradesh"
+ },
+ "Prayagraj": {
+  "strong_sectors": [
+   "services/administration hub",
+   "agriculture trade (sangam belt)",
+   "food_processing"
+  ],
+  "source": "general economic geography; KVK SHUATS (1992)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Deemed-university hosted KVK; RSETI present (Allahabad Bank legacy → Indian Bank).",
+  "district": "Prayagraj",
+  "state": "Uttar Pradesh"
+ },
+ "Raebareli": {
+  "strong_sectors": [
+   "railcoach/PSU employment",
+   "agriculture",
+   "dairy (KPM belt)"
+  ],
+  "source": "general economic geography; KVK Dariapur (1984)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; BoB-legacy RSETI belt.",
+  "district": "Raebareli",
+  "state": "Uttar Pradesh"
+ },
+ "Rampur": {
+  "strong_sectors": [
+   "agriculture (mentha)",
+   "handicrafts (Rampur knives/wood)",
+   "library/cultural services"
+  ],
+  "source": "general economic geography; KVK Dhamaura (1992)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present; PNB-legacy RSETI belt.",
+  "district": "Rampur",
+  "state": "Uttar Pradesh"
+ },
+ "Saharanpur": {
+  "strong_sectors": [
+   "wood carving (Sheesham — GI; major artisan export craft)",
+   "agriculture (mango belt)",
+   "paper mills"
+  ],
+  "source": "general economic geography; KVK Numaish Camp (1992) + PNB RSETI Matki Jharoli (official)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Wood-carving artisan workforce; KVK + PNB RSETI.",
+  "district": "Saharanpur",
+  "state": "Uttar Pradesh"
+ },
+ "Sambhal": {
+  "strong_sectors": [
+   "metal craft (Moradabad-adjacent brass)",
+   "handloom (Sambhal dari)",
+   "agriculture"
+  ],
+  "source": "general economic geography; KVK (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New district (2011-era carve); KVK present; RSETI was a last-wave (Syndicate-legacy) establishment.",
+  "district": "Sambhal",
+  "state": "Uttar Pradesh"
+ },
+ "Sant Kabir Nagar": {
+  "strong_sectors": [
+   "brass utensils (ODOP)",
+   "agriculture"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (ODOP: brass utensils) + KVK (2009)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Brass-artisan livelihood; KVK present.",
+  "district": "Sant Kabir Nagar",
+  "state": "Uttar Pradesh"
+ },
+ "Shahjahanpur": {
+  "strong_sectors": [
+   "agriculture",
+   "sugar mills",
+   "craft fringe"
+  ],
+  "source": "general economic geography; KVK Niyamatpur (1994)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Shahjahanpur",
+  "state": "Uttar Pradesh"
+ },
+ "Shamli": {
+  "strong_sectors": [
+   "agriculture (sugarcane, jaggery)",
+   "steel rolling fringe"
+  ],
+  "source": "general economic geography; KVK Jalalpur (2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "New district; KVK present; RSETI was a last-wave (PNB) establishment per SLBC.",
+  "district": "Shamli",
+  "state": "Uttar Pradesh"
+ },
+ "Shravasti": {
+  "strong_sectors": [
+   "Buddhist-circuit tourism",
+   "dryland agriculture",
+   "forest fringe"
+  ],
+  "source": "general economic geography; KVK Gabbapur Kala (2020)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "One of India's most SC/tribal-share and aspirational districts — top PM-AJAY GIA priority; newest-wave KVK.",
+  "district": "Shravasti",
+  "state": "Uttar Pradesh"
+ },
+ "Siddharthnagar": {
+  "strong_sectors": [
+   "Buddhist-circuit tourism (Kapilvastu belt)",
+   "agriculture"
+  ],
+  "source": "general economic geography; KVK Sohna (1992)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "KVK present.",
+  "district": "Siddharthnagar",
+  "state": "Uttar Pradesh"
+ },
+ "Sitapur": {
+  "strong_sectors": [
+   "agriculture",
+   "carpet weaving fringe",
+   "dairy"
+  ],
+  "source": "general economic geography; 2 KVKs + 4 govt ITIs listed (Sitapur, Sidhauli captured)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs + multiple ITIs; RSETI present (Aryavart legacy).",
+  "district": "Sitapur",
+  "state": "Uttar Pradesh"
+ },
+ "Sonbhadra": {
+  "strong_sectors": [
+   "mining & power (thermal + hydro belt)",
+   "tribal agriculture",
+   "stone/quarrying"
+  ],
+  "source": "general economic geography; KVK Tissuhi (2004)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Tribal-majority district — high PM-AJAY GIA priority; KVK present.",
+  "district": "Sonbhadra",
+  "state": "Uttar Pradesh"
+ },
+ "Sultanpur": {
+  "strong_sectors": [
+   "agriculture",
+   "small trade"
+  ],
+  "source": "general economic geography; 2 KVKs (1976 NGO + 2018)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "2 KVKs incl. one of UP's oldest (Kamla Nehru Memorial Trust).",
+  "district": "Sultanpur",
+  "state": "Uttar Pradesh"
+ },
+ "Unnao": {
+  "strong_sectors": [
+   "leather-tanning fringe (Unnao industrial estate)",
+   "agriculture",
+   "soap/detergent"
+  ],
+  "source": "general economic geography; NGO KVK Hasanganj (1999) + 5 govt ITIs listed (Unnao captured)",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Leather-adjacent wage work; NGO KVK + multiple govt ITIs.",
+  "district": "Unnao",
+  "state": "Uttar Pradesh"
+ },
+ "Varanasi": {
+  "strong_sectors": [
+   "handloom_textile (Banarasi silk sarees — GI; weaver economy)",
+   "pilgrim-economy services",
+   "carpet fringe",
+   "tourism"
+  ],
+  "source": "https://ramp.msme.gov.in/ramp/pdf-documents/sip-states/uttar_pradesh.pdf (Banarasi saree ODOP; Varanasi among major handloom clusters) + 2 ITIs + KVK captured",
+  "confidence": "LIKELY",
+  "livelihood_notes": "Banarasi weaver workforce (large SC/minority base) — handloom QPs (TSC/Q2404 etc.) map here; GITI Karaundi (Maruti-Suzuki partner) + Chaukaghat ITI + KVK Kallipur captured; RSETI present (Union/Kashi-Gomti legacy).",
+  "district": "Varanasi",
+  "state": "Uttar Pradesh"
+ }
+}

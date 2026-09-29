@@ -69,6 +69,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import `in`.jandwar.app.ai.OnDeviceNlu
 import `in`.jandwar.app.ai.ConversationEngine
 import `in`.jandwar.app.data.model.EducationLevel
 import `in`.jandwar.app.ui.components.Badge
@@ -389,9 +390,16 @@ private fun UnderstoodRow(
             val level = EducationLevel.fromAiString(raw)
             add(if (level != null) appViewModel.tr(level.key) else raw)
         }
+        // District then state, so the chip row reads "Ernakulam · Kerala".
         p.district?.let { add(it) }
+        p.state?.let { add(it) }
         p.familyOccupation?.let { add(appViewModel.occupationLabel(it)) }
         p.currentLivelihood?.let { add(appViewModel.occupationLabel(it)) }
+        // A stated difficulty is worth showing back; the "None" sentinel is an
+        // answer, not something to display as a chip.
+        p.physicalConstraints
+            ?.takeIf { it.isNotBlank() && !it.equals(OnDeviceNlu.NO_CONSTRAINT, true) }
+            ?.let { add(it) }
         p.interests.forEach { add(appViewModel.interestLabel(it)) }
         p.preference?.let { add(appViewModel.tr(it)) }
         p.mobility?.let { raw ->

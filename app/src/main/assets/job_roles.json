@@ -4126,5 +4126,255 @@
   "notional_hours": "37",
   "ssc": "AMHSSC",
   "sector": "apparel"
+ },
+ {
+  "qp_code": "2022/TEXT/MoT/05533",
+  "job_role": "Mulberry Silk Reeler",
+  "nsqf_level": "2",
+  "notional_hours": "210",
+  "ssc": "RSA (Rubber, Silk and Cutlery) / Textiles Committee",
+  "sector": "handloom_textile",
+  "source": "https://www.nqr.gov.in/",
+  "evidence": "Notional hours printed in the qualification title excerpt on nqr.gov.in (210 hours); aligns with Karnataka's mulberry-silk belt (Ramanagara, Kolar, Chikkaballapura, Mysuru)",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "2022/TEXT/MoT/06347",
+  "job_role": "Mulberry Silk Reeling Manufacturing Operator",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "RSA (Rubber, Silk and Cutlery) / Textiles Committee",
+  "sector": "handloom_textile",
+  "source": "https://www.nqr.gov.in/",
+  "evidence": "QP existence and 2022 NSQC approval confirmed on nqr.gov.in; notional hours not shown in the title excerpt and PDF not opened this pass — null with note",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "2019/TEXT/MOT/3173",
+  "job_role": "Vanya Silk Reeling and Spinning Manufacturer",
+  "nsqf_level": "4",
+  "notional_hours": "200",
+  "ssc": "RSA (Rubber, Silk and Cutlery) / Textiles Committee",
+  "sector": "handloom_textile",
+  "source": "https://www.nqr.gov.in/",
+  "evidence": "Notional hours printed in the qualification title excerpt on nqr.gov.in (200 hours); vanya (tasar/eri/muga) reeling relevant to eastern-Karnataka silk clusters",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "TSC/Q2404",
+  "job_role": "Fitter - Shuttleless Weaving (Weaving Machines)",
+  "nsqf_level": "3",
+  "notional_hours": "450",
+  "ssc": "Textiles Sector Skill Council (TSC)",
+  "sector": "handloom_textile",
+  "source": "https://nqr.gov.in/qualification-detail?qualification=TSC%2FQ2404",
+  "evidence": "Notional hours table on the qualification page shows total 450 hours (145+227+78); relevant to Gadag powerloom and Melkote handloom clusters in the MSME district profile",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "AAS/Q1001",
+  "job_role": "Aerospace CNC Machinist",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "Aerospace and Aviation Sector Skill Development Council (AASSC)",
+  "sector": "aerospace_aviation",
+  "source": "https://www.nqr.gov.in/",
+  "evidence": "QP approved at the 18th NSQC meeting (28 Apr 2022) per AASSC/MSDE documents surfaced in search; NSQF level and notional hours are inside the NQR PDF which was not opened this pass — null with note",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "AAS/Q0605",
+  "job_role": "Cabin Crew",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "Aerospace and Aviation Sector Skill Development Council (AASSC)",
+  "sector": "aerospace_aviation",
+  "source": "https://www.nqr.gov.in/",
+  "evidence": "QP approved at the 24th NSQC meeting (17 Nov 2022) per AASSC/MSDE documents surfaced in search; level and hours inside NQR PDF not opened this pass — null with note",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "AAS/Q4504",
+  "job_role": "Airport Terminal Operations Manager",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "Aerospace and Aviation Sector Skill Development Council (AASSC)",
+  "sector": "aerospace_aviation",
+  "source": "https://www.nqr.gov.in/",
+  "evidence": "NCVET recognition number 2022/AA/AASSC/06399 surfaced in search results; level and hours inside NQR PDF not opened this pass — null with note",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "QG-04-AG-03236-2024-V2-ASCI",
+  "job_role": "Fish Seed Grower",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "fisheries",
+  "source": "https://www.nqr.gov.in/qualification/file/Q-file_Fish%20Seed%20Grower%20v4.pdf",
+  "note": "Verified from NQR: approved in 40th NSQC meeting, 22 Oct 2024; short-term training (STT) qualification under the new NCrF-era code series (successor to FIS/Q codes). Trainer-qualification ladder also documented. Notional hours not printed in excerpt."
+ },
+ {
+  "qp_code": "QG-05-AG-01263-2023-V1-CUTM",
+  "job_role": "Fisheries Post Harvest Supervisor",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "ASCI",
+  "sector": "fisheries",
+  "source": "https://www.nqr.gov.in/qualification/file/Q%20File-Fisheries%20Post%20Harvest%20Supervisor.pdf",
+  "note": "Verified from NQR: approved in 33rd NSQC meeting, 1 Nov 2023; covers post-harvest handling, value addition and by-product conversion - directly relevant to Kerala's fish-processing economy."
+ },
+ {
+  "qp_code": "THC/Q2902",
+  "job_role": "Food Delivery Associate",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "THSC",
+  "sector": "tourism_hospitality",
+  "source": "https://nqr.gov.in/sites/default/files/Annexure%202_Food%20Delivery%20Associate_THC_Q2902_v2.0_0.pdf",
+  "note": "Verified from NQR: v2.0, NSQF level 3."
+ },
+ {
+  "qp_code": "THC/Q3008",
+  "job_role": "Street Food Vendor - Standalone",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "THSC",
+  "sector": "tourism_hospitality",
+  "source": "https://nqr.gov.in/sites/default/files/Annexure%202_Street%20Food%20Vendor-%20Standalone_THC_Q3008_v2.0.pdf",
+  "note": "Verified from NQR: v2.0, NSQF level 4, minimum entry 'basic literacy and numeracy' - a rare QP usable for near-non-literate users, valuable for a voice-first app."
+ },
+ {
+  "qp_code": "THC/Q0102",
+  "job_role": "Front Office Associate",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "THSC",
+  "sector": "tourism_hospitality",
+  "source": "https://nqr.gov.in/sites/default/files/Annexure%203_MC_THC_Q0102_Front%20Office%20Associate.pdf",
+  "note": "Verified from NQR via model curriculum: v2.0, NSQF level 4; module-hour table visible (e.g., module blocks 28-84 hours) but total notional hours not stated in excerpt."
+ },
+ {
+  "qp_code": "LSS/Q2301",
+  "job_role": "Cutter - Footwear",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "LSSC",
+  "sector": "leather",
+  "source": "https://hsdm.org.in/doc/qualification_packs/LSS_Q2301_v1.0.pdf (official LSSC QP document mirrored on the HSDM portal; LSSC QPs are also hosted on nqr.gov.in)",
+  "note": "QP verified: NSQF level 4, min. entry 5th class + 2-3 yrs experience. Notional hours not stated in the pages accessed - null until read from the full QP PDF."
+ },
+ {
+  "qp_code": "LSS/Q5501",
+  "job_role": "Stitching Operator - Goods and Garments",
+  "nsqf_level": "3",
+  "notional_hours": "",
+  "ssc": "LSSC",
+  "sector": "leather",
+  "source": "https://www.nqr.gov.in/sites/default/files/Annexure%201_LSS_Q5501_v2.0_Stitcher_Goods&Garments.pdf",
+  "note": "Verified from the National Qualification Register: NSQF level 3, 6.0 credits total (1.17 + 4.83) plus a 30-hour Employability Skills NOS. Notional hours figure not printed in the excerpt accessed."
+ },
+ {
+  "qp_code": "ASC/Q1433",
+  "job_role": "Automotive Detailer Technician",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "ASDC",
+  "sector": "automotive",
+  "source": "https://www.nqr.gov.in/qualification/file/QF%20-%20Automotive%20Detailer%20Technician.pdf",
+  "note": "Verified from NQR: approved in 20th NSQC meeting (NCVET), 30 June 2022, level 4."
+ },
+ {
+  "qp_code": "ASC/Q3511",
+  "job_role": "Automotive Machining Trainer",
+  "nsqf_level": "5",
+  "notional_hours": "",
+  "ssc": "ASDC",
+  "sector": "automotive",
+  "source": "https://www.nqr.gov.in/sites/default/files/QF%20-%20Automotive%20Machining%20Trainer.pdf",
+  "note": "Verified from NQR: level 5, 6 NOSs, trainer role."
+ },
+ {
+  "qp_code": "ASC/Q8314",
+  "job_role": "Automotive Electric Vehicle BSS (Battery Swapping System) Planning Engineer",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "ASDC",
+  "sector": "automotive",
+  "source": "https://www.nqr.gov.in/qualification/file/Automotive%20Electric%20Vehicle%20BSS%20(Battery%20Swapping%20Syste%20(1).pdf",
+  "note": "Verified from NQR: approved 27th NSQC meeting, 28 Feb 2023. NSQF level not visible in excerpt - null."
+ },
+ {
+  "qp_code": "HSS/Q5101",
+  "job_role": "General Duty Assistant",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "HSSC",
+  "sector": "healthcare",
+  "source": "https://nqr.gov.in/sites/default/files/QP_HSSQ5101_General%20Duty%20Assistant_v2.0.pdf",
+  "note": "QP document verified on NQR (v2.0, sector Healthcare, Allied Health & Paramedics). NSQF level and notional hours not printed in excerpt - null. Version 2.0 grants OJT exemption per MoHFW letter of 23 Feb 2022 cited in a related HSSC file."
+ },
+ {
+  "qp_code": "HSS/Q5103",
+  "job_role": "General Duty Assistant - Advanced",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "HSSC",
+  "sector": "healthcare",
+  "source": "https://nqr.gov.in/sites/default/files/Annexure%203%20GDA%20Advanced%20MC%20final.pdf",
+  "note": "Model curriculum on NQR: 12 compulsory + 4 optional NOSs; specialisations incl. Critical Care, Maternal & Newborn Care, Dialysis, Parturition. Level/hours not printed in excerpt - null."
+ },
+ {
+  "qp_code": "HSS/Q0301",
+  "job_role": "Medical Laboratory Technician",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "HSSC",
+  "sector": "healthcare",
+  "source": "https://nqr.gov.in/sites/default/files/NSQF-%20Medical%20Laboratory%20Technician_0.pdf",
+  "note": "Qualification file verified on NQR; NSDA-registered. Level/hours not printed in excerpt - null."
+ },
+ {
+  "qp_code": "HSS/Q3601",
+  "job_role": "Panchakarma Technician",
+  "nsqf_level": "",
+  "notional_hours": "",
+  "ssc": "HSSC",
+  "sector": "healthcare",
+  "source": "https://nqr.gov.in/sites/default/files/Q%20File%20Panchakarma%20Technician..pdf",
+  "note": "Qualification file verified on NQR (approved 23rd NSQC meeting, 22 Aug 2019). Level/hours not printed in excerpt - null."
+ },
+ {
+  "qp_code": "NG-2.5-LT-00760-2023-V1-LSSC",
+  "job_role": "Shoesmith (Cobbler) - PM Vishwakarma",
+  "nsqf_level": "",
+  "notional_hours": "40",
+  "ssc": "Leather Sector Skill Council (LSSC)",
+  "sector": "leather",
+  "source": "https://nqr.gov.in/qualification/file/QF_Shoesmith(Cobbler).pdf",
+  "evidence": "Verified from the NQR qualification file: NCrF/NSQF Level 2.5 (fractional - recorded null in the numeric level field with this note), approved 14-Sep-2023; modules: Modern Toolkit Upskilling 15h + Employability/Entrepreneurial 23.5h + Feedback 1.5h = 40:00 hours. Related base QP: Shoe Maker LSS/Q4101. Direct fit for Agra/Kanpur footwear & cobbling livelihoods and PM Vishwakarma artisans",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "2018/LT/DGT/02719",
+  "job_role": "Footwear Maker (CTS - Craftsmen Training Scheme)",
+  "nsqf_level": "3",
+  "notional_hours": "2080",
+  "ssc": "Leather Sector (DGT-certified)",
+  "sector": "leather",
+  "source": "https://nqr.gov.in/qualification-title?nid=&page=152&field_qualification_title__value=Daca&field_anticipated_volume_of_trai_value=all",
+  "evidence": "Verified on the NQR qualification-title page: Level 3, Notional Hours 2080, DGT accreditation/certification - the ITI-system footwear trade qualification; maps to Agra shoe cluster (5,000 units) and Kanpur leather belt",
+  "retrieved": "2026-09-29"
+ },
+ {
+  "qp_code": "LSS/Q2501",
+  "job_role": "Stitching Operator (Footwear)",
+  "nsqf_level": "4",
+  "notional_hours": "",
+  "ssc": "Leather Sector Skill Council (LSSC)",
+  "sector": "leather",
+  "source": "https://hsdm.org.in/doc/qualification_packs/LSS_Q2501_v1.0.pdf",
+  "evidence": "NSQF Level 4 and NQR ref 2015/LT/LSSC/00386 verified from the LSSC QP PDF (NSQC 19-12-2018); hours not captured - null with note",
+  "retrieved": "2026-09-29"
  }
 ]

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JanDwar — multi-channel console</title>
+<style>
+  :root{
+    --indigo:#102354; --indigo2:#1B3A8C; --teal:#0FA3A3; --saffron:#F0921B;
+    --ink:#0D1220; --muted:#6B7488; --line:#E3E7F0; --bg:#F5F7FB; --card:#fff;
+    --ok:#1B9C5D; --warn:#C98A12;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+       background:var(--bg);color:var(--ink)}
+  header{background:linear-gradient(120deg,var(--indigo),var(--indigo2) 55%,var(--teal));
+         color:#fff;padding:18px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{margin:0;font-size:19px;letter-spacing:.2px}
+  header .sub{opacity:.85;font-size:13px}
+  .pills{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.16);border-radius:999px;padding:5px 11px;font-size:12px;
+        white-space:nowrap}
+  .pill.on{background:rgba(27,214,140,.28)} .pill.off{background:rgba(255,255,255,.12)}
+  main{display:grid;grid-template-columns:270px 1fr 340px;gap:16px;padding:16px;
+       align-items:start;max-width:1500px;margin:0 auto}
+  @media(max-width:1180px){main{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h2{margin:0 0 12px;font-size:13px;text-transform:uppercase;letter-spacing:.7px;
+           color:var(--muted)}
+  .tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+  .tab{flex:1;min-width:92px;padding:9px 8px;border:1px solid var(--line);background:#fff;
+       border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}
+  .tab.sel{background:var(--indigo2);border-color:var(--indigo2);color:#fff}
+  select,input,button{font:inherit}
+  select,input[type=text]{width:100%;padding:9px 11px;border:1px solid var(--line);
+       border-radius:10px;background:#fff}
+  button.go{width:100%;padding:11px;border:0;border-radius:10px;background:var(--indigo2);
+       color:#fff;font-weight:600;cursor:pointer;margin-top:10px}
+  button.go.alt{background:#fff;color:var(--indigo2);border:1px solid var(--line)}
+  button.go:disabled{opacity:.5;cursor:not-allowed}
+  .chat{min-height:330px;max-height:52vh;overflow:auto;display:flex;flex-direction:column;
+        gap:10px;padding:4px}
+  .msg{max-width:82%;padding:10px 13px;border-radius:14px;white-space:pre-wrap;font-size:14.5px}
+  .bot{background:#EEF2FB;border-bottom-left-radius:4px;align-self:flex-start}
+  .me{background:var(--indigo2);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+  .wa .bot{background:#fff;border:1px solid var(--line)}
+  .wa .me{background:#D9FDD3;color:#111}
+  .ivrwrap{background:#0E1626;border-radius:14px;padding:14px;color:#D7DEEC}
+  .ivr .bot{background:#1B2740;color:#DCE4F5}
+  .ivr .me{background:#2F7D5B;color:#fff}
+  .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+  .keys button{padding:12px 0;border-radius:10px;border:1px solid #2A3550;background:#16203A;
+       color:#E6ECF8;font-weight:600;cursor:pointer}
+  .keys button:hover{background:#22304F}
+  .row{display:flex;gap:8px;margin-top:10px}
+  .row input{flex:1}
+  .row button{padding:9px 15px;border:0;border-radius:10px;background:var(--indigo2);
+       color:#fff;font-weight:600;cursor:pointer}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{background:#EEF2FB;border:1px solid var(--line);border-radius:999px;padding:4px 10px;
+        font-size:12.5px}
+  .bar{height:7px;background:#E9EDF6;border-radius:99px;overflow:hidden;margin:6px 0 12px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--indigo2),var(--teal))}
+  .role{border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:9px}
+  .role b{display:block;font-size:14px;margin-bottom:5px;line-height:1.35}
+  .meta{font-size:12px;color:var(--muted);display:flex;gap:7px;flex-wrap:wrap;margin-bottom:5px}
+  .tag{background:#EEF2FB;border-radius:6px;padding:2px 7px}
+  .tag.f{background:#FFF1DC;color:#8A5A06}
+  .tag.c{background:#E6F6EE;color:#136B41}
+  .why{font-size:12.5px;color:#39415A;margin-top:4px}
+  .xml{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;background:#0E1626;color:#9FE8C7;
+       padding:10px;border-radius:10px;overflow:auto;max-height:170px;white-space:pre-wrap;
+       margin-top:10px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .lbl{font-size:12px;color:var(--muted);margin:10px 0 4px;font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>JanDwar — livelihood mapping &amp; NSQF skilling</h1>
+    <div class="sub">One engine, three channels · PM-AJAY GIA · SIH 26097</div>
+  </div>
+  <div class="pills" id="pills"></div>
+</header>
+
+<main>
+  <!-- ─── controls ─────────────────────────────────────────────── -->
+  <div class="card">
+    <h2>Channel</h2>
+    <div class="tabs">
+      <div class="tab sel" data-ch="app">App / Kiosk</div>
+      <div class="tab" data-ch="ivr">IVR call</div>
+      <div class="tab" data-ch="wa">WhatsApp</div>
+    </div>
+    <div class="lbl">Language</div>
+    <select id="lang"></select>
+    <button class="go" id="start">Start</button>
+    <button class="go alt" id="demo">Run a scripted demo</button>
+    <div class="note" id="chNote"></div>
+    <h2 style="margin-top:18px">Catalogue</h2>
+    <div id="cat" class="note"></div>
+  </div>
+
+  <!-- ─── conversation ─────────────────────────────────────────── -->
+  <div class="card">
+    <h2 id="convTitle">Conversation</h2>
+    <div id="stage"></div>
+  </div>
+
+  <!-- ─── profile + results ────────────────────────────────────── -->
+  <div class="card">
+    <h2>Profile captured</h2>
+    <div class="bar"><i id="pbar" style="width:0%"></i></div>
+    <div class="chips" id="chips"><span class="note">Nothing yet.</span></div>
+    <h2 style="margin-top:18px">NSQF recommendations</h2>
+    <div id="results"><span class="note">Finish the interview to see matches.</span></div>
+  </div>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+let CH='app', SID=null, IVR_ACTION=null, WA_PHONE='919000000001', BUSY=false;
+
+const SCRIPTS = {
+  en:["I studied up to 10th","my family does dairy farming","right now I do coolie work",
+      "I am interested in dairy and goat rearing","I want to start my own business",
+      "anywhere in my district","no health problem","Erode"],
+  ta:["பத்தாம் வகுப்பு படித்தேன்","எங்க குடும்பம் நெசவு வேலை","இப்போ வேலை இல்லை",
+      "தையல் வேலையில் ஆர்வம்","சொந்தமா தொழில் செய்யணும்","மாநிலம் முழுவதும்","இல்லை","ஈரோடு"],
+  hi:["मैंने दसवीं तक पढ़ाई की है","मेरे परिवार का काम खेती है","अभी मजदूरी करता हूँ",
+      "मुझे डेयरी में रुचि है","मैं अपना काम करना चाहता हूँ","जिले में कहीं भी","नहीं","Salem"]
+};
+
+/* ── boot ──────────────────────────────────────────────────────── */
+async function boot(){
+  const h = await (await fetch('/api/health')).json();
+  const d = h.data, c = h.config;
+  $('#cat').innerHTML =
+    `<b>${d.roles}</b> NSQF job roles · <b>${d.fundable}</b> GIA-fundable<br>`+
+    `${d.districts} districts · ${d.centres} centres<br>`+
+    `${d.lexicon_forms} surface forms · ${d.languages.length} languages`;
+  const p = [];
+  p.push(`<span class="pill on">${d.roles} job roles</span>`);
+  p.push(`<span class="pill ${h.llm.available?'on':'off'}">LLM: ${h.llm.available?('Ollama '+(c.ollama.model||'')):'rules only'}</span>`);
+  p.push(`<span class="pill ${h.speech.enabled?'on':'off'}">Speech: ${h.speech.enabled?'Bhashini':'DTMF / text'}</span>`);
+  p.push(`<span class="pill ${c.whatsapp.configured?'on':'off'}">WhatsApp: ${c.whatsapp.configured?'live':'dry-run'}</span>`);
+  $('#pills').innerHTML = p.join('');
+
+  const langs = await (await fetch('/api/languages')).json();
+  $('#lang').innerHTML = langs.map(l=>`<option value="${l.code}">${l.name}</option>`).join('');
+  renderStage();
+}
+
+/* ── channel switching ─────────────────────────────────────────── */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('sel'));
+  t.classList.add('sel'); CH=t.dataset.ch; SID=null; IVR_ACTION=null;
+  renderStage(); resetPanels();
+});
+
+const NOTES = {
+  app:'Talks to <code>/api/session</code> — the same JSON API the Android app and a kiosk would use.',
+  ivr:'Posts to the real <code>/ivr/*</code> webhooks and shows the TwiML returned. This is the exact code a phone provider drives.',
+  wa:'Posts a genuine Meta webhook payload to <code>/whatsapp/webhook</code>. With no Meta token the replies land in a dry-run outbox.'
+};
+
+function renderStage(){
+  $('#chNote').innerHTML = NOTES[CH];
+  $('#convTitle').textContent =
+    CH==='ivr' ? 'Simulated phone call' : CH==='wa' ? 'WhatsApp thread' : 'Conversation';
+  if(CH==='ivr'){
+    $('#stage').innerHTML =
+      `<div class="ivrwrap"><div class="chat ivr" id="chat"></div>
+        <div class="keys" id="keys"></div>
+        <div class="row"><input type="text" id="say" placeholder="…or speak (simulated ASR)">
+        <button id="send">Say</button></div></div>
+       <div class="xml" id="xml">TwiML will appear here.</div>`;
+    drawKeys();
+  } else {
+    $('#stage').innerHTML =
+      `<div class="chat ${CH==='wa'?'wa':''}" id="chat"></div>
+       <div class="row"><input type="text" id="say" placeholder="Type your answer…">
+       <button id="send">Send</button></div>`;
+  }
+  $('#send').onclick = send;
+  $('#say').onkeydown = e => { if(e.key==='Enter') send(); };
+}
+
+function drawKeys(){
+  let h='';
+  for(const k of ['1','2','3','4','5','6','7','8','9','*','0','#'])
+    h += `<button data-k="${k}">${k}</button>`;
+  $('#keys').innerHTML = h;
+  $('#keys').querySelectorAll('button').forEach(b=>b.onclick=()=>press(b.dataset.k));
+}
+
+function bubble(who,text){
+  const d=document.createElement('div');
+  d.className='msg '+(who==='bot'?'bot':'me'); d.textContent=text;
+  $('#chat').appendChild(d); $('#chat').scrollTop=$('#chat').scrollHeight;
+}
+function resetPanels(){
+  $('#chips').innerHTML='<span class="note">Nothing yet.</span>';
+  $('#results').innerHTML='<span class="note">Finish the interview to see matches.</span>';
+  $('#pbar').style.width='0%';
+}
+
+/* ── start ─────────────────────────────────────────────────────── */
+$('#start').onclick = start;
+async function start(){
+  resetPanels(); renderStage();
+  const lang=$('#lang').value;
+  if(CH==='ivr'){ await ivrDial(lang); return; }
+  if(CH==='wa'){ WA_PHONE='9190000000'+Math.floor(Math.random()*90+10);
+                 await waSend(SCRIPTS[lang]?'hello':'hello'); return; }
+  const r = await post('/api/session',{lang,channel:'sim'});
+  SID=r.session; bubble('bot',r.reply); paint(r);
+}
+
+/* ── app / kiosk channel ───────────────────────────────────────── */
+async function send(){
+  const el=$('#say'), t=el.value.trim(); if(!t||BUSY) return; el.value='';
+  if(CH==='ivr')      return ivrTurn({SpeechResult:t}, t);
+  if(CH==='wa')       return waSend(t);
+  if(!SID) await start();
+  bubble('me',t);
+  const r=await post('/api/say',{session:SID,text:t});
+  bubble('bot',r.reply); paint(r);
+}
+
+/* ── IVR channel: drives the real webhooks ─────────────────────── */
+async function ivrDial(lang){
+  const x = await form('/ivr/voice',{});
+  showXml(x); speak(x);
+  const digit = {en:'1',ta:'2',hi:'3',te:'4',kn:'5',ml:'6'}[lang]||'1';
+  IVR_ACTION='/ivr/lang';
+  setTimeout(()=>press(digit),250);
+}
+async function press(k){
+  if(!IVR_ACTION){ await ivrDial($('#lang').value); return; }
+  bubble('me','📞 pressed '+k);
+  await ivrTurn({Digits:k});
+}
+async function ivrTurn(extra, label){
+  if(BUSY) return; BUSY=true;
+  if(label) bubble('me',label);
+  const body=Object.assign({CallSid:'SIMCALL1'},extra);
+  const x=await form(IVR_ACTION,body);
+  showXml(x); speak(x); BUSY=false;
+  if(SID) refresh();
+}
+function showXml(x){ if($('#xml')) $('#xml').textContent=x.trim(); }
+function speak(xml){
+  const doc=new DOMParser().parseFromString(xml,'text/xml');
+  const says=[...doc.getElementsByTagName('Say')].map(n=>n.textContent.trim());
+  const plays=[...doc.getElementsByTagName('Play')].map(n=>'🔊 '+n.textContent.trim());
+  const line=(says.concat(plays)).filter(Boolean)[0];
+  if(line) bubble('bot',line);
+  const g=doc.getElementsByTagName('Gather')[0];
+  IVR_ACTION = g ? g.getAttribute('action') : null;
+  const sid = IVR_ACTION && IVR_ACTION.includes('sid=') ? IVR_ACTION.split('sid=')[1] : null;
+  if(sid){ SID=sid; refresh(); }
+  if(!g){ bubble('bot','— call ended —'); if(SID) refresh(); }
+}
+
+/* ── WhatsApp channel: drives the real webhook ─────────────────── */
+async function waSend(text){
+  if(BUSY) return; BUSY=true;
+  bubble('me',text);
+  await fetch('/whatsapp/webhook',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({object:'whatsapp_business_account',entry:[{changes:[{value:{
+      messaging_product:'whatsapp',
+      messages:[{from:WA_PHONE,id:'wamid.'+Date.now(),type:'text',text:{body:text}}]
+    }}]}]})});
+  const out=await (await fetch('/whatsapp/outbox/'+WA_PHONE)).json();
+  out.messages.forEach(m=>bubble('bot', m.type==='audio'?('🔊 voice note — '+m.body):m.body));
+  BUSY=false; refresh();
+}
+
+/* ── shared ────────────────────────────────────────────────────── */
+async function post(u,b){
+  const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},
+                         body:JSON.stringify(b)});
+  return r.json();
+}
+async function form(u,b){
+  const fd=new URLSearchParams(); Object.entries(b).forEach(([k,v])=>fd.append(k,v));
+  const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                         body:fd});
+  return r.text();
+}
+async function refresh(){
+  if(!SID) return;
+  const r=await fetch('/api/session/'+SID);
+  if(r.ok) paint(await r.json());
+}
+
+function paint(r){
+  if(r.session) SID=r.session;
+  const p=r.profile||{}, pr=r.progress||{filled:0,total:8};
+  $('#pbar').style.width = Math.round(100*pr.filled/pr.total)+'%';
+  const L={class5:'Up to Class 5',class8:'Class 8',class10:'Class 10',class12:'Class 12',
+           iti_diploma:'ITI / Diploma',graduate:'Graduate',
+           pref_self:'Self-employment',pref_wage:'Wage job',
+           local:'Village only',district:'Within district',state:'Anywhere in state'};
+  const c=[];
+  if(p.education) c.push(L[p.education]||p.education);
+  if(p.district) c.push('📍 '+p.district);
+  if(p.familyOccupation) c.push('Family: '+p.familyOccupation);
+  if(p.currentLivelihood) c.push('Now: '+p.currentLivelihood);
+  (p.interests||[]).forEach(i=>c.push('★ '+i));
+  (p.skills||[]).forEach(s=>c.push('✎ '+(s.length>26?s.slice(0,25)+'…':s)));
+  if(p.preference) c.push(L[p.preference]||p.preference);
+  if(p.mobility) c.push('🚌 '+(L[p.mobility]||p.mobility));
+  if(p.physicalConstraints) c.push('♿ '+p.physicalConstraints);
+  $('#chips').innerHTML = c.length ? c.map(x=>`<span class="chip">${esc(x)}</span>`).join('')
+                                   : '<span class="note">Nothing yet.</span>';
+
+  const res=r.results||[];
+  if(res.length){
+    $('#results').innerHTML = res.map(m=>`
+      <div class="role">
+        <b>${esc(m.jobRole)}</b>
+        <div class="meta">
+          <span class="tag">NSQF ${esc(m.nsqfLevel||'—')}</span>
+          <span class="tag">${esc(m.duration||'')}</span>
+          <span class="tag c">${m.confidence}% match</span>
+          ${m.fundable?'<span class="tag f">GIA fundable</span>':''}
+        </div>
+        <div class="meta"><span>${esc(m.qpCode||'')}</span></div>
+        <div class="why">${esc(m.reason||'')}</div>
+        <div class="why"><b>Gap:</b> ${esc(m.skillGap||'')}</div>
+        ${m.centre?`<div class="why"><b>Centre:</b> ${esc(m.centre)}</div>`:''}
+      </div>`).join('');
+  }
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ── scripted demo ─────────────────────────────────────────────── */
+$('#demo').onclick = async ()=>{
+  const lang=$('#lang').value, script=SCRIPTS[lang]||SCRIPTS.en;
+  $('#demo').disabled=true;
+  await start();
+  for(const line of script){
+    await new Promise(r=>setTimeout(r,420));
+    if(CH==='ivr'){ await ivrTurn({SpeechResult:line}, line); }
+    else if(CH==='wa'){ await waSend(line); }
+    else { bubble('me',line); const r=await post('/api/say',{session:SID,text:line}); bubble('bot',r.reply); paint(r); }
+  }
+  $('#demo').disabled=false;
+};
+
+boot();
+</script>
+</body>
+</html>

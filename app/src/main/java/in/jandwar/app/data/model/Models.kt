@@ -10,6 +10,11 @@ import kotlinx.serialization.Serializable
 data class JobRole(
     val qp_code: String = "",
     val job_role: String = "",
+    // These two are String rather than Int on purpose: the published NSQF
+    // catalogue prints levels like "4/5" and hours like "390 (NOS)". They are
+    // also the two fields the researched rows most often leave empty, so the
+    // decoder is configured with `coerceInputValues` and every read goes
+    // through the digit filters below.
     val nsqf_level: String = "",
     val notional_hours: String = "",
     val ssc: String = "",
@@ -20,6 +25,9 @@ data class JobRole(
 
     /** Notional training hours. Blank defaults to 300 (typical short-term pack). */
     fun hoursInt(): Int = notional_hours.filter { it.isDigit() }.toIntOrNull() ?: 300
+
+    /** True when the catalogue row itself did not publish a duration. */
+    fun hasHours(): Boolean = notional_hours.any { it.isDigit() }
 
     fun isLongTerm(): Boolean = hoursInt() >= 600
 
@@ -42,7 +50,6 @@ data class JobRole(
      * PM-AJAY GIA priority domains. These four sectors carry asset/enterprise
      * support under the Grant-in-Aid component.
      */
-    fun isFundable(): Boolean = sector in FUNDABLE_SECTORS
 
     /**
      * Minimum education rank the pack realistically expects, derived from its
@@ -142,33 +149,138 @@ data class JobRole(
                 n.contains("lifting") || n.contains("loader") || n.contains("helper")
     }
 
+    /**
+     * Which PM-AJAY GIA programme this role's duration fits.
+     *
+     * The published rule sets duration bands per programme type rather than
+     * one blanket limit, and this is what a person actually wants to know:
+     * whether the course is a few days of recognition-of-prior-learning, a
+     * three-month short course, or a year-long one.
+     */
+    fun programmeType(): String {
+        val h = hoursInt()
+        return when {
+            h in 32..80 -> "rpl"
+            h in 200..600 -> "short_term"
+            h > 600 -> "long_term"
+            else -> "short_term"   // unknown or off-band; see isFundable()
+        }
+    }
+
+    /**
+     * Eligible for funding under the PM-AJAY GIA component.
+     *
+     * This replaces a **guessed** four-sector whitelist
+     * (`agriculture, food_processing, construction, handloom_textile`) that
+     * was wrong in an expensive direction: it marked 116 media_entertainment
+     * and 20 electronics roles as unfundable when the published Annexure-1
+     * list covers 31 sectors including both. Every sector in this catalogue
+     * maps onto that list, so the sector test no longer excludes anything —
+     * which is the correct answer, not a bug.
+     *
+     * Duration is deliberately *not* used to exclude. The guidelines note
+     * that a QP whose notional hours fall outside the standard band still
+     * qualifies where its NOS stipulates that duration, so treating an
+     * off-band figure as disqualifying would deny funding the rules allow.
+     */
+    fun isFundable(): Boolean = ANNEXURE1_SECTOR.containsKey(sector)
+
     companion object {
-        val FUNDABLE_SECTORS = setOf(
-            "agriculture", "food_processing", "construction", "handloom_textile"
+        /**
+         * This catalogue's sector names mapped onto the PM-AJAY GIA
+         * Annexure-1 eligible-activity list. Source:
+         * `assets/gia_funding_rules.json`, researched per state.
+         */
+        val ANNEXURE1_SECTOR = mapOf(
+            "agriculture" to "agriculture",
+            "food_processing" to "food_processing",
+            "construction" to "plumbing_construction",
+            "handloom_textile" to "handloom_textile",
+            "apparel" to "readymade_garments",
+            "electronics_automation" to "electronics",
+            "media_entertainment" to "media_entertainment",
+            // The five-state research drop added six more sectors to the
+            // catalogue. They were absent from this map, so 20 roles were
+            // shown to beneficiaries as "not funded under PM-AJAY GIA" —
+            // a claim the researched rules contradict. assets/
+            // gia_funding_rules.json records, for three of the five states:
+            //   "qp_whitelist": "none stated - central GIA guidelines do not
+            //                    restrict sectors/QPs"
+            // so nothing in this catalogue is excluded on sector grounds.
+            "automotive" to "automobile_repair",
+            "healthcare" to "healthcare",
+            "leather" to "leather_footwear",
+            "tourism_hospitality" to "hospitality",
+            "fisheries" to "fisheries",
+            "aerospace_aviation" to "aerospace_aviation"
         )
+
+        @Deprecated("Guessed whitelist; use isFundable().")
+        val FUNDABLE_SECTORS = ANNEXURE1_SECTOR.keys
     }
 }
 
 @Serializable
 data class Centre(
+    val state: String = "",
     val district: String = "",
     val name: String = "",
-    val address: String = "",
+    // Nullable, and deliberately so. 199 of the 660 centres publish no street
+    // address and 268 no phone number. A null renders as "not published";
+    // inventing a plausible-looking phone number for a screen someone is
+    // about to dial is worse than leaving it blank.
+    val address: String? = null,
     val phone: String? = null,
-    val trades: String = "",
+    val trades: String? = null,
     val dairy_course: Boolean? = null,
-    val confidence: String = ""
+    /** CONFIRMED, LIKELY or UNVERIFIED. */
+    val confidence: String = "",
+    /** The sentence behind the level: which page, how stale, what is missing. */
+    val confidence_note: String? = null,
+    val source: String? = null,
+    val retrieved: String? = null
 ) {
     fun isConfirmed(): Boolean = confidence.startsWith("CONFIRMED", ignoreCase = true)
     fun hasPhone(): Boolean = !phone.isNullOrBlank()
+    fun hasAddress(): Boolean = !address.isNullOrBlank()
 }
+
+@Serializable
+data class StateDistricts(
+    val all: List<String> = emptyList(),
+    val with_centre: List<String> = emptyList(),
+    val without_centre: List<String> = emptyList()
+)
 
 @Serializable
 data class DistrictsData(
     val all: List<String> = emptyList(),
     val with_centre: List<String> = emptyList(),
-    val without_centre: List<String> = emptyList()
-)
+    val without_centre: List<String> = emptyList(),
+    /**
+     * State name -> that state's districts. The flat lists above are the union
+     * and are kept for backward compatibility; anything user-facing should go
+     * through this map so a person in Kerala is never asked to scroll past
+     * 75 Uttar Pradesh districts.
+     */
+    val by_state: Map<String, StateDistricts> = emptyMap()
+) {
+    fun states(): List<String> = by_state.keys.sorted()
+
+    fun districtsOf(state: String): List<String> =
+        by_state[state]?.all ?: emptyList()
+
+    fun withCentreIn(state: String): Set<String> =
+        by_state[state]?.with_centre?.toSet() ?: emptySet()
+
+    /** Which state a district belongs to, or null if it is not in the data. */
+    fun stateOf(district: String): String? {
+        if (district.isBlank()) return null
+        return by_state.entries.firstOrNull { (_, v) ->
+            v.all.any { it.equals(district, ignoreCase = true) }
+        }?.key
+    }
+}
 
 data class I18nData(
     val langs: List<Pair<String, String>> = emptyList(),
@@ -255,6 +367,12 @@ data class UserProfile(
     val education: EducationLevel? = null,
     val preference: Preference? = null,
     val mobility: Mobility? = null,
+    /**
+     * Asked before the district and never inferred. The catalogue now spans
+     * five states, so assuming Tamil Nadu — as every earlier build did — was
+     * simply wrong for four users in five.
+     */
+    val state: String = "",
     val district: String = "",
     val interests: Set<String> = emptySet(),
     val familyOccupation: String = "",
@@ -269,7 +387,7 @@ data class UserProfile(
 
     fun hasAnyData(): Boolean =
         education != null || preference != null || mobility != null ||
-                district.isNotBlank() || interests.isNotEmpty() ||
+                state.isNotBlank() || district.isNotBlank() || interests.isNotEmpty() ||
                 familyOccupation.isNotBlank() || currentLivelihood.isNotBlank()
 
     fun completedFieldCount(): Int {
@@ -280,11 +398,13 @@ data class UserProfile(
         if (interests.isNotEmpty()) n++
         if (preference != null) n++
         if (mobility != null) n++
+        if (state.isNotBlank()) n++
         if (district.isNotBlank()) n++
+        if (physicalConstraints.isNotBlank()) n++
         return n
     }
 
-    fun totalFieldCount(): Int = 7
+    fun totalFieldCount(): Int = 9
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -315,4 +435,11 @@ data class ConversationMessage(
     val isUser: Boolean,
     val text: String,
     val timestamp: Long = System.currentTimeMillis()
+)
+
+/** What a district's economy actually runs on, for the "why here" line. */
+data class DistrictEconomy(
+    val district: String = "",
+    val note: String = "",
+    val strongSectors: List<String> = emptyList()
 )

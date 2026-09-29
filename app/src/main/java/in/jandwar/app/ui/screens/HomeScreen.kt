@@ -61,9 +61,17 @@ fun HomeScreen(
 ) {
     val allRoles by viewModel.allRoles.collectAsState()
     val roleCount = allRoles.size
-    val fundable = remember(roleCount) { viewModel.fundableCount() }
-    val districts = remember(roleCount) { viewModel.getDistricts().size }
-    val centres = remember(roleCount) { viewModel.districtsWithCentre().size }
+    // Every sector in the catalogue is GIA-eligible (see ANNEXURE1_SECTOR),
+    // so a "fundable" count would just repeat the role count. Sector breadth
+    // is the figure that actually tells the user something.
+    val sectors = remember(roleCount) { viewModel.sectors().size }
+    val statesCount = remember(roleCount) { viewModel.stateCount() }
+    val districts = remember(roleCount) { viewModel.districtCount() }
+    // Training centres, not districts that happen to have one. The old tile
+    // read 185 — the number of districts with a centre — under the label
+    // "centres", which understated the catalogue by 475.
+    val centres = remember(roleCount) { viewModel.centreCount() }
+    val confirmed = remember(roleCount) { viewModel.confirmedCentreCount() }
 
     Column(
         modifier = Modifier
@@ -152,8 +160,8 @@ fun HomeScreen(
                         modifier = Modifier.weight(1f)
                     )
                     StatTile(
-                        value = fundable.toString(),
-                        label = viewModel.tr("stat_fundable"),
+                        value = sectors.toString(),
+                        label = viewModel.tr("stat_sectors"),
                         tint = Success,
                         modifier = Modifier.weight(1f)
                     )
@@ -162,6 +170,12 @@ fun HomeScreen(
 
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    StatTile(
+                        value = statesCount.toString(),
+                        label = viewModel.tr("stat_states"),
+                        tint = BrandTeal,
+                        modifier = Modifier.weight(1f)
+                    )
                     StatTile(
                         value = districts.toString(),
                         label = viewModel.tr("stat_districts"),
@@ -175,6 +189,19 @@ fun HomeScreen(
                         modifier = Modifier.weight(1f)
                     )
                 }
+            }
+
+            // Say out loud how much of the centre data is first-party
+            // verified. A number with no provenance is worth very little to
+            // someone who is about to travel to one of these addresses.
+            item {
+                InfoBanner(
+                    text = viewModel.tr("stat_confirmed")
+                        .replace("%1", confirmed.toString())
+                        .replace("%2", centres.toString()),
+                    icon = Icons.Rounded.VerifiedUser,
+                    tone = BrandTeal
+                )
             }
 
             item {

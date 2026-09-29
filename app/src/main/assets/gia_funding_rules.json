@@ -1,0 +1,543 @@
+{
+ "Andhra Pradesh": {
+  "state": "Andhra Pradesh",
+  "scheme": "PM-AJAY Grant-in-aid (GIA) component — skill development for SC persons",
+  "implementing_structure": {
+   "national": "Ministry of Social Justice & Empowerment (MoSJE); PM-AJAY GIA component",
+   "state_nodal": "AP Scheduled Castes Cooperative Finance Corporation Ltd (APSCCF), Amaravati, through District SC Service Cooperative Societies (SCSC) in every district; political oversight via the AP SC Corporation (apsccorporation.ap.gov.in); general skilling executed by AP State Skill Development Corporation (APSSDC) as executive agency of the Department of Skill Development & Training",
+   "source": "https://krishna.ap.gov.in/sc-corporation/",
+   "retrieved": "2026-09-29"
+  },
+  "eligibility": {
+   "caste": "Scheduled Caste (white ration card + Aadhaar + caste certificate via Meeseva)",
+   "age_band": "18-50 years (district SC Society skill/self-employment schemes)",
+   "income_cap": "below double poverty line: annual family income <= Rs 98,000 rural / Rs 1,20,000 urban (baseline printed for 2018-19 ISB schemes; unchanged on district portals)",
+   "education": "SSC (10th) pass or fail — open to non-matriculates",
+   "exclusions": "beneficiaries with outstanding loans not eligible",
+   "evidence": "Eligibility blocks published verbatim on official district portals (konaseema.ap.gov.in, krishna.ap.gov.in, kadapa.ap.gov.in SC Corporation pages)",
+   "source": "https://konaseema.ap.gov.in/sc-corporation/",
+   "retrieved": "2026-09-29"
+  },
+  "cost_norms": {
+   "national_gia_predicate": {
+    "note": "Central PM-AJAY GIA training norms captured in the Tamil Nadu pass (same central scheme governs all states); repeated for self-containment",
+    "rpl_hours": "32-80 hours",
+    "short_term_training_hours": "200-600 hours (NSQF-aligned STT)",
+    "edp_hours": "80 hours",
+    "long_term_training": "6-12 months",
+    "placement_floor": ">= 70% of trained candidates",
+    "women_floor": ">= 30% women beneficiaries",
+    "infrastructure_cap": "<= 30% of outlay on infrastructure",
+    "qp_whitelist": "none stated - central GIA guidelines do not restrict sectors/QPs"
+   },
+   "state_training_unit_cost": {
+    "found": true,
+    "values": "Skill Development Programme for SC youth: unit cost Rs 0.33-0.40 lakh per trainee; subsidy 100% (grant-based, from SCA/ESS funds). Training modes: (1) Job-Oriented High-End training, (2) Placement-Oriented training, (3) Skill Development training",
+    "vintage": "printed as pre-2019-20 scheme structure on district portals — verify current year norms with the district SC Society before quoting",
+    "source": "https://konaseema.ap.gov.in/sc-corporation/"
+   },
+   "duration_caps": "central predicate (STT 200-600 h; RPL 32-80 h; EDP 80 h; LTT 6-12 mo) — state pages silent on duration",
+   "source": "https://pmajay.dosje.gov.in/"
+  },
+  "state_trade_list": {
+   "found": false,
+   "note": "No AP state-specific GIA trade/QP whitelist was found in public pages. What the state DOES publish: SC Society training is organised in three buckets (high-end job-oriented / placement-oriented / general skill development) with fixed unit costs, not a trade list; APSSDC training spans IT, electronics, manufacturing, apparel etc. via its Centres of Excellence (Siemens partnership) and Employability Skill Centres in degree colleges across 26 districts (pre-2025 count). Treat sector choice as open, subject to the central GIA predicate.",
+   "source": "https://konaseema.ap.gov.in/sc-corporation/"
+  },
+  "state_training_institution_layer": {
+   "apssdc": "AP State Skill Development Corporation (est. 2014, Skills Development & Training Dept): nodal + executive agency; Siemens-partnered Centres of Excellence and trade labs; Employability Skill Centres in degree colleges across all districts; plan for 23 Skill Colleges (each: 6 classrooms, 2 labs, 1 workshop, start-up centre; 120 residential + 1,920 trainees/yr; cap Rs 20 cr capital cost; self-sustainable operating model per G.O. Ms. No. 10); job-melas via Naipunyam portal (naipunyam.ap.gov.in)",
+   "ap_sc_corporation_2026": "Aug-2026: AP SC Corporation launched apscorporation.ap.gov.in; overseas-employment skilling for SC youth — free English training for nursing students at 6 centres (Visakhapatnam, Rajahmundry, Guntur, Nellore, Tirupati, Kurnool; 50 seats each, Israel placements) and free German training at 3 centres (Visakhapatnam, Guntur, Tirupati; Germany placements); general sector skill training with placement facilitation",
+   "sources": [
+    {
+     "url": "https://apit.ap.gov.in/?page_id=1762",
+     "what": "ITE&C dept — advanced-technology skilling mandate",
+     "retrieved": "2026-09-29"
+    },
+    {
+     "url": "https://www.pdicai.org/Docs/Andhra-Pradesh-State-Skill-Development-Corporation_68202195619287.pdf",
+     "what": "APSSDC RFP for 23 Skill Colleges DPR (features, caps)",
+     "retrieved": "2026-09-29"
+    },
+    {
+     "url": "https://www.deccanchronicle.com/southern-states/andhra-pradesh/sc-corporation-launches-website-for-welfare-schemes-1978957",
+     "what": "AP SC Corporation portal launch + overseas skilling centres (13 Aug 2026)",
+     "retrieved": "2026-09-29"
+    }
+   ]
+  },
+  "machine_usable_rule": {
+   "rule_id": "AP-GIA-ELIG-001",
+   "if": {
+    "category": "SC",
+    "domicile": "Andhra Pradesh",
+    "age_years": {
+     "min": 18,
+     "max": 50
+    },
+    "annual_family_income_inr": {
+     "rural_max": 98000,
+     "urban_max": 120000
+    },
+    "loan_status": "no outstanding loans",
+    "documents": [
+     "white ration card",
+     "Aadhaar",
+     "caste certificate"
+    ]
+   },
+   "then": {
+    "eligible_for": "District SC Society skill-development training (unit cost Rs 33,000-40,000 per trainee, 100% subsidy) + placement/self-employment support via APSCCF/AP SC Corporation",
+    "overseas_track": "nursing students: free English (6 centres) / German (3 centres) language training for Israel/Germany placements"
+   },
+   "training_norms": "PM-AJAY GIA central predicate (RPL 32-80 h, STT 200-600 h, EDP 80 h, LTT 6-12 mo, >=70% placement, >=30% women)",
+   "caveat": "Unit cost and income caps are printed on district portals with 2018-19 vintage labels; confirm current-year circulars with APSCCF before defending figures before judges. Central per-trainee GIA rupee norms not restated on state pages."
+  },
+  "sources": [
+   {
+    "url": "https://konaseema.ap.gov.in/sc-corporation/",
+    "what": "Dr. B.R. Ambedkar Konaseema district SC Society: objectives, eligibility, training programme buckets, unit costs",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://krishna.ap.gov.in/sc-corporation/",
+    "what": "Krishna district SCSC: affiliation to APSCCF, funding pattern (grant-based)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://kadapa.ap.gov.in/sc-corporation/",
+    "what": "Kadapa district SCSC: eligibility detail (SSC pass/fail, 18-50, income caps, exclusions)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://apsccorporation.ap.gov.in",
+    "what": "AP SC Corporation state portal (welfare + skilling applications)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://pmajay.dosje.gov.in/",
+    "what": "PM-AJAY national portal (central predicate reference)",
+    "retrieved": "2026-09-29"
+   }
+  ]
+ },
+ "Karnataka": {
+  "state": "Karnataka",
+  "scheme": "PM-AJAY Grant-in-aid (GIA) component — skill development for SC persons",
+  "implementing_structure": {
+   "national": "Ministry of Social Justice & Empowerment (MoSJE); PM-AJAY merger of SCA-to-SCSP, Pradhan Mantri Adarsh Gram Yojana and Babu Jagjivan Ram Chhatrawas Yojana",
+   "state_nodal": "Dr. B.R. Ambedkar Development Corporation (under the Department of Social Welfare, Government of Karnataka) is the state agency for SC welfare-scheme delivery; its 'Prosperity Scheme' carries the state-side skill/EDP support for SC beneficiaries",
+   "source": "https://yuvakanaja.in/",
+   "retrieved": "2026-09-29"
+  },
+  "eligibility": {
+   "caste": "Scheduled Caste (certificate required)",
+   "age_band_state_scheme": "21-50 years (Dr. B.R. Ambedkar Development Corporation Prosperity Scheme)",
+   "age_band_cmky": "18-35 years for the state's flagship free NSQF skilling (Chief Minister's Kaushalya Karnataka Yojane, KSDC)",
+   "income_cap_state_scheme": "annual family income up to Rs 5,00,000 (Prosperity Scheme)",
+   "residency": "Karnataka domicile",
+   "evidence": "Prosperity Scheme eligibility listed on the corporation's official scheme page (yuvakanaja.in); CMKKY age band and design from the official SDEL department site",
+   "source": "https://yuvakanaja.in/",
+   "retrieved": "2026-09-29"
+  },
+  "cost_norms": {
+   "national_gia_predicate": {
+    "note": "These are the central PM-AJAY GIA training norms captured during the Tamil Nadu pass (same central scheme governs all states); recorded here so the Karnataka pack is self-contained",
+    "rpl_hours": "32-80 hours (Recognition of Prior Learning)",
+    "short_term_training_hours": "200-600 hours (NSQF-aligned STT)",
+    "edp_hours": "80 hours (Entrepreneurship Development Programme)",
+    "long_term_training": "6-12 months",
+    "placement_floor": ">= 70% of trained candidates",
+    "women_floor": ">= 30% women beneficiaries",
+    "infrastructure_cap": "<= 30% of outlay on infrastructure",
+    "qp_whitelist": "none stated - central GIA guidelines do not restrict to specific QPs/sectors"
+   },
+   "per_trainee_amount_inr": null,
+   "per_trainee_amount_note": "The state GIA circular with per-trainee rupee norms was NOT found in public pages this pass (central norms live in MoSJE GIA guidelines PDF; state allocation orders not surfaced). Machine rule below uses the verified structural caps only.",
+   "duration_caps": "STT 200-600 h; RPL 32-80 h; EDP 80 h; LTT 6-12 months (central predicate, unchanged for Karnataka)",
+   "source": "https://pmajay.dosje.gov.in/"
+  },
+  "state_trade_list": {
+   "found": false,
+   "note": "No Karnataka state-specific GIA trade/QP list was published in pages found this pass. The state equivalent that defines WHAT is taught is CMKKY: free short-term NSQF-aligned training across nearly 3,000 job roles from 35+ sectors through 800+ accredited training centres, run by Karnataka Skill Development Centre (KSDC) with District Skill Development Offices in 30 districts. This is sector-open, not a fixed trade list.",
+   "source": "https://kaushalya.karnataka.gov.in/"
+  },
+  "state_training_institution_layer": {
+   "gttc": "28 Government Tool Room & Training Centres (state-owned) incl. Centres of Excellence at Bengaluru, Mysuru, Dandeli, Kalaburagi (with Siemens) - precision manufacturing skilling",
+   "kgtti": "Karnataka German Technical Training Institutes at Bengaluru, Kalaburagi, Belagavi, Hubballi, Mangaluru - international-certificate technical training",
+   "setu": "SETU centres named in SDEL pages (near-complete skilling eco-system, per department)",
+   "source": "https://kaushalya.karnataka.gov.in/8/history/en",
+   "retrieved": "2026-09-29"
+  },
+  "machine_usable_rule": {
+   "rule_id": "KA-GIA-ELIG-001",
+   "if": {
+    "category": "SC",
+    "domicile": "Karnataka",
+    "age_years": {
+     "min": 21,
+     "max": 50
+    },
+    "annual_family_income_inr": {
+     "max": 500000
+    }
+   },
+   "then": {
+    "eligible_scheme": "Dr. B.R. Ambedkar Development Corporation Prosperity Scheme (skill/EDP training + franchise retail-outlet support)",
+    "also_eligible_cmky": {
+     "age_years": {
+      "min": 18,
+      "max": 35
+     },
+     "income_condition": "not income-capped on public page; SC category benefits under state flagship"
+    }
+   },
+   "training_norms": "PM-AJAY GIA central predicate (RPL 32-80 h, STT 200-600 h, EDP 80 h, LTT 6-12 mo, >=70% placement, >=30% women)",
+   "caveat": "Age/income bands verified for the STATE corporation scheme; central GIA per-trainee rupee norms not found on state pages - do not quote a rupee figure without the MoSJE circular"
+  },
+  "sources": [
+   {
+    "url": "https://yuvakanaja.in/",
+    "what": "Dr. B.R. Ambedkar Development Corporation - Prosperity Scheme eligibility (SC, 21-50, <=Rs 5L, training + franchise support)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://kaushalya.karnataka.gov.in/",
+    "what": "KSDC/SDEL - CMKKY design (18-35, ~3,000 NSQF job roles, 35+ sectors, 800+ accredited centres), GTTC/KGTTI/SETU network, DSDO coverage",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://pmajay.dosje.gov.in/",
+    "what": "PM-AJAY national portal (GIA component; central norms referenced)",
+    "retrieved": "2026-09-29"
+   }
+  ]
+ },
+ "Kerala": {
+  "state": "Kerala",
+  "scheme": "PM-AJAY (Pradhan Mantri Anusuchit Jaati Abhyuday Yojana)",
+  "component_analysed": "Grants-in-Aid / 'Grant to States' component (former SCA-to-SCSP). The central rule-set is identical across states - see the Tamil Nadu pack for the full guideline analysis (pmajay.dosje.gov.in Guidelines July 2020 + AAP circular). This file adds the Kerala implementation layer.",
+  "prose_summary": "The national PM-AJAY skill rules apply unchanged in Kerala: no trade/QP whitelist exists; eligibility is by programme type (RPL 32-80h; short-term 200-600h or per QP/NOS; EDP 80h; long-term 6-12 months+), all training must be NSQF-compliant and within MSDE Common Cost Norms, with >=70% placement (wage or self-employment), >=30% women, and at least 10% of each yearly release spent on skill development. Kerala-specific findings from this pass: (1) The state implementation runs through the Directorate of Scheduled Caste Development (SCDD), Government of Kerala (scdd.kerala.gov.in); its Scheduled Caste Sub Plan 2022-23 plan document allocates Rs 4,900 lakh for 'training, employment and Human Resource Development', including 'finishing schools cum skill centres' in Model Residential Schools for residential coaching and employability in emerging sectors, area-specific livelihood programmes with the Industries/Agriculture/Animal-Husbandry departments, and Pre-Examination Training Centres (PETCs) in all districts. (2) A concrete PM-AJAY-funded programme in the state: Digital University Kerala (duk.ac.in), 'in partnership with the Directorate of Scheduled Caste Department', admits SC candidates to three one-year RESIDENTIAL skill programmes (Blockchain, Cyber Security, PCB Design) under PM-AJAY - a live example of the 'long-term course (6-12 months)' category being used, consistent with the central rule. (3) Kerala's SSDM counterpart is the Kerala Academy for Skills Excellence (KASE) and the Higher Education Department's ASAP Kerala (a Companies Act Section-8 state PSU), whose Community Skill Parks are the state's flagship skilling venues; PM-AJAY-funded training is expected to route through SSDM-affiliated providers per the central guidelines. (4) No Kerala government order publishing a state-approved trade list specifically under PM-AJAY was found on the pages accessed; SCDD's annual plan documents (scdd.kerala.gov.in/index.php/schemes/planning) are the closest official source and change yearly.",
+  "machine_usable_rule": {
+   "type": "predicate_over_role",
+   "reuse": "Identical predicate as gia_funding_rules.json (Tamil Nadu pack): programme_type in [rpl, short_term, edp, long_term] AND sector in Annexure-I eligible list AND nsqf_compliant AND duration within type bounds AND cost <= MSDE Common Cost Norms AND placement >= 70%.",
+   "programme_types": [
+    {
+     "type": "rpl",
+     "duration_hours": [
+      32,
+      80
+     ]
+    },
+    {
+     "type": "short_term",
+     "duration_hours": [
+      200,
+      600
+     ],
+     "note": "or per QP/NOS stipulation"
+    },
+    {
+     "type": "edp",
+     "duration_hours": [
+      80,
+      80
+     ]
+    },
+    {
+     "type": "long_term",
+     "duration_months": [
+      6,
+      12
+     ]
+    }
+   ],
+   "eligible_sectors_from_annexure1": [
+    "agriculture",
+    "horticulture",
+    "animal_husbandry",
+    "dairy",
+    "poultry",
+    "fisheries",
+    "food_processing",
+    "forestry_agroforestry",
+    "sericulture",
+    "bee_keeping",
+    "handicrafts",
+    "handloom_textile",
+    "leather",
+    "carpentry_furniture",
+    "printing",
+    "brick_making",
+    "rubber",
+    "readymade_garments",
+    "retail",
+    "gems_jewellery",
+    "electronics",
+    "bakery",
+    "beauty_wellness",
+    "plumbing_construction",
+    "automotive_repair",
+    "it_ites",
+    "media_entertainment",
+    "healthcare",
+    "banking_financial_services",
+    "cooperatives"
+   ],
+   "outcome_constraints": {
+    "min_placement_wage_or_self_employment": 0.7,
+    "women_min_share": 0.3
+   },
+   "kerala_live_example": {
+    "programme": "1-year residential Blockchain / Cyber Security / PCB Design for SC candidates",
+    "funded_under": "PM-AJAY",
+    "provider": "Digital University Kerala with Directorate of Scheduled Caste Development",
+    "maps_to": "long_term category"
+   },
+   "guidelines_silent_on": "explicit QP-code or NSQF-level whitelist (same as national guidelines)"
+  },
+  "state_specifics": {
+   "implementing_agency": "Directorate of Scheduled Caste Development (SCDD), Government of Kerala; SC welfare corporation counterpart for economic schemes; SSDM: Kerala Academy for Skills Excellence (KASE); flagship skilling vehicle: ASAP Kerala Community Skill Parks",
+   "scdp_2022_23_skill_outlay": "Rs 4,900 lakh for training, employment and HRD (SCSP 2022-23 plan document)",
+   "state_initiatives": [
+    "Finishing schools cum skill centres in Model Residential Schools (MRS)",
+    "PETCs (Pre-Examination Training Centres) in all districts",
+    "Area-specific livelihood programmes with Industries/Agriculture/Animal Husbandry departments",
+    "PM-AJAY residential long-term programmes via Digital University Kerala"
+   ],
+   "state_trade_list_found": false,
+   "state_trade_list_note": "No state-approved PM-AJAY trade list published online in this pass; check the SCDD annual plan PDFs (scdd.kerala.gov.in) and PM-AJAY AAP submissions each year."
+  },
+  "sources": [
+   "https://pmajay.dosje.gov.in/Writereaddata/Guidelines_PM-Ajay_July2020.pdf",
+   "https://pmajay.dosje.gov.in/Writereaddata/PM-Ajay.pdf",
+   "https://scdd.kerala.gov.in/index.php/schemes/planning (SCSP 2022-23 planning page, Rs 4,900 lakh skill outlay, MRS finishing schools, PETCs)",
+   "https://duk.ac.in/applications-invited-for-skill-development-programs-in-association-with-scheduled-caste-department/ (Digital University Kerala PM-AJAY admissions)",
+   "https://asapkerala.gov.in/ (ASAP Kerala CSPs)"
+  ],
+  "caveats": [
+   "Same central caveat: separate 'GIA' NGO window guidelines were not found on pmajay.dosje.gov.in in this pass; the SCA-to-SCSP/Grant-to-States rules analysed here are what the PM-AJAY skill mandate rides on."
+  ]
+ },
+ "Tamil Nadu": {
+  "state": "Tamil Nadu",
+  "scheme": "PM-AJAY (Pradhan Mantri Anusuchit Jaati Abhyuday Yojana)",
+  "component_analysed": "Grants-in-Aid / 'Grant to States' component (the former Special Central Assistance to Scheduled Caste Sub-Plan, SCA-to-SCSP), which carries the scheme's skill-development mandate. PM-AJAY merged SCA-to-SCSP + PM-AGY (Adarsh Gram) + BJRCY (hostels) in 2021-22.",
+  "prose_summary": "The governing text is the consolidated SCA-to-SCSP guidelines (revised July 2020, carried into PM-AJAY) and the PM-AJAY Annual Action Plan circular. Findings: (1) There is NO trade-wise or QP-code whitelist anywhere in the guidelines. Eligibility is defined by programme TYPE and by an ILLUSTRATIVE sector/activity list (Annexure-I), not by QP code. (2) Four programme types are fundable: RPL/up-skilling (32-80 hours over up to 1 month); Short Term Courses focused on women and self-employment (normally 200-600 hours, up to 5 months, or as stipulated by the QP's NOS); EDP (normally 80 hours / 10 days, per MoRD norms); Long Term Courses (6 months and above, usually up to 1 year, as stipulated by the concerned board/regulator). (3) ALL training must comply with NSQF and MSDE Common Norms, including centre infrastructure, assessment and certification. (4) Training cost is capped by the MSDE Common Cost Norms (CCN) or NCVT guidelines; payments are milestone-based. The CCN tables themselves are a separate MSDE document and were not re-derived here. (5) At least 10% of released SCA must go to skill development; up to 30% to infrastructure; the skill programmes must deliver >=70% placement in wage or self-employment (for long-term courses, >=70% of the placed must be in wage employment). (6) Programmes are to be designed with NSDC skill-gap analysis and endorsed by the District Skilling Authority / State Skill Development Mission; executing agencies are SSDMs, their affiliated training providers, SSC-affiliated TIs, institutes on NSFDC's Appendix-I list, and others with a 70%-placement track record; long-term partners must have trained >=1,000 candidates over 3 years, in centres they own (no franchisee centres). (7) Beneficiary rules: SC persons below poverty line for individual benefits (PM-AJAY proposal moved individual funding to household income < Rs 2.5 lakh/yr); >=30% women; 5% of SCA for disabled persons' economic development. (8) Annexure-I's illustrative activity list covers: agriculture & soil conservation (incl. training of SC farmers, bee-keeping, sericulture); horticulture; minor irrigation; animal husbandry (milch cattle & dairy farming, poultry, goat/sheep, pigs & ducks); fisheries (fish production training, pisciculture, boats & nets, fishermen cooperatives); food processing; forestry/agro-forestry; handicrafts & handlooms; and 'Industry, Service and Business' - explicitly including leather units, carpentry/furniture, printing, brick-making, rubber, readymade garments, retail, gems & jewellery, electronics, bakery, beauty parlours, plumbing, automobile repair, IT/ITeS, media & entertainment, healthcare, and banking & financial services. (9) Tamil Nadu implementation: PM-AJAY is implemented by TAHDCO (Tamil Nadu Adi Dravidar Housing & Development Corporation) under the Adi Dravidar and Tribal Welfare Department; TAHDCO's PM-AJAY page describes income-generation assistance (subsidy 50% of project cost or Rs 50,000, whichever is lower - the revised PM-AJAY norm - for SC applicants with family income <= Rs 3 lakh) and TAHDCO funds skill courses (e.g., plastics processing at CIPET, textile diplomas, solar panel installation, CNC operation, cosmetology, hospitality, aviation reservations/cabin crew) through partner institutions. No Tamil Nadu state-published approved-trade list under PM-AJAY was found on the pages accessed; TAHDCO's skill catalogue on tahdco.com is the closest thing to a state trade list and changes with each tender.",
+  "machine_usable_rule": {
+   "type": "predicate_over_role",
+   "predicate": "(programme_type in ['rpl','short_term','edp','long_term']) AND (sector in eligible_sectors OR job_role_maps_to_annexure1_activity) AND (nsqf_compliant == true) AND (duration within programme_type bounds OR matches QP/NOS stipulation) AND (cost_per_trainee <= MSDE_Common_Cost_Norms) AND (placement_target >= 0.70)",
+   "programme_types": [
+    {
+     "type": "rpl",
+     "duration_hours": [
+      32,
+      80
+     ],
+     "duration_months_max": 1
+    },
+    {
+     "type": "short_term",
+     "duration_hours": [
+      200,
+      600
+     ],
+     "duration_months_max": 5,
+     "note": "or as stipulated in the QP's NOS - a QP with notional hours outside 200-600 can still qualify if its NOS stipulates it"
+    },
+    {
+     "type": "edp",
+     "duration_hours": [
+      80,
+      80
+     ]
+    },
+    {
+     "type": "long_term",
+     "duration_months": [
+      6,
+      12
+     ],
+     "note": "or longer as stipulated by the concerned board/regulator"
+    }
+   ],
+   "eligible_sectors_from_annexure1": [
+    "agriculture",
+    "horticulture",
+    "animal_husbandry",
+    "dairy",
+    "poultry",
+    "goat_sheep_pig_rearing",
+    "fisheries",
+    "food_processing",
+    "forestry_agroforestry",
+    "sericulture",
+    "bee_keeping",
+    "handicrafts",
+    "handloom_textile",
+    "leather",
+    "carpentry_furniture",
+    "printing",
+    "brick_making",
+    "rubber",
+    "readymade_garments",
+    "retail",
+    "gems_jewellery",
+    "electronics",
+    "bakery",
+    "beauty_wellness",
+    "plumbing_construction",
+    "automotive_repair",
+    "it_ites",
+    "media_entertainment",
+    "healthcare",
+    "banking_financial_services",
+    "cooperatives"
+   ],
+   "funding_share_constraints": {
+    "skill_development_min_share_of_release": 0.1,
+    "infrastructure_max_share_of_release": 0.3,
+    "women_min_share_in_skill_programmes": 0.3,
+    "disabled_share_of_sca_for_ig_schemes": 0.05
+   },
+   "outcome_constraints": {
+    "min_placement_wage_or_self_employment": 0.7,
+    "long_term_min_share_wage_employment_of_placed": 0.7
+   },
+   "cost_constraint": {
+    "rule": "per-trainee cost capped by MSDE Common Cost Norms / NCVT guidelines, milestone payments only",
+    "source_of_caps": "MSDE Common Norms document - separate from PM-AJAY guidelines; not reproduced here"
+   },
+   "guidelines_silent_on": "an explicit list of eligible QP codes or NSQF levels; NSQF alignment is required generically but no level range (e.g., 'levels 3-7') is prescribed in the SCA-to-SCSP/PM-AJAY skill guidelines accessed"
+  },
+  "state_specifics": {
+   "implementing_agency": "TAHDCO, under the Adi Dravidar and Tribal Welfare Department, Government of Tamil Nadu",
+   "tn_pmajay_igs_norms": {
+    "subsidy": "50% of project cost or Rs 50,000, whichever is lower, as front-end subsidy",
+    "eligibility": "SC applicant, age 18-55, annual family income <= Rs 3 lakh; individuals and SHGs"
+   },
+   "state_trade_list_found": false,
+   "state_trade_list_note": "No Tamil Nadu G.O. publishing a state-approved trade list under PM-AJAY was found on the pages accessed. TAHDCO's live skill catalogue (tahdco.com) lists current courses (plastics/CIPET, textiles, solar, CNC, cosmetology, hospitality, aviation, data science at IIT-M) and functions as the de facto trade list."
+  },
+  "sources": [
+   "https://pmajay.dosje.gov.in/Writereaddata/Guidelines_PM-Ajay_July2020.pdf (SCA-to-SCSP revised consolidated guidelines July 2020, incl. Annexure-I activity list and Annexure-II skill development guidelines)",
+   "https://pmajay.dosje.gov.in/Writereaddata/PM-Ajay.pdf (PM-AJAY Annual Action Plan circular for the 'Grant to States' component, FY 2021-22; skill programme types, 10%/30% shares, 70% placement, CCN cost cap)",
+   "https://pmajay.dosje.gov.in/public/uploads/pac/81qMsTZ9s8.pdf (Project Appraisal Committee minutes 2023 - confirms 10% skill / 30% infrastructure enforcement)",
+   "https://tahdco.com/pmajay-scheme.php (TAHDCO PM-AJAY page - TN norms)",
+   "https://tahdco.com/ (TAHDCO skill training catalogue)"
+  ],
+  "caveats": [
+   "The old standalone GIA-to-VOs skill scheme is distinct; under PM-AJAY the skill mandate rides on the SCA-to-SCSP/Grant-to-States guidelines analysed here. If your problem statement means a separate 'GIA component' NGO-grant window, its guidelines were not found on pmajay.dosje.gov.in in this pass - flag for manual check.",
+   "Your sector whitelist (agriculture, food_processing, construction, handloom_textile) is TOO NARROW versus Annexure-I, which also clearly covers fisheries, dairy/animal husbandry, leather, healthcare, IT/ITeS, retail, gems & jewellery, beauty, plumbing, auto repair and media. Recommend replacing the whitelist with the eligible_sectors list above, labelled 'derived from PM-AJAY SCA-SCSP Annexure-I (illustrative)'.",
+   "Whether a given QP's notional hours fit the 200-600h short-term window must be checked against CCN norms per course - the guidelines delegate this to MSDE Common Norms."
+  ]
+ },
+ "Uttar Pradesh": {
+  "state": "Uttar Pradesh",
+  "scheme": "PM-AJAY Grant-in-aid (GIA) component — skill development for SC persons",
+  "implementing_structure": {
+   "national": "Ministry of Social Justice & Empowerment (MoSJE)",
+   "state_nodal": "Uttar Pradesh Scheduled Castes Finance and Development Corporation (UPSCFDC) under the Social Welfare Department, GoUP. CRITICAL STATE-SPECIFIC FACT: by a GoUP order of 14 July 2022, ALL UPSCFDC schemes were brought under the PM-AJAY umbrella — UP is the state where the PM-AJAY-UPSCFDC linkage is explicit and documented in press + GO.",
+   "sources": [
+    {
+     "url": "https://timesofindia.indiatimes.com/city/lucknow/now-schemes-under-upscfdc-to-now-fall-under-pm-ajay/articleshow/92940343.cms",
+     "what": "UPSCFDC schemes renamed/merged under PM-AJAY; GO dated 14-Jul-2022; grant raised Rs 10,000 -> Rs 50,000; income limit removed with <= Rs 2.5 L priority; cluster-based training + market linkage",
+     "retrieved": "2026-09-29"
+    }
+   ],
+   "retrieved": "2026-09-29"
+  },
+  "eligibility": {
+   "caste": "Scheduled Caste",
+   "age_band_state_training_scheme": "18-45 years (UP Training Scheme for SC/ST)",
+   "income_cap": "NO fixed income limit for UPSCFDC schemes since Jul-2022; preference to families with annual income below Rs 2.5 lakh (earlier cap of Rs 56,000 abolished)",
+   "education": "No reading/writing requirement for non-technical trades; 8th pass required for technical trades (SC/ST Training Scheme)",
+   "evidence": "msme1connect.up.gov.in official scheme page (eligibility block) + Times of India report of the 2022 GO",
+   "source": "https://msme1connect.up.gov.in/scheme-list/training-scheme-for-sc-st",
+   "retrieved": "2026-09-29"
+  },
+  "cost_norms": {
+   "national_gia_predicate": {
+    "note": "Central PM-AJAY GIA training norms captured in the Tamil Nadu pass (same central scheme governs all states); repeated for self-containment",
+    "rpl_hours": "32-80 hours",
+    "short_term_training_hours": "200-600 hours",
+    "edp_hours": "80 hours",
+    "long_term_training": "6-12 months",
+    "placement_floor": ">= 70% of trained candidates",
+    "women_floor": ">= 30% women beneficiaries",
+    "infrastructure_cap": "<= 30% of outlay on infrastructure",
+    "qp_whitelist": "none stated centrally"
+   },
+   "state_training_scheme_structure": {
+    "found": true,
+    "values": "UP SC/ST Training Scheme: 4-month group training = 1 month theory + 3 months practical at field units/departments; toolkit of the respective trade given to candidates AFTER training; grant-based self-employment support raised to Rs 50,000 (2022 GO)",
+    "vintage": "scheme page is current on msme1connect.up.gov.in; the Rs 50,000 grant figure is from the Jul-2022 GO report",
+    "source": "https://msme1connect.up.gov.in/scheme-list/training-scheme-for-sc-st"
+   },
+   "duration_caps": "state scheme: 4 months (1T+3P); central GIA predicate unchanged (STT 200-600h etc.)",
+   "per_trainee_amount_inr": null,
+   "per_trainee_amount_note": "A rupee-per-trainee training norm for PM-AJAY GIA in UP was NOT found on public pages this pass; the Rs 50,000 figure is the self-employment GRANT, not a training norm. Do not conflate."
+  },
+  "state_trade_list": {
+   "found": false,
+   "note": "No fixed UP trade/QP whitelist published. UPSCFDC PM-AJAY implementation is CLUSTER-BASED (SC beneficiaries grouped into clusters, trained to run their project, state helps find markets - 2022 GO). A live UP PM-AJAY RTD-mode e-bid (Nov-2025) trains 1,650 SC youth (18+, <=Rs 2.5L priority) across placement-linked job roles, confirming Recruit-Train-Deploy as the operative mode.",
+   "source": "https://skillspedia.in/inviting-ebids-from-eligible-training-partners-for-conducting-skill-training-programme-under-the-centrally-sponsored-scheme-pradhan-mantri-anusuchit-jaati-abhyuday-yojana-pm-ajay/"
+  },
+  "state_training_institution_layer": {
+   "upsdm": "UP Skill Development Mission (upsdm.gov.in): UP Skill Development Policy targets ages 14-35, >=30% women under STEP-UP, SC/ST benefited at least in proportion to their BPL population share, 3% reservation for differently-abled; specific targets for women/SC/ST/minorities in ALL mission trainings",
+   "odop": "One District One Product covers all 75 districts (Agra leather, Aligarh locks, Moradabad brass, Firozabad glass, Bhadohi-Mirzapur carpets, Varanasi silk, Kannauj perfumery, Saharanpur wood-carving) - the natural clustering frame for PM-AJAY GIA cluster training",
+   "source": "https://www.upsdm.gov.in/Content/WebAssets/pdfFiles/Uttar_Pradesh_Skill_Development_Policy.pdf"
+  },
+  "machine_usable_rule": {
+   "rule_id": "UP-GIA-ELIG-001",
+   "if": {
+    "category": "SC",
+    "domicile": "Uttar Pradesh",
+    "age_years": {
+     "min": 18,
+     "max": 45
+    },
+    "annual_family_income_inr": {
+     "max": null,
+     "note": "no cap since Jul-2022; priority if < 250000"
+    },
+    "education": {
+     "non_technical_trades": "none",
+     "technical_trades": "8th pass"
+    }
+   },
+   "then": {
+    "eligible_scheme": "UPSCFDC/PM-AJAY: 4-month SC/ST Training Scheme (1 month theory + 3 months practical) + post-training toolkit + self-employment grant up to Rs 50,000; cluster formation and market-linkage support",
+    "also": "UPSDM skilling with >=30% women and SC/ST proportionality floors"
+   },
+   "training_norms": "PM-AJAY GIA central predicate (RPL 32-80 h, STT 200-600 h, EDP 80 h, LTT 6-12 mo, >=70% placement, >=30% women)",
+   "caveat": "The 4-month/toolkit structure is from the official UP scheme page; RTD-mode tender (2025) shows placement-first variants. Quote the Rs 50,000 only as a self-employment grant."
+  },
+  "sources": [
+   {
+    "url": "https://msme1connect.up.gov.in/scheme-list/training-scheme-for-sc-st",
+    "what": "UP govt MSME portal: SC/ST Training Scheme (4-month, toolkit, 18-45y, eligibility, GO PDFs)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://timesofindia.indiatimes.com/city/lucknow/now-schemes-under-upscfdc-to-now-fall-under-pm-ajay/articleshow/92940343.cms",
+    "what": "UPSCFDC->PM-AJAY merger, Rs 50k grant, income-limit removal, cluster training (Jul-2022)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://www.upsdm.gov.in/Content/WebAssets/pdfFiles/Uttar_Pradesh_Skill_Development_Policy.pdf",
+    "what": "UP Skill Development Policy (women/SC/ST floors)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://skillspedia.in/inviting-ebids-from-eligible-training-partners-for-conducting-skill-training-programme-under-the-centrally-sponsored-scheme-pradhan-mantri-anusuchit-jaati-abhyuday-yojana-pm-ajay/",
+    "what": "UP PM-AJAY RTD e-bid (1,650 SC beneficiaries, 2023-26)",
+    "retrieved": "2026-09-29"
+   },
+   {
+    "url": "https://pmajay.dosje.gov.in/",
+    "what": "PM-AJAY national portal (central predicate)",
+    "retrieved": "2026-09-29"
+   }
+  ]
+ }
+}

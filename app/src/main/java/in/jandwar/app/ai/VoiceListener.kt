@@ -84,6 +84,15 @@ class VoiceListener @Inject constructor(
     var micLive = false
         private set
 
+    /**
+     * True from the moment the recogniser is started until its audio release
+     * has run. Distinct from [micLive], which only becomes true once the
+     * recogniser signals it is actually ready to hear speech -- a session can
+     * fail in between, and the muted streams must still be restored.
+     */
+    @Volatile
+    private var sessionOpen = false
+
     fun isAvailable(): Boolean = try {
         SpeechRecognizer.isRecognitionAvailable(context)
     } catch (e: Exception) {
@@ -149,13 +158,15 @@ class VoiceListener @Inject constructor(
     private fun openRecogniser() {
         try {
             earcon.muteSystem()
+            sessionOpen = true
             recognizer = SpeechRecognizer.createSpeechRecognizer(context).apply {
                 setRecognitionListener(recognitionListener)
                 startListening(buildIntent())
             }
         } catch (e: Exception) {
             Log.e(TAG, "start failed: ${e.message}")
-            earcon.unmuteSystem()
+            sessionOpen = false
+            earcon.releaseNow()
             micLive = false
             listener?.onMicClosed()
             listener?.onProblem(Problem.OTHER)
@@ -187,13 +198,25 @@ class VoiceListener @Inject constructor(
             }
         }
 
-    private fun closeMic() {
+    /**
+     * End the microphone session.
+     *
+     * Both `onEndOfSpeech` and `onResults` land here, so the audio release is
+     * keyed off [sessionOpen] rather than [micLive]: it must happen exactly
+     * once per session, and it must still happen when the session fails before
+     * the mic ever went live (otherwise the muted streams would never be
+     * restored).
+     *
+     * @param cue false for cancellation and teardown, where a closing blip
+     *            would be noise rather than feedback.
+     */
+    private fun closeMic(cue: Boolean = true) {
         val wasLive = micLive
         micLive = false
-        earcon.unmuteSystem()
-        if (wasLive) {
-            earcon.playClose()
-            listener?.onMicClosed()
+        if (wasLive) listener?.onMicClosed()
+        if (sessionOpen) {
+            sessionOpen = false
+            if (cue && wasLive) earcon.releaseAfterCue() else earcon.releaseNow()
         }
     }
 
@@ -286,7 +309,7 @@ class VoiceListener @Inject constructor(
     private fun stopInternal() {
         pendingStart?.let { main.removeCallbacks(it) }
         pendingStart = null
-        earcon.unmuteSystem()
+        earcon.releaseNow()
         try {
             recognizer?.let {
                 runCatching { it.cancel() }
@@ -295,7 +318,7 @@ class VoiceListener @Inject constructor(
         } catch (_: Exception) {
         }
         recognizer = null
-        closeMic()
+        closeMic(cue = false)
     }
 
     fun release() {

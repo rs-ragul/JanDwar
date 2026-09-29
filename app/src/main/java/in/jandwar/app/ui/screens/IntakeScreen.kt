@@ -63,7 +63,7 @@ import `in`.jandwar.app.ui.components.SelectChip
 import `in`.jandwar.app.ui.components.StepProgress
 import `in`.jandwar.app.ui.viewmodel.AppViewModel
 
-private const val STEPS = 5
+private const val STEPS = 6
 
 @Composable
 fun IntakeScreen(
@@ -79,7 +79,8 @@ fun IntakeScreen(
         1 -> true               // occupation text is optional
         2 -> profile.interests.isNotEmpty()
         3 -> profile.preference != null && profile.mobility != null
-        4 -> profile.district.isNotBlank()
+        4 -> profile.state.isNotBlank()
+        5 -> profile.district.isNotBlank()
         else -> false
     }
 
@@ -124,7 +125,8 @@ fun IntakeScreen(
                     1 -> OccupationStep(viewModel)
                     2 -> InterestStep(viewModel)
                     3 -> PreferenceStep(viewModel)
-                    4 -> DistrictStep(viewModel)
+                    4 -> StateStep(viewModel)
+                    5 -> DistrictStep(viewModel)
                 }
                 Spacer(Modifier.height(24.dp))
             }
@@ -294,13 +296,48 @@ private fun PreferenceStep(viewModel: AppViewModel) {
     }
 }
 
+/**
+ * State is its own step, deliberately.
+ *
+ * The catalogue spans five states, so a single 187-entry district list both
+ * buried the user's own district and let them pick one from a state they do
+ * not live in. Choosing the state first cuts the next list to 14-75 entries
+ * and makes the centre lookup unambiguous.
+ */
+@Composable
+private fun StateStep(viewModel: AppViewModel) {
+    StepHeading(viewModel.tr("q_state"))
+
+    val states = remember { viewModel.states() }
+
+    states.forEach { st ->
+        val districtCount = remember(st) { viewModel.districtsForState(st).size }
+        val centreCount = remember(st) { viewModel.centreCountForState(st) }
+        OptionTile(
+            title = viewModel.stateLabel(st),
+            subtitle = "$districtCount ${viewModel.tr("stat_districts")} · " +
+                    "$centreCount ${viewModel.tr("stat_centres")}",
+            selected = viewModel.profile.state == st,
+            onClick = { viewModel.updateState(st) },
+            leadingIcon = Icons.Rounded.Map
+        )
+        Spacer(Modifier.height(10.dp))
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DistrictStep(viewModel: AppViewModel) {
-    StepHeading(viewModel.tr("q_dist"))
+    val state = viewModel.profile.state
+    StepHeading(
+        if (state.isBlank()) viewModel.tr("q_dist")
+        else "${viewModel.tr("q_dist")} — ${viewModel.stateLabel(state)}"
+    )
 
-    val districts = remember { viewModel.getDistricts() }
-    val withCentre = remember { viewModel.districtsWithCentre().toSet() }
+    // Keyed on the state so switching state rebuilds the list instead of
+    // showing the previous state's districts.
+    val districts = remember(state) { viewModel.districtsForCurrentState() }
+    val withCentre = remember(state) { viewModel.districtsWithCentreForCurrentState() }
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -352,7 +389,8 @@ private fun DistrictStep(viewModel: AppViewModel) {
 
     if (viewModel.profile.district.isNotBlank()) {
         InfoBanner(
-            text = centre?.let { "${it.name} — ${it.district}" } ?: viewModel.tr("no_centre"),
+            text = centre?.let { "${it.name} — ${it.district}, ${it.state}" }
+                ?: viewModel.tr("no_centre"),
             icon = Icons.Rounded.Agriculture
         )
     }

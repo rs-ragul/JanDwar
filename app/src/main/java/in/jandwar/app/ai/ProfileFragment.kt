@@ -8,6 +8,8 @@ data class ProfileFragment(
     var edu: String? = null,
     var preference: String? = null,
     var mobility: String? = null,
+    /** English state name, e.g. "Tamil Nadu". Asked, never assumed. */
+    var state: String? = null,
     var district: String? = null,
     var familyOccupation: String? = null,
     var currentLivelihood: String? = null,
@@ -23,9 +25,16 @@ data class ProfileFragment(
     fun hasEdu() = !edu.isNullOrBlank()
     fun hasPref() = !preference.isNullOrBlank()
     fun hasMobility() = !mobility.isNullOrBlank()
+    fun hasState() = !state.isNullOrBlank()
     fun hasDistrict() = !district.isNullOrBlank()
     fun hasFamilyOccupation() = !familyOccupation.isNullOrBlank()
     fun hasCurrentLivelihood() = !currentLivelihood.isNullOrBlank()
+    /**
+     * Answered either way: a stated difficulty, or the sentinel "None" when the
+     * user says there is none. Both are answers -- only an unasked question is
+     * unfilled.
+     */
+    fun hasConstraints() = !physicalConstraints.isNullOrBlank()
     fun hasPhysicalConstraints() = !physicalConstraints.isNullOrBlank()
     fun hasInterests() = interests.isNotEmpty()
     fun hasSkills() = skills.isNotEmpty()
@@ -36,6 +45,7 @@ data class ProfileFragment(
         if (other.hasEdu()) edu = other.edu
         if (other.hasPref()) preference = other.preference
         if (other.hasMobility()) mobility = other.mobility
+        if (other.hasState()) state = other.state
         if (other.hasDistrict()) district = other.district
         if (other.hasFamilyOccupation()) familyOccupation = other.familyOccupation
         if (other.hasCurrentLivelihood()) currentLivelihood = other.currentLivelihood
@@ -59,7 +69,7 @@ data class ProfileFragment(
 
     /** Enough collected to produce a trustworthy recommendation. */
     fun isUsable(): Boolean =
-        hasEdu() && hasDistrict() && (hasInterests() || hasFamilyOccupation())
+        hasEdu() && hasState() && hasDistrict() && (hasInterests() || hasFamilyOccupation())
 
     /** Every slot answered. */
     fun isFullyComplete(): Boolean = missingSlots().isEmpty()
@@ -70,6 +80,7 @@ data class ProfileFragment(
         currentLivelihood?.let { add(it) }
         if (interests.isNotEmpty()) add(interests.joinToString("/"))
         district?.let { add(it) }
+        state?.let { add(it) }
     }.joinToString(" · ")
 
     /** Interview slots in priority order. */
@@ -80,6 +91,11 @@ data class ProfileFragment(
         INTERESTS,
         PREFERENCE,
         MOBILITY,
+        CONSTRAINTS,
+        // State is asked immediately before the district so the district
+        // question can name it ("...which district of Kerala?") and the
+        // district answer can be validated against that state's list.
+        STATE,
         DISTRICT;
 
         fun isFilled(f: ProfileFragment): Boolean = when (this) {
@@ -89,6 +105,8 @@ data class ProfileFragment(
             INTERESTS -> f.hasInterests()
             PREFERENCE -> f.hasPref()
             MOBILITY -> f.hasMobility()
+            CONSTRAINTS -> f.hasConstraints()
+            STATE -> f.hasState()
             DISTRICT -> f.hasDistrict()
         }
     }

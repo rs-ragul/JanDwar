@@ -69,8 +69,9 @@ class GroqClient @Inject constructor(
         val langName = LANG_NAMES[lang] ?: "English"
         return """
             You are JanDwar, a warm and patient livelihood counsellor for Scheduled Caste
-            beneficiaries under the Government of India's PM-AJAY scheme (Grant-in-Aid component)
-            in Tamil Nadu.
+            beneficiaries under the Government of India's PM-AJAY scheme (Grant-in-Aid component).
+            You cover five states: Tamil Nadu, Kerala, Karnataka, Andhra Pradesh and
+            Uttar Pradesh.
 
             Your job is to hold a gentle spoken conversation and quietly build the person's
             profile. Many users have low literacy and little digital experience.
@@ -84,8 +85,13 @@ class GroqClient @Inject constructor(
               Be encouraging and never judgemental about low education or poverty.
             - Extract every field you can from the whole conversation so far, even if the
               person mentioned it in passing.
-            - Set "is_complete" to true only once education, district and either interests or
-              family occupation are known, and you have asked about work preference and travel.
+            - NEVER assume which state the person lives in, not from their language and not
+              from a district name that sounds familiar. Ask for the state, then ask which
+              district of that state. Naming the state back to them ("which district of
+              Kerala?") is good practice.
+            - Set "is_complete" to true only once education, state, district and either
+              interests or family occupation are known, and you have asked about work
+              preference and travel.
 
             FIELD VALUES (use exactly these tokens)
             - edu: none | class5 | class8 | class10 | class12 | iti_diploma | graduate
@@ -93,12 +99,16 @@ class GroqClient @Inject constructor(
             - mobility: local | district | state
             - interests: any of dairy, cattle, goat, poultry, farming, food, machine,
               textile, construction, tailor
-            - district: an English Tamil Nadu district name, e.g. Erode, Madurai, Salem
+            - state: exactly one of Tamil Nadu | Kerala | Karnataka | Andhra Pradesh |
+              Uttar Pradesh. Null until the person says it.
+            - district: an English district name belonging to that state, e.g. Erode
+              (Tamil Nadu), Ernakulam (Kerala), Ballari (Karnataka), Guntur (Andhra
+              Pradesh), Varanasi (Uttar Pradesh)
             - familyOccupation / currentLivelihood / physicalConstraints: short English phrases
             - Use null for anything not yet known. Never invent values.
 
             JSON SHAPE
-            {"edu":null,"preference":null,"mobility":null,"district":null,
+            {"edu":null,"preference":null,"mobility":null,"state":null,"district":null,
              "familyOccupation":null,"currentLivelihood":null,"physicalConstraints":null,
              "interests":[],"skills":[],"next_question":"...","is_complete":false}
         """.trimIndent()
@@ -114,6 +124,7 @@ class GroqClient @Inject constructor(
             put("edu", current.edu ?: JSONObject.NULL)
             put("preference", current.preference ?: JSONObject.NULL)
             put("mobility", current.mobility ?: JSONObject.NULL)
+            put("state", current.state ?: JSONObject.NULL)
             put("district", current.district ?: JSONObject.NULL)
             put("familyOccupation", current.familyOccupation ?: JSONObject.NULL)
             put("currentLivelihood", current.currentLivelihood ?: JSONObject.NULL)
@@ -145,6 +156,7 @@ class GroqClient @Inject constructor(
             edu = json.optNullableString("edu")
             preference = json.optNullableString("preference")
             mobility = json.optNullableString("mobility")
+            state = json.optNullableString("state")?.let { canonicalState(it) }
             district = json.optNullableString("district")
             familyOccupation = json.optNullableString("familyOccupation")
             currentLivelihood = json.optNullableString("currentLivelihood")
@@ -291,6 +303,26 @@ class GroqClient @Inject constructor(
         if (!has(key) || isNull(key)) return null
         val v = optString(key).trim()
         return v.takeIf { it.isNotBlank() && !it.equals("null", true) }
+    }
+
+    /**
+     * Snaps whatever the model wrote onto one of the five catalogue states.
+     *
+     * An LLM will happily return "TN", "tamilnadu" or "Andhra". Those are all
+     * correct answers that would not have matched a district list keyed on
+     * "Tamil Nadu", so they are normalised here rather than discarded.
+     */
+    private fun canonicalState(raw: String): String? {
+        val v = raw.trim().lowercase().replace(Regex("[^a-z]"), "")
+        if (v.isEmpty()) return null
+        return when {
+            v.startsWith("tamil") || v == "tn" -> "Tamil Nadu"
+            v.startsWith("keral") || v == "kl" -> "Kerala"
+            v.startsWith("karnat") || v == "ka" -> "Karnataka"
+            v.startsWith("andhra") || v == "ap" -> "Andhra Pradesh"
+            v.startsWith("uttarp") || v == "up" -> "Uttar Pradesh"
+            else -> null
+        }
     }
 
     companion object {

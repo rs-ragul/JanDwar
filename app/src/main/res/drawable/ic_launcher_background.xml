@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Brand gradient sampled from brand/logo_premium.png. Full bleed: the
+     launcher applies its own mask, so this must not draw a rounded shape. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
@@ -10,9 +12,9 @@
                 android:startX="0" android:startY="0"
                 android:endX="108" android:endY="108"
                 android:type="linear">
-                <item android:offset="0.0" android:color="#FF102354" />
-                <item android:offset="0.55" android:color="#FF1B3A8C" />
-                <item android:offset="1.0" android:color="#FF0FA3A3" />
+                <item android:offset="0.0" android:color="#FF001AA8" />
+                <item android:offset="0.55" android:color="#FF0267A8" />
+                <item android:offset="1.0" android:color="#FF05D2BC" />
             </gradient>
         </aapt:attr>
     </path>

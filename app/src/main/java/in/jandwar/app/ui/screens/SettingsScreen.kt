@@ -189,14 +189,19 @@ fun SettingsScreen(
                     }
                     Spacer(Modifier.height(12.dp))
                     KeyValueRow(viewModel.tr("stat_roles"), roles.size.toString())
+                    KeyValueRow(viewModel.tr("stat_sectors"), viewModel.sectors().size.toString())
                     KeyValueRow(viewModel.tr("stat_fundable"), viewModel.fundableCount().toString())
+                    KeyValueRow(viewModel.tr("stat_states"), viewModel.stateCount().toString())
                     KeyValueRow(
                         viewModel.tr("stat_districts"),
-                        viewModel.getDistricts().size.toString()
+                        viewModel.districtCount().toString()
                     )
+                    // Centres, not districts-with-a-centre: the old row read
+                    // 185 under a "centres" label when there are 660.
                     KeyValueRow(
                         viewModel.tr("stat_centres"),
-                        viewModel.districtsWithCentre().size.toString()
+                        "${viewModel.centreCount()} (${viewModel.confirmedCentreCount()} " +
+                                "${viewModel.tr("confirmed")})"
                     )
                 }
             }

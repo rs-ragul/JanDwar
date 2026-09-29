@@ -6,6 +6,8 @@ import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -44,10 +46,16 @@ class MicEarcon @Inject constructor(
 
     private var muted = false
 
+    private val main = Handler(Looper.getMainLooper())
+
+    /** A scheduled "unmute + closing blip", held so it can be cancelled. */
+    private var pendingRelease: Runnable? = null
+
     // ── System beep suppression ─────────────────────────────────────────────
 
-    /** Silences the recogniser's own earcons. Always pair with [unmuteSystem]. */
+    /** Silences the recogniser's own earcons. Always pair with a release. */
     fun muteSystem() {
+        cancelPending()
         if (muted) return
         muted = true
         MUTED_STREAMS.forEach { setMute(it, true) }
@@ -57,6 +65,61 @@ class MicEarcon @Inject constructor(
         if (!muted) return
         muted = false
         MUTED_STREAMS.forEach { setMute(it, false) }
+    }
+
+    /**
+     * End a recognition session.
+     *
+     * The platform plays its *stop* earcon at end-of-speech -- the same instant
+     * we want to sound our own closing blip. Unmuting first, which is what the
+     * previous version did, let that stop beep straight through: the user heard
+     * our soft cue when the mic opened and the old harsh one when it closed.
+     *
+     * So the streams stay muted a moment longer than the session, until the
+     * platform's beep has been emitted into silence and discarded. Only then do
+     * we unmute and play our own falling blip.
+     */
+    fun releaseAfterCue() {
+        cancelPending()
+        val r = object : Runnable {
+            override fun run() {
+                synchronized(this@MicEarcon) {
+                    if (pendingRelease === this) pendingRelease = null
+                }
+                unmuteSystem()
+                playClose()
+            }
+        }
+        synchronized(this) { pendingRelease = r }
+        main.postDelayed(r, RELEASE_DELAY_MS)
+    }
+
+    /** Restore audio immediately with no cue -- cancel, error and teardown. */
+    fun releaseNow() {
+        cancelPending()
+        unmuteSystem()
+    }
+
+    /**
+     * Called by [TtsSpeaker] before it speaks. Speech must never be swallowed
+     * by our own mute, and the closing blip must not play *over* the reply, so
+     * a cue still in flight is brought forward to right now instead.
+     */
+    fun releaseForSpeech() {
+        val hadCue = cancelPending()
+        unmuteSystem()
+        if (hadCue) playClose()
+    }
+
+    /** @return true if a closing cue was scheduled and has now been dropped. */
+    private fun cancelPending(): Boolean {
+        val r = synchronized(this) {
+            val p = pendingRelease
+            pendingRelease = null
+            p
+        } ?: return false
+        main.removeCallbacks(r)
+        return true
     }
 
     private fun setMute(stream: Int, mute: Boolean) {
@@ -173,6 +236,15 @@ class MicEarcon @Inject constructor(
 
     companion object {
         private const val TAG = "MicEarcon"
+
+        /**
+         * How long the streams stay muted after recognition ends. Long enough
+         * to swallow the platform's stop earcon, short enough that nothing
+         * else is noticeably held back -- and [releaseForSpeech] pre-empts it
+         * anyway the moment the assistant starts talking.
+         */
+        private const val RELEASE_DELAY_MS = 260L
+
         private const val SAMPLE_RATE = 22050
         private const val DURATION_S = 0.11f
 

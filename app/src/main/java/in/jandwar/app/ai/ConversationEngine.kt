@@ -1,5 +1,6 @@
 package `in`.jandwar.app.ai
 
+import android.os.SystemClock
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -193,7 +194,10 @@ class ConversationEngine @Inject constructor(
                 notice = if (granted) null else notice("mic_denied")
             )
         }
-        if (granted && _state.value.phase == Phase.IDLE) beginListening()
+        // Do not open the mic here directly. On a first run the greeting is
+        // usually still playing when the user taps Allow; beginListening()
+        // now waits that out for us.
+        if (granted) beginListening()
     }
 
     // ── Core loop ───────────────────────────────────────────────────────────
@@ -248,7 +252,7 @@ class ConversationEngine @Inject constructor(
                     // a beat before the audio has actually drained out of the
                     // speaker. Opening the mic immediately makes the assistant
                     // hear itself, so wait out the tail.
-                    main.postDelayed({ if (!stopped) beginListening() }, MIC_GUARD_MS)
+                    beginListening()
                 } else {
                     update { it.copy(phase = Phase.IDLE) }
                 }
@@ -263,12 +267,44 @@ class ConversationEngine @Inject constructor(
         tts.speak(line) { main.post { onDone() } }
     }
 
-    private fun beginListening() {
+    /**
+     * Opens the microphone, but never while the assistant can still be heard.
+     *
+     * There were two ways the recogniser could end up transcribing our own
+     * voice, and both showed up as "the mic came on during the greeting, but
+     * only the first time":
+     *
+     *  1. `onMicPermissionResult` called this the instant the user tapped
+     *     Allow. On a first run the greeting is still playing at that moment,
+     *     because the permission prompt goes up while the interview opens.
+     *  2. TTS reports `onDone` when *synthesis* finishes, not when the speaker
+     *     has finished making noise. The single 450 ms delay at the one call
+     *     site did not cover any other route into this method.
+     *
+     * Rather than sprinkle delays at call sites, the guard lives here: this is
+     * the only place the mic opens, so it is the only place that has to be
+     * right. If speech is in flight, or its tail has not drained, we simply
+     * try again shortly. [MAX_MIC_WAITS] bounds that so a wedged TTS engine
+     * can never leave the user staring at a dead screen.
+     */
+    private fun beginListening(waits: Int = 0) {
         if (stopped) return
         if (_state.value.inputMode != InputMode.VOICE) {
             update { it.copy(phase = Phase.IDLE) }
             return
         }
+
+        val done = tts.finishedAt()
+        val tail = if (done == 0L) 0L
+        else MIC_GUARD_MS - (SystemClock.elapsedRealtime() - done)
+
+        if ((tts.isSpeaking() || tail > 0) && waits < MAX_MIC_WAITS) {
+            val wait = if (tts.isSpeaking()) MIC_GUARD_MS else tail
+            update { it.copy(phase = Phase.SPEAKING, micLive = false) }
+            main.postDelayed({ if (!stopped) beginListening(waits + 1) }, wait)
+            return
+        }
+
         update { it.copy(phase = Phase.LISTENING, partial = "", micLive = false) }
         voice.start()
     }
@@ -441,7 +477,11 @@ class ConversationEngine @Inject constructor(
          * Without it the recogniser picks up the tail of the assistant's own
          * sentence and answers its own question.
          */
+        /** How long the speaker keeps sounding after TTS reports "done". */
         private const val MIC_GUARD_MS = 450L
+
+        /** Bounds the guard loop so a wedged TTS engine cannot hang the turn. */
+        private const val MAX_MIC_WAITS = 12
 
         private val NOTICES: Map<String, Map<String, String>> = mapOf(
             "mic_missing" to mapOf(

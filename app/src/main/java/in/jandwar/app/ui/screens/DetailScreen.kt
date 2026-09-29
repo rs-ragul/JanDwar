@@ -271,13 +271,20 @@ fun DetailScreen(
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            centre.address.ifBlank { centre.district },
+                            // address is null for 199 of the 660 centres --
+                            // the source published none. Fall back to the
+                            // district rather than printing an empty line.
+                            centre.address?.takeIf { it.isNotBlank() }
+                                ?: listOf(centre.district, centre.state)
+                                    .filter { it.isNotBlank() }
+                                    .joinToString(", "),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        if (centre.trades.isNotBlank()) {
+                        val trades = centre.trades
+                        if (!trades.isNullOrBlank()) {
                             Spacer(Modifier.height(9.dp))
-                            KeyValueRow(viewModel.tr("outcome"), centre.trades)
+                            KeyValueRow(viewModel.tr("outcome"), trades)
                         }
                         if (centre.isConfirmed()) {
                             Spacer(Modifier.height(9.dp))
