@@ -274,9 +274,7 @@ src = list(KT.rglob("*.kt")) + list((ROOT / "server/app").rglob("*.py"))
 leaked = [p.name for p in src if "gsk_" in p.read_text(encoding="utf-8", errors="ignore")]
 check("no API key in source", not leaked, f"{leaked or 'clean'}")
 
-cfg = json.load(open(A / "config.json", encoding="utf-8"))
-key = json.dumps(cfg)
-check("config.json is a placeholder", "gsk_" not in key, "no live key")
+check("config.json removed (Groq eliminated)", not (A / "config.json").exists(), "file should not exist")
 
 swallow = [p.name for p in (KT / "data").rglob("*.kt")
            if re.search(r"catch\s*\([^)]*\)\s*\{\s*empty(List|Map)\(\)\s*\}", 

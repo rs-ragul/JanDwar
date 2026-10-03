@@ -8,8 +8,7 @@ Last updated: 2026-09-29
 ## 1. Where we are
 
 The app is **feature-complete against the problem statement and works fully
-offline**. Offline is no longer the fallback — it is the tested primary path.
-The Groq key is an optional polish layer.
+offline**. Offline is not the fallback — it is the tested primary path.
 
 | PS requirement | Status | Where |
 |---|---|---|
@@ -172,7 +171,7 @@ sector map, and a check that no API key sits in the source.
 
 ## 5. Still outstanding from earlier
 
-* ~~Revoke the leaked Groq key~~ — done by you.
+* ~~Revoke the leaked Groq key~~ — done; Groq removed entirely from the app.
 * The key remains in this repository's **git history**. If you publish the repo
   publicly, rewrite history (`git filter-repo`) or push a fresh repo without
   the old commits.

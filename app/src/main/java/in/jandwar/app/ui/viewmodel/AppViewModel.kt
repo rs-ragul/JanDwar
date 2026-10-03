@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import `in`.jandwar.app.ai.AiConfig
 import `in`.jandwar.app.ai.InterviewFlow
 import `in`.jandwar.app.ai.MicEarcon
 import `in`.jandwar.app.ai.TtsSpeaker
@@ -33,7 +32,6 @@ import javax.inject.Inject
 class AppViewModel @Inject constructor(
     private val repository: AppRepository,
     private val prefs: SharedPreferences,
-    private val aiConfig: AiConfig,
     private val tts: TtsSpeaker,
     private val earcon: MicEarcon
 ) : ViewModel() {
@@ -88,12 +86,9 @@ class AppViewModel @Inject constructor(
     private var _micCue by mutableStateOf(prefs.getBoolean(KEY_MIC_CUE, true))
     val micCue: Boolean get() = _micCue
 
-    val aiReady: Boolean get() = aiConfig.groqEnabled()
-
     // ── Init ────────────────────────────────────────────────────────────────
 
     init {
-        aiConfig.load()
         applyTtsEngine()
         earcon.enabled = _micCue
         viewModelScope.launch {

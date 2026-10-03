@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.jandwar.app.ai.ConversationEngine
-import `in`.jandwar.app.ai.GroqClient
 import `in`.jandwar.app.ai.InterviewFlow
 import `in`.jandwar.app.ai.ProfileFragment
 import `in`.jandwar.app.data.model.MatchedRole
@@ -24,8 +23,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class VoiceViewModel @Inject constructor(
-    private val engine: ConversationEngine,
-    private val groq: GroqClient
+    private val engine: ConversationEngine
 ) : ViewModel() {
 
     val state: StateFlow<ConversationEngine.State> = engine.state
@@ -83,9 +81,8 @@ class VoiceViewModel @Inject constructor(
     // ── Result narration ────────────────────────────────────────────────────
 
     /**
-     * Speaks a short, warm summary of the matches. Uses the LLM when it is
-     * available, otherwise a clean template built from the match data itself.
-     * Always calls back so navigation can never stall.
+     * Speaks a short, warm summary of the matches built from the match data
+     * itself. Always calls back so navigation can never stall.
      */
     fun narrateResults(
         results: List<MatchedRole>,
@@ -100,23 +97,10 @@ class VoiceViewModel @Inject constructor(
         }
 
         val intro = InterviewFlow.resultIntro(lang, results.size)
-        val lines = results.take(3).map { m ->
-            buildString {
-                append(m.role.job_role)
-                append(" (NSQF ").append(m.role.nsqf_level.ifBlank { "-" }).append(", ")
-                append(m.role.durationLabel().ifBlank { "-" }).append(")")
-                if (m.reason.isNotBlank()) append(" — ").append(m.reason)
-                m.centre?.let { append(" — centre: ").append(it.name).append(", ").append(it.district) }
-            }
-        }
-
+        val text = buildTemplateNarration(intro, results)
+        narration = text
         isNarrating = true
-        groq.explainResults(lang, profileSummary, lines) { llm ->
-            val text = llm ?: buildTemplateNarration(intro, results)
-            narration = text
-            isNarrating = false
-            speakAndFinish(text, onFinished)
-        }
+        speakAndFinish(text, onFinished)
     }
 
     /** User does not want to wait for the summary to be read out. */

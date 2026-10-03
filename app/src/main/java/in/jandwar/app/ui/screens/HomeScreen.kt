@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.CloudDone
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material.icons.rounded.OfflineBolt
@@ -218,11 +217,9 @@ fun HomeScreen(
 
 @Composable
 private fun AiStatusPill(viewModel: AppViewModel) {
-    val cloud = viewModel.aiReady
-    val tone = if (cloud) BrandTeal else Success
     Surface(
         shape = RoundedCornerShape(50),
-        color = tone.copy(alpha = 0.11f),
+        color = Success.copy(alpha = 0.11f),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -230,16 +227,16 @@ private fun AiStatusPill(viewModel: AppViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                if (cloud) Icons.Rounded.CloudDone else Icons.Rounded.OfflineBolt,
+                Icons.Rounded.OfflineBolt,
                 contentDescription = null,
-                tint = tone,
+                tint = Success,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(Modifier.width(9.dp))
             Text(
-                text = viewModel.tr(if (cloud) "ai_cloud_on" else "ai_device_on"),
+                text = viewModel.tr("ai_device_on"),
                 style = MaterialTheme.typography.labelMedium,
-                color = tone
+                color = Success
             )
         }
     }

@@ -66,7 +66,6 @@ class ConversationEngine @Inject constructor(
          * LISTENING for a moment before the recogniser has actually opened.
          */
         val micLive: Boolean = false,
-        val usingCloud: Boolean = false,
         /** Localised, non-fatal hint (mic unavailable, offline, …). */
         val notice: String? = null,
         /** True once enough is known to run matching even if not finished. */
@@ -102,7 +101,6 @@ class ConversationEngine @Inject constructor(
         _state.value = State(
             phase = Phase.SPEAKING,
             inputMode = if (voiceOk) InputMode.VOICE else InputMode.TEXT,
-            usingCloud = nlu.cloudAvailable(),
             micPermissionNeeded = !micGranted && voice.isAvailable(),
             notice = when {
                 !voice.isAvailable() -> notice("mic_missing")
@@ -218,7 +216,6 @@ class ConversationEngine @Inject constructor(
                     profile = updated,
                     progress = updated.filledSlotCount().toFloat() /
                             ProfileFragment.TOTAL_SLOTS.toFloat(),
-                    usingCloud = result.source == NluEngine.Source.CLOUD,
                     canFinishEarly = updated.isUsable()
                 )
             }

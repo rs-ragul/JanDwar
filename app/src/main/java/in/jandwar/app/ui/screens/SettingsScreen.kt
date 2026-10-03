@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.CloudDone
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.Lock
@@ -94,33 +93,28 @@ fun SettingsScreen(
 
             // ── AI status ───────────────────────────────────────────────────
             item {
-                val cloud = viewModel.aiReady
-                PremiumCard(accent = if (cloud) BrandTeal else Success) {
+                PremiumCard(accent = Success) {
                     SectionTitle(viewModel.tr("ai_status"))
                     Spacer(Modifier.height(10.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            if (cloud) Icons.Rounded.CloudDone else Icons.Rounded.CloudOff,
+                            Icons.Rounded.CloudOff,
                             null,
-                            tint = if (cloud) BrandTeal else Success,
+                            tint = Success,
                             modifier = Modifier.size(21.dp)
                         )
                         Spacer(Modifier.width(11.dp))
                         Text(
-                            viewModel.tr(if (cloud) "ai_cloud_on" else "ai_device_on"),
+                            viewModel.tr("ai_device_on"),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                    if (!cloud) {
-                        // Production build: state the capability, never the
-                        // developer set-up steps.
-                        Spacer(Modifier.height(12.dp))
-                        InfoBanner(
-                            text = viewModel.tr("ai_enhanced_off"),
-                            tone = Success
-                        )
-                    }
+                    Spacer(Modifier.height(12.dp))
+                    InfoBanner(
+                        text = viewModel.tr("ai_enhanced_off"),
+                        tone = Success
+                    )
                 }
             }
 

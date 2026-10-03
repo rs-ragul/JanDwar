@@ -272,15 +272,6 @@ class AssetDataSource @Inject constructor(
         }
     }
 
-    fun loadConfigJson(): JSONObject {
-        return try {
-            val text = readAsset("config.json")
-            JSONObject(text)
-        } catch (e: Exception) {
-            JSONObject()
-        }
-    }
-
     /** Multilingual surface forms for the on-device NLU. */
     fun loadLexicon(): JSONObject {
         return try {

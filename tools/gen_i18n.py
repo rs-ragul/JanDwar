@@ -367,16 +367,7 @@ add("engine_auto", "Automatic (recommended)", "தானியங்கி (ப�
     "స్వయంచాలక (సిఫార్సు)", "ಸ್ವಯಂಚಾಲಿತ (ಶಿಫಾರಸು)", "സ്വയമേവ (ശുപാർശ)")
 add("engine_device", "On-device only", "சாதனத்தில் மட்டும்", "सिर्फ डिवाइस पर",
     "పరికరంలో మాత్రమే", "ಸಾಧನದಲ್ಲಿ ಮಾತ್ರ", "ഉപകരണത്തിൽ മാത്രം")
-add("engine_cloud", "Cloud voice (Bhashini / Sarvam)", "கிளவுட் குரல் (Bhashini / Sarvam)",
-    "क्लाउड आवाज़ (Bhashini / Sarvam)", "క్లౌడ్ వాయిస్ (Bhashini / Sarvam)",
-    "ಕ್ಲೌಡ್ ಧ್ವನಿ (Bhashini / Sarvam)", "ക്ലൗഡ് ശബ്ദം (Bhashini / Sarvam)")
 add("ai_status", "AI engine", "AI இயந்திரம்", "AI इंजन", "AI ఇంజిన్", "AI ಎಂಜಿನ್", "AI എഞ്ചിൻ")
-add("ai_cloud_on", "Cloud AI connected — fully natural conversation",
-    "கிளவுட் AI இணைக்கப்பட்டது — முழுமையான இயல்பான உரையாடல்",
-    "क्लाउड AI जुड़ा है — पूरी तरह स्वाभाविक बातचीत",
-    "క్లౌడ్ AI కనెక్ట్ అయింది — పూర్తిగా సహజ సంభాషణ",
-    "ಕ್ಲೌಡ್ AI ಸಂಪರ್ಕವಾಗಿದೆ — ಸಂಪೂರ್ಣ ಸಹಜ ಸಂಭಾಷಣೆ",
-    "ക്ലൗഡ് AI ബന്ധിപ്പിച്ചു — പൂർണ്ണമായും സ്വാഭാവിക സംഭാഷണം")
 add("ai_device_on", "On-device AI — works without internet",
     "சாதன AI — இணையம் இல்லாமல் வேலை செய்யும்",
     "डिवाइस AI — बिना इंटरनेट काम करता है",

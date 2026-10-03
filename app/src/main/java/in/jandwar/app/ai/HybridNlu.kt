@@ -1,29 +1,19 @@
 package `in`.jandwar.app.ai
 
-import android.util.Log
-import `in`.jandwar.app.util.NetworkMonitor
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Routes each utterance to the best available brain and **always** produces a
- * usable turn.
+ * Delegates every utterance to the on-device engine.
  *
- *  1. Cloud (Groq) when a key is configured and the device is online — this
- *     gives the free-flowing, genuinely conversational experience the problem
- *     statement asks for.
- *  2. On-device extraction + [InterviewFlow] script otherwise, or whenever the
- *     cloud call fails/times out.
- *
- * Crucially, the on-device path also runs on every cloud turn so that slots the
- * LLM missed (a district name, an interest keyword) are still captured, and the
- * cloud path can never regress the profile.
+ * The cloud path (Groq) has been removed. The deterministic on-device NLU
+ * handles the full interview in six languages with no key and no network.
+ * This class is kept as a thin wrapper so that [ConversationEngine] and
+ * the DI graph remain unchanged.
  */
 @Singleton
 class HybridNlu @Inject constructor(
-    private val groq: GroqClient,
-    private val onDevice: OnDeviceNlu,
-    private val network: NetworkMonitor
+    private val onDevice: OnDeviceNlu
 ) : NluEngine {
 
     private var turn = 0
@@ -32,8 +22,8 @@ class HybridNlu @Inject constructor(
         turn = 0
     }
 
-    /** True when the richer cloud conversation is currently possible. */
-    fun cloudAvailable(): Boolean = groq.isConfigured() && network.isOnline()
+    /** Always false — the cloud path is no longer available. */
+    fun cloudAvailable(): Boolean = false
 
     override fun understand(
         utterance: String,
@@ -44,8 +34,6 @@ class HybridNlu @Inject constructor(
     ) {
         turn++
 
-        // Always mine the utterance locally first — cheap, instant, and it
-        // guards against the LLM dropping a field it already saw.
         val local = if (utterance.isBlank()) ProfileFragment()
         else if (askedSlot != null) onDevice.extractForSlot(utterance, lang, askedSlot)
         else onDevice.extract(utterance, lang)
@@ -68,38 +56,7 @@ class HybridNlu @Inject constructor(
         }
 
         val blank = utterance.isBlank()
-
-        if (!cloudAvailable()) {
-            callback.onResult(finishLocally(local, current, lang, blank))
-            return
-        }
-
-        groq.understand(utterance, lang, current, askedSlot) { cloudFrag ->
-            if (cloudFrag == null) {
-                Log.i(TAG, "Cloud unavailable for this turn — using on-device engine")
-                callback.onResult(finishLocally(local, current, lang, blank))
-                return@understand
-            }
-
-            // Merge: start from the local read, then let the cloud refine it.
-            val merged = local.copyOf()
-            merged.merge(cloudFrag)
-            // Keep interests normalised to our fixed vocabulary.
-            merged.interests = merged.interests
-                .map { it.lowercase().trim() }
-                .filter { it in VALID_INTERESTS }
-                .distinct()
-                .toMutableList()
-
-            val projected = current.copyOf().apply { merge(merged) }
-            val finished = !blank && projected.isUsable() &&
-                    (cloudFrag.isComplete || projected.isFullyComplete() || turn >= MAX_TURNS)
-
-            if (merged.nextQuestion.isNullOrBlank()) {
-                merged.nextQuestion = nextScriptedLine(projected, lang, finished)
-            }
-            callback.onResult(NluEngine.Result(merged, NluEngine.Source.CLOUD, finished))
-        }
+        callback.onResult(finishLocally(local, current, lang, blank))
     }
 
     // ── On-device turn construction ─────────────────────────────────────────
@@ -135,16 +92,6 @@ class HybridNlu @Inject constructor(
         return NluEngine.Result(local, NluEngine.Source.ON_DEVICE, finished)
     }
 
-    private fun nextScriptedLine(
-        projected: ProfileFragment,
-        lang: String,
-        finished: Boolean
-    ): String {
-        if (finished) return InterviewFlow.closing(lang)
-        val slot = projected.missingSlots().firstOrNull() ?: return InterviewFlow.closing(lang)
-        return InterviewFlow.question(slot, lang, turn, projected.state)
-    }
-
     /** The slot the assistant is expecting an answer to next. */
     fun expectedSlot(current: ProfileFragment): ProfileFragment.Slot? =
         current.missingSlots().firstOrNull()
@@ -157,10 +104,5 @@ class HybridNlu @Inject constructor(
          * Raised from 12 when the state question made it nine slots.
          */
         private const val MAX_TURNS = 14
-
-        private val VALID_INTERESTS = setOf(
-            "dairy", "cattle", "goat", "poultry", "farming",
-            "food", "machine", "textile", "construction", "tailor"
-        )
     }
 }

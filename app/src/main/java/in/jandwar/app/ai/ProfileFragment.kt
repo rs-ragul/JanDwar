@@ -1,7 +1,7 @@
 package `in`.jandwar.app.ai
 
 /**
- * Everything an extractor (cloud LLM or on-device parser) managed to pull out
+ * Everything the on-device NLU managed to pull out
  * of one utterance. Merged cumulatively across the interview.
  */
 data class ProfileFragment(

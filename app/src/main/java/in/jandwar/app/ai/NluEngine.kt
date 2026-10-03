@@ -4,9 +4,8 @@ package `in`.jandwar.app.ai
  * Contract for turning one spoken/typed utterance into profile data plus the
  * assistant's next line.
  *
- * Deliberately has **no error path**: the hybrid implementation always returns
- * a usable result, falling back to the on-device engine when the cloud is
- * unreachable. A beneficiary must never see an API error.
+ * Deliberately has **no error path**: the implementation always returns
+ * a usable result. A beneficiary must never see an error.
  */
 interface NluEngine {
 
@@ -29,5 +28,5 @@ interface NluEngine {
         val finished: Boolean
     )
 
-    enum class Source { CLOUD, ON_DEVICE }
+    enum class Source { ON_DEVICE }
 }

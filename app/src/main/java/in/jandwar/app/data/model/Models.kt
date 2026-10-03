@@ -295,7 +295,7 @@ data class I18nData(
     /**
      * Canonical English occupation label (lowercased) -> display label, per
      * language. The profile always stores the canonical English string because
-     * role matching and the cloud prompt both key off it; this map exists so the
+     * role matching keys off it; this map exists so the
      * UI can show it in the user's own language.
      */
     val occupations: Map<String, Map<String, String>> = emptyMap()
@@ -316,7 +316,7 @@ enum class EducationLevel(val key: String, val rank: Int) {
     companion object {
         fun fromKey(key: String): EducationLevel? = entries.find { it.key == key }
 
-        /** Tolerant mapping from whatever the LLM or the on-device parser produced. */
+        /** Tolerant mapping from whatever the on-device parser produced. */
         fun fromAiString(ai: String?): EducationLevel? {
             val v = ai?.trim()?.lowercase() ?: return null
             return when {
