@@ -11,6 +11,9 @@ Package `in.jandwar.app` · **v2.9 (versionCode 11)** · minSdk 24 · targetSdk 
 > extraction in six languages, NSQF matching, skill-gap reasoning, centre
 > lookup, funding rules — runs on the device with no network and no API key.
 
+*JanDwar* — Android app plus the reference server.
+The live IVR runs from [`JanDwar-IVR-WhatsApp`](https://github.com/rs-ragul/JanDwar-IVR-WhatsApp.git).
+
 ---
 
 ## 1. Build it
@@ -253,3 +256,13 @@ leaves the phone — the app has no user data at rest to lose.
 symptom, the actual cause and the fix. `docs_JanDwar_Proposal.md` is an early
 planning document; where it disagrees with the code, **the code is
 authoritative**.
+
+---
+
+## 11. Licence
+
+Code — [Apache License 2.0](LICENSE)
+Data pack (`app/src/main/assets/*.json`) — [CC BY 4.0](NOTICE)
+
+Compiled from 190 public Government of India and public-sector sources,
+each record carrying its source URL, retrieval date and confidence grade.

@@ -473,7 +473,7 @@ out = {
     "forms": L,
 }
 
-path = "/home/user/Thozhil-Thunai/app/src/main/assets/lexicon.json"
+path = "/home/user/JanDwar/app/src/main/assets/lexicon.json"
 with open(path, "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
 

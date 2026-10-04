@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import pathlib
 
-ROOT = pathlib.Path("/home/user/Thozhil-Thunai")
+ROOT = pathlib.Path("/home/user/JanDwar")
 KT = ROOT / "app/src/main/java/in/jandwar/app"
 done = []
 

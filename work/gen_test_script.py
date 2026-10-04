@@ -9,7 +9,7 @@ from __future__ import annotations
 import pathlib
 import sys
 
-ROOT = pathlib.Path("/home/user/Thozhil-Thunai")
+ROOT = pathlib.Path("/home/user/JanDwar")
 sys.path.insert(0, str(ROOT / "server"))
 
 from app.core.engine import Engine  # noqa: E402

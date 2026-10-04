@@ -1,6 +1,4 @@
 # ── Secrets ────────────────────────────────────────────────────────────────
-# assets/config.json IS committed, but only with placeholder values so a fresh
-# clone builds out of the box. Never commit a real API key into it.
 local.properties
 *.keystore
 *.jks
@@ -22,7 +20,3 @@ captures/
 # ── OS ─────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
-
-
-app/src/main/assets/config.json
-app/src/main/assets/config.json

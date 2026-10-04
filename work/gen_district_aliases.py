@@ -17,7 +17,7 @@ import sys
 sys.path.insert(0, "/home/user/work")
 from district_aliases import ALIASES  # noqa: E402
 
-ROOT = pathlib.Path("/home/user/Thozhil-Thunai")
+ROOT = pathlib.Path("/home/user/JanDwar")
 PY = ROOT / "server/app/core/nlu.py"
 KT = ROOT / "app/src/main/java/in/jandwar/app/ai/OnDeviceNlu.kt"
 DJ = ROOT / "app/src/main/assets/districts.json"

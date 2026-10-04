@@ -26,7 +26,7 @@ import os
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
-REPO = "/home/user/Thozhil-Thunai"
+REPO = "/home/user/JanDwar"
 RES = os.path.join(REPO, "app/src/main/res")
 SRC = os.path.join(REPO, "brand/logo_premium.png")
 

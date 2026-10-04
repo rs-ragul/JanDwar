@@ -473,7 +473,7 @@ out = {
     "forms": L,
 }
 
-path = "/home/user/Thozhil-Thunai/app/src/main/assets/lexicon.json"
+path = "/home/user/JanDwar/app/src/main/assets/lexicon.json"
 
 
 # ── merge the spoken-language expansion pack ─────────────────────────────

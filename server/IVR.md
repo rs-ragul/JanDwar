@@ -80,7 +80,7 @@ work; it's locked to your browser. Two choices:
 
 **Easiest — Render (free, permanent URL):**
 
-1. Push this repo to GitHub (you already have `rs-ragul/Thozhil-Thunai`).
+1. Push this repo to GitHub (you already have `rs-ragul/JanDwar`).
 2. Go to render.com → sign in with GitHub → **New → Blueprint**.
 3. Pick the repo. It reads `render.yaml` automatically. Click **Apply**.
 4. Wait ~3 minutes. You get `https://jandwar.onrender.com`.

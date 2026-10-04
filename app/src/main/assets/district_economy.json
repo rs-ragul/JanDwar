@@ -110,9 +110,11 @@
     "strong_sectors": [
       "handloom_textile/silk (Rayachoti, fringe of Madanapalle garment belt)",
       "agro processing (mango, tamarind)",
-      "bus body building (Madanapalle cluster legacy — now largely in Madanapalle district)"
+      "bus body building (Madanapalle cluster — 242 units, ~3,000 employed)",
+      "readymade garments (Madanapalle garment cluster)",
+      "horticulture (tomato, mango, tamarind)"
     ],
-    "source": "https://dcmsme.gov.in/dips/amended%20chittoor%20dp%20march%202013.pdf (Madanapalle bus-body cluster listed under undivided Chittoor)",
+    "source": "https://dcmsme.gov.in/dips/amended%20chittoor%20dp%20march%202013.pdf (Madanapalle bus-body cluster 242 units, ~3,000 employed)",
     "confidence": "LIKELY",
     "livelihood_notes": "KVK Kalikiri (district placement under re-verify note); Rajampet ITI moved OUT to YSR Kadapa (Dec 2025); no RSETI yet (SLBC: SBI assigned).",
     "district": "Annamayya",
@@ -1227,18 +1229,6 @@
     "livelihood_notes": "Chikankari/zardozi is the flagship women-artisan livelihood — apparel QPs already in project map here; JSS present.",
     "district": "Lucknow",
     "state": "Uttar Pradesh"
-  },
-  "Madanapalle": {
-    "strong_sectors": [
-      "readymade garments (Madanapalle garment cluster)",
-      "bus body building (legacy cluster)",
-      "horticulture (tomato, mango, tamarind)"
-    ],
-    "source": "https://dcmsme.gov.in/dips/amended%20chittoor%20dp%20march%202013.pdf (Madanapalle bus-body cluster 242 units, ~3,000 employed)",
-    "confidence": "LIKELY",
-    "livelihood_notes": "NEW district (Dec-2025 gazette); apparel QPs and garment-skilling are the natural GIA fit; ITI Pileru (unverified) mapped here.",
-    "district": "Madanapalle",
-    "state": "Andhra Pradesh"
   },
   "Madurai": {
     "district": "Madurai",

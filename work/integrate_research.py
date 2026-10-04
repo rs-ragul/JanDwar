@@ -32,7 +32,7 @@ import collections
 import re
 
 RESEARCH = pathlib.Path("/home/user/research/jandwar")
-ASSETS = pathlib.Path("/home/user/Thozhil-Thunai/app/src/main/assets")
+ASSETS = pathlib.Path("/home/user/JanDwar/app/src/main/assets")
 
 STATE_LABEL = {
     "andhra_pradesh": "Andhra Pradesh",
