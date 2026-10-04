@@ -1,0 +1,63 @@
+JanDwar
+Copyright 2026 Team Nymeriaa
+
+This product includes software developed for Smart India Hackathon 2026,
+Problem Statement 26097 (Ministry of Social Justice and Empowerment).
+
+================================================================================
+DATA PACK — licensed separately
+================================================================================
+
+The eight JSON assets under app/src/main/assets/ (centres.json, job_roles.json,
+districts.json, district_economy.json, gia_funding_rules.json, lexicon.json,
+i18n.json, config.json) are DATA, not software, and are released under the
+Creative Commons Attribution 4.0 International licence (CC BY 4.0):
+
+    https://creativecommons.org/licenses/by/4.0/
+
+You may copy, redistribute and build upon this data, including commercially,
+provided you credit "JanDwar data pack, Team Nymeriaa (2026)" and link back to
+this repository.
+
+The underlying facts were compiled from 190 public Government of India and
+public-sector sources, each recorded per record in the `source` field with a
+`retrieved` date and a `confidence` grade. The compilation, normalisation,
+confidence grading and schema are the contribution licensed here; the
+underlying public records remain the property of their originating bodies.
+
+Record counts as published:
+  - 660 training-centre records  (294 CONFIRMED, 350 LIKELY, 16 UNVERIFIED;
+    392 carry a published phone number, 268 do not)
+  - 476 usable NSQF job roles    (386 carry an NSQF level, 380 carry notional
+    hours; missing values render as an em dash and are never inferred)
+  - 187 districts across 5 states, 190 logged sources
+
+================================================================================
+THIRD-PARTY COMPONENTS
+================================================================================
+
+Android application
+  Kotlin, Jetpack Compose, Hilt, AndroidX          Apache License 2.0
+  Android SpeechRecognizer / TextToSpeech          Apache License 2.0 (AOSP)
+
+Server
+  FastAPI                                          MIT License
+  Uvicorn                                          BSD 3-Clause License
+  httpx                                            BSD 3-Clause License
+  pydantic                                         MIT License
+  python-multipart                                 Apache License 2.0
+
+Services integrated through optional adapters, each with a working fallback
+  Twilio Programmable Voice                        commercial API, per Twilio terms
+  WhatsApp Cloud API (Meta)                        commercial API, per Meta terms
+  Bhashini (National Language Translation Mission) Government of India
+  ffmpeg                                           LGPL 2.1 / GPL 2.0 (invoked as
+                                                   an external binary, not linked)
+
+Standards referenced
+  ITU-T G.711 mu-law companding
+  National Skills Qualifications Framework (NSQF), MSDE
+  Digital Personal Data Protection Act, 2023
+
+No third-party source code is vendored into this repository. All dependencies
+are resolved at build time from their official distribution channels.
